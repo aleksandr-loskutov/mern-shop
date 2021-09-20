@@ -6,16 +6,18 @@ import {
     ORDER_ROUTE,
     PRODUCT_ROUTE,
     ROOT_ROUTE,
+    THANKS_ROUTE,
     USER_ROUTE
-} from "./consts";
-import Admin from "../pages/admin";
-import Cart from "../pages/cart";
-import User from "../pages/user";
-import Category from "../pages/category";
-import Product from "../pages/product";
-import Order from "../pages/order";
-import Login from "../pages/login";
-import Main from "../pages/main";
+} from "./utils/consts";
+import Admin from "./pages/admin";
+import Cart from "./pages/cart";
+import User from "./pages/user";
+import Category from "./pages/category";
+import Product from "./pages/product";
+import Order from "./pages/order";
+import Login from "./pages/login";
+import Main from "./pages/main";
+import Thanks from "./pages/thanks";
 
 export const authRoutes = [
     {
@@ -34,7 +36,7 @@ export const authRoutes = [
 
 export const publicRoutes = [
     {
-        path: CATEGORY_ROUTE,
+        path: CATEGORY_ROUTE + "/:categoryId",
         component: Category
     },
     {
@@ -42,7 +44,7 @@ export const publicRoutes = [
         component: Cart
     },
     {
-        path: PRODUCT_ROUTE,
+        path: PRODUCT_ROUTE + "/:productId",
         component: Product
     },
     {
@@ -56,5 +58,9 @@ export const publicRoutes = [
     {
         path: ROOT_ROUTE,
         component: Main
+    },
+    {
+        path: THANKS_ROUTE,
+        component: Thanks
     }
 ];

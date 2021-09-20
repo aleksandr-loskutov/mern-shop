@@ -1,6 +1,13 @@
 import React from "react";
+import AppRouter from "./components/AppRouter";
+import { BrowserRouter } from "react-router-dom";
+
 function App() {
-    return <h1>Holodos</h1>;
+    return (
+        <BrowserRouter>
+            <AppRouter />
+        </BrowserRouter>
+    );
 }
 
 export default App;
