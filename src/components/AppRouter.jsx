@@ -1,9 +1,10 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { authRoutes, publicRoutes } from "../routes";
-// Redirect
+import { ROOT_ROUTE } from "../utils/consts";
+
 const AppRouter = () => {
-    const authed = false;
+    const authed = true;
     return (
         <Switch>
             {authed &&
@@ -13,6 +14,7 @@ const AppRouter = () => {
             {publicRoutes.map(({ path, component }) => (
                 <Route key={path} path={path} component={component} exact />
             ))}
+            <Redirect to={ROOT_ROUTE} />
         </Switch>
     );
 };
