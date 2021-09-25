@@ -3,6 +3,7 @@ const User = require("../models/models");
 const bcrypt = require("bcrypt");
 const { check, validationResult } = require("express-validator");
 const AuthRouter = new Router();
+// перенос в контроллеры?
 AuthRouter.post(
     "/registration",
     [

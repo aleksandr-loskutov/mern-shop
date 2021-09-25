@@ -1,4 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+server/config/
+!server/config/example_default.json
 .idea
 # dependencies
 **/node_modules
