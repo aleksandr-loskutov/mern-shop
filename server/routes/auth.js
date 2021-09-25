@@ -1,9 +1,8 @@
 const Router = require("express");
-const User = require("../models/models");
+const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { check, validationResult } = require("express-validator");
 const AuthRouter = new Router();
-// перенос в контроллеры?
 AuthRouter.post(
     "/registration",
     [
