@@ -1,22 +1,22 @@
 const Router = require("express");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const { check, validationResult } = require("express-validator");
-const AuthRouter = new Router();
-const AuthController = require("../controllers/authController");
+const { check } = require("express-validator");
+const router = new Router();
+const controller = require("../controllers/authController");
 
-AuthRouter.post(
+router.post(
     "/registration",
     [
-        check("email", "Incorrect email").isEmail(),
-        check(
-            "password",
-            "Password must be longer than 3 and shorter than 12"
-        ).isLength({ min: 3, max: 12 })
+        check("email", "Введите корректный Email").isEmail(),
+        check("password", "Пароль должен быть от 4 до 15 символов").isLength({
+            min: 4,
+            max: 15
+        })
     ],
-    AuthController.registration
+    controller.registration
 );
-AuthRouter.post("/login", AuthController.login);
-AuthRouter.post("/users", AuthController.getUsers);
+router.post("/login", controller.login);
+router.post("/users", controller.getUsers);
 
-module.exports = AuthRouter;
+module.exports = router;
