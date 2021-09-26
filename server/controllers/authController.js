@@ -1,7 +1,9 @@
 const User = require("../models/user");
 const Role = require("../models/role");
+const config = require("config");
 const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
 class AuthController {
     async registration(req, res) {
         try {
@@ -37,6 +39,26 @@ class AuthController {
     }
     async login(req, res) {
         try {
+            const { email, password } = req.body;
+            const user = await User.findOne({ email });
+            if (!user) {
+                return res.status(400).json({
+                    message: `Ошибка в паре логин/пароль`
+                });
+            }
+            const validPassword = bcrypt.compareSync(password, user.password);
+            if (!validPassword) {
+                return res.status(400).json({
+                    message: "Ошибка в паре логин/пароль"
+                });
+            }
+            const token = jwt.sign({ id: user.id }, config.get("secretKey"), {
+                expiresIn: "24h"
+            });
+            return res.json({
+                token,
+                user: { id: user.id, email: user.email }
+            });
         } catch (e) {}
     }
     async getUsers(req, res) {
