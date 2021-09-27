@@ -4,6 +4,7 @@ const config = require("config");
 const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+
 class AuthController {
     async registration(req, res) {
         try {
@@ -52,18 +53,27 @@ class AuthController {
                     message: "Ошибка в паре логин/пароль"
                 });
             }
-            const token = jwt.sign({ id: user.id }, config.get("secretKey"), {
-                expiresIn: "24h"
-            });
+            const token = generateAccessToken(user._id, user.roles);
             return res.json({
                 token,
-                user: { id: user.id, email: user.email }
+                user: { id: user._id, email: user.email, role: user.roles }
             });
         } catch (e) {}
     }
     async getUsers(req, res) {
         try {
+            const users = await User.find();
+            res.json(users);
         } catch (e) {}
     }
+}
+function generateAccessToken(id, roles) {
+    const payload = {
+        id,
+        roles
+    };
+    return jwt.sign(payload, config.get("secretKey"), {
+        expiresIn: "24h"
+    });
 }
 module.exports = new AuthController();
