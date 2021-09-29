@@ -5,8 +5,9 @@ const authRouter = require("./routes/authRouter");
 const PORT = config.get("serverPort");
 const DB_URL = config.get("dbUrl");
 const app = express();
+const router = require("./routes/index");
 app.use(express.json());
-app.use("/api/auth", authRouter);
+app.use("/api", router);
 
 const start = async () => {
     try {

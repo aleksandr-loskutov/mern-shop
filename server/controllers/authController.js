@@ -66,6 +66,10 @@ class AuthController {
             res.json(users);
         } catch (e) {}
     }
+    async checkAuth(req, res) {
+        try {
+        } catch (e) {}
+    }
 }
 function generateAccessToken(id, roles) {
     const payload = {
