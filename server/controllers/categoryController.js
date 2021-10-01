@@ -25,10 +25,20 @@ class CategoryController {
                         "Категория с таким наименованием / URL алиасом уже есть в базе"
                 });
             }
+            let parentCat = categoryId;
+            if (!parentCat || parentCat.isEmpty()) {
+                let root = await Category.findOne({ name: "root" });
+
+                if (!root) {
+                    root = new Category({ name: "root" });
+                    await root.save();
+                }
+                parentCat = root._id;
+            }
             const category = new Category({
                 name: name,
                 description: description,
-                categoryId: categoryId,
+                parentId: parentCat,
                 metaTitle: metaTitle,
                 img: img,
                 urlAlias: alias
@@ -42,21 +52,32 @@ class CategoryController {
     }
     async getAll(req, res) {
         try {
-        } catch (e) {
-            console.log(e);
-            res.status(400).json({ message: "Ошибка" });
-        }
+            const categories = await Category.find({});
+            return res.status(200).json(categories);
+        } catch (e) {}
     }
     async getOne(req, res) {
         try {
+            const category = await Category.findOne({ _id: req.params.id });
+            return category
+                ? res.status(200).json(category)
+                : res.status(404).json({ message: "Категория не найдена" });
         } catch (e) {}
     }
     async update(req, res) {
         try {
+            const category = await Category.findOneAndUpdate(
+                { _id: req.params.id },
+                { $set: req.body },
+                { new: true }
+            );
+            res.status(200).json(category);
         } catch (e) {}
     }
     async delete(req, res) {
         try {
+            await Category.deleteOne({ _id: req.params.id });
+            res.status(200).json({ message: "Категория была удалена" });
         } catch (e) {}
     }
 }

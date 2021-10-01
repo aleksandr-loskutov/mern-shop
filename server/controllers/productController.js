@@ -3,6 +3,7 @@ const Category = require("../models/category");
 const { validationResult } = require("express-validator");
 const cyrillicToTranslit = require("cyrillic-to-translit-js");
 const { json } = require("express");
+const { log } = require("nodemon/lib/utils");
 
 class ProductController {
     async create(req, res) {
@@ -38,6 +39,16 @@ class ProductController {
                     message: "Товар с таким наименованием уже есть в базе"
                 });
             }
+            let category = categoryId;
+            if (!category || category.isEmpty()) {
+                let root = await Category.findOne({ name: "root" });
+                if (!root) {
+                    root = new Category({ name: "root" });
+                    await root.save();
+                }
+                category = root._id;
+            }
+            // console.log(category);
             const product = new Product({
                 name: name,
                 description: description,
@@ -49,7 +60,7 @@ class ProductController {
                 color: color,
                 brand: brand,
                 metaTitle: metaTitle,
-                categoryId: categoryId,
+                categoryId: category,
                 price: price,
                 urlAlias: alias
             });
@@ -62,13 +73,16 @@ class ProductController {
     }
     async getAll(req, res) {
         try {
-        } catch (e) {
-            console.log(e);
-            res.status(400).json({ message: "Ошибка" });
-        }
+            const products = await Product.find({});
+            return res.status(200).json(products);
+        } catch (e) {}
     }
     async getOne(req, res) {
         try {
+            const product = await Product.findOne({ _id: req.params.id });
+            return product
+                ? res.status(200).json(product)
+                : res.status(404).json({ message: "Продукт не найден" });
         } catch (e) {}
     }
     async getByCategory(req, res) {
@@ -76,15 +90,23 @@ class ProductController {
             const products = await Product.find({
                 categoryId: req.params.categoryId
             });
-            res.status(200).json(products);
+            return res.status(200).json(products);
         } catch (e) {}
     }
     async update(req, res) {
         try {
+            const product = await Product.findOneAndUpdate(
+                { _id: req.params.id },
+                { $set: req.body },
+                { new: true }
+            );
+            res.status(200).json(product);
         } catch (e) {}
     }
     async delete(req, res) {
         try {
+            await Product.deleteOne({ _id: req.params.id });
+            res.status(200).json({ message: "Продукт был удален" });
         } catch (e) {}
     }
 }

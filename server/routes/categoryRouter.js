@@ -17,6 +17,6 @@ router.post(
 );
 router.get("/", categoryController.getAll);
 router.get("/:id", categoryController.getOne);
-router.patch("/:id", categoryController.update);
-router.delete("/:id", categoryController.delete);
+router.patch("/:id", roleMiddleware(["admin"]), categoryController.update);
+router.delete("/:id", roleMiddleware(["admin"]), categoryController.delete);
 module.exports = router;

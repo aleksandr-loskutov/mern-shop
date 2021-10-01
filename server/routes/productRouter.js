@@ -18,10 +18,10 @@ router.post(
     ],
     productController.create
 );
+router.patch("/:id", roleMiddleware(["admin"]), productController.update);
+router.delete("/:id", roleMiddleware(["admin"]), productController.delete);
 router.get("/", productController.getAll);
 router.get("/:id", productController.getOne);
-router.patch("/:id", productController.update);
-router.delete("/:id", productController.delete);
 router.get("/cat/:categoryId", productController.getByCategory);
 
 module.exports = router;
