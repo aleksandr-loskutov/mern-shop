@@ -3,7 +3,7 @@ const Cart = require("../models/cart");
 const { validationResult } = require("express-validator");
 
 class CartController {
-    //берет если есть или создает если нет, для конкретного юзера
+    //берет если есть или создает если нет, для конкретного юзера или гостя
     async get(req, res) {
         try {
         } catch (e) {}
