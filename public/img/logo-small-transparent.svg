@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- My Brand New Logo (1.0.92), id: rrxzNpXwDvsJBOYvrPkx (1.2.0), date: 2021-10-02 09:42 -->
+<svg version="1.1" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="347.175 346.952 305.649 306.096" width="1000" height="1000">
+	<defs>
+		<path id="def-1" d="M649.828,500 A149.828,149.828 0 1 0 350.172,500 A149.828,149.828 0 1 0 649.828,500 Z" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="25"></path>
+		<path id="def-2" d="M572.992,412.674 L572.992,587.326 L531.128,587.326 L531.128,514.394 L469.112,514.394 L469.112,587.326 L427.008,587.326 L427.008,412.674 L469.112,412.674 L469.112,482.007 L531.128,482.007 L531.128,412.674 L572.992,412.674 Z" fill="#fff"></path>
+		<g id="def-3">
+			<use xlink:href="#def-1" stroke-width="0"></use>
+		</g>
+		<mask id="mask-1" x="302.227" y="302.004" width="395.546" height="395.993" maskUnits="userSpaceOnUse" stroke-width="0">
+			<rect x="320.206" y="319.983" width="359.587" height="360.034" fill="#000"></rect>
+			<use xlink:href="#def-3" fill="#fff" stroke="#fff"></use>
+		</mask>
+		<mask id="mask-2" x="403.651" y="389.317" width="192.698" height="221.367" maskUnits="userSpaceOnUse" stroke-width="0">
+			<rect x="412.41" y="398.076" width="175.18" height="203.849" fill="#000"></rect>
+			<use xlink:href="#def-2" fill="#fff" stroke="#fff"></use>
+		</mask>
+	</defs>
+	<g mask="url(#mask-1)">
+		<rect x="320.206" y="319.983" width="359.587" height="360.034" fill="#000000"></rect>
+	</g>
+	<g mask="url(#mask-2)">
+		<rect x="412.41" y="398.076" width="175.18" height="203.849" fill="#ffd048"></rect>
+	</g>
+</svg>

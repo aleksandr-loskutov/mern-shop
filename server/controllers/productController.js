@@ -79,7 +79,7 @@ class ProductController {
     }
     async getOne(req, res) {
         try {
-            const product = await Product.findOne({ _id: req.params.id });
+            const product = await Product.findById(req.params.id);
             return product
                 ? res.status(200).json(product)
                 : res.status(404).json({ message: "Продукт не найден" });

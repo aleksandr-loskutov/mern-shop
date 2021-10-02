@@ -6,8 +6,10 @@ const PORT = config.get("serverPort");
 const DB_URL = config.get("dbUrl");
 const app = express();
 const router = require("./routes/index");
+const errorHandler = require("./middleware/errorHandler");
 app.use(express.json());
 app.use("/api", router);
+app.use(errorHandler);
 
 const start = async () => {
     try {

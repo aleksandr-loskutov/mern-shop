@@ -58,7 +58,7 @@ class CategoryController {
     }
     async getOne(req, res) {
         try {
-            const category = await Category.findOne({ _id: req.params.id });
+            const category = await Category.findById(req.params.id);
             return category
                 ? res.status(200).json(category)
                 : res.status(404).json({ message: "Категория не найдена" });
