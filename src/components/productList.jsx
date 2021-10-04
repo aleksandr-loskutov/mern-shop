@@ -17,7 +17,7 @@ const ProductList = () => {
                 </div>
                 <img
                     alt="товар1"
-                    src="img/item-1.jpg"
+                    src="/img/item-1.jpg"
                     width="360"
                     height="380"
                 />
@@ -44,7 +44,7 @@ const ProductList = () => {
                 </div>
                 <img
                     alt="товар2"
-                    src="img/item-2.jpg"
+                    src="/img/item-2.jpg"
                     width="360"
                     height="380"
                 />
@@ -72,7 +72,7 @@ const ProductList = () => {
                 </div>
                 <img
                     alt="товар3"
-                    src="img/item-3.jpg"
+                    src="/img/item-3.jpg"
                     width="360"
                     height="380"
                 />
@@ -101,7 +101,7 @@ const ProductList = () => {
                 </div>
                 <img
                     alt="товар4"
-                    src="img/item-4.jpg"
+                    src="/img/item-4.jpg"
                     width="360"
                     height="380"
                 />

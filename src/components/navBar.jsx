@@ -1,18 +1,19 @@
 import React from "react";
 import NavMenu from "./navMenu";
 import SearchBar from "./searchBar";
+import { Link } from "react-router-dom";
 const NavBar = () => {
     return (
         <header className="main-header">
             <div className="main-logo">
-                <a href="index.html">
+                <Link to={"/"}>
                     <img
                         alt="Логотип"
-                        src="img/logo.svg"
+                        src="/img/logo.svg"
                         width="150"
                         height="48"
                     />
-                </a>
+                </Link>
             </div>
             <div className="active-block">
                 <SearchBar />
@@ -21,7 +22,7 @@ const NavBar = () => {
                         <a href="">
                             <img
                                 alt="логин"
-                                src="img/icon_user_header.svg"
+                                src="/img/icon_user_header.svg"
                                 width="14"
                                 height="14"
                             />
@@ -35,7 +36,7 @@ const NavBar = () => {
                         <a href="">
                             <img
                                 alt="сравнение"
-                                src="img/icon_chart_header.svg"
+                                src="/img/icon_chart_header.svg"
                                 width="13"
                                 height="14"
                             />
@@ -46,7 +47,7 @@ const NavBar = () => {
                         <a href="">
                             <img
                                 alt="корзина"
-                                src="img/icon_cart_header.svg"
+                                src="/img/icon_cart_header.svg"
                                 width="10"
                                 height="10"
                             />

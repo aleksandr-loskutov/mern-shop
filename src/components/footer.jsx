@@ -9,7 +9,7 @@ function Footer(props) {
                         <a href="">
                             <img
                                 alt="Логотип"
-                                src="img/logo-white.svg"
+                                src="/img/logo-white.svg"
                                 width="auto"
                                 height="60"
                             />
@@ -20,7 +20,7 @@ function Footer(props) {
                             <a href="">
                                 <img
                                     alt="логин"
-                                    src="img/icon_user.svg"
+                                    src="/img/icon_user.svg"
                                     width="13"
                                     height="14"
                                 />
@@ -37,7 +37,7 @@ function Footer(props) {
                             >
                                 <img
                                     alt="сравнить"
-                                    src="img/icon_chart.svg"
+                                    src="/img/icon_chart.svg"
                                     width="14"
                                     height="14"
                                 />
@@ -51,7 +51,7 @@ function Footer(props) {
                             >
                                 <img
                                     alt="корзина"
-                                    src="img/icon_cart.svg"
+                                    src="/img/icon_cart.svg"
                                     width="10"
                                     height="10"
                                 />
@@ -89,7 +89,7 @@ function Footer(props) {
                             <a href="">
                                 <img
                                     alt="facebook"
-                                    src="img/icon_facebook.svg"
+                                    src="/img/icon_facebook.svg"
                                     width="32"
                                     height="32"
                                 />
@@ -99,7 +99,7 @@ function Footer(props) {
                             <a href="">
                                 <img
                                     alt="instagram"
-                                    src="img/icon_instagram.svg"
+                                    src="/img/icon_instagram.svg"
                                     width="32"
                                     height="32"
                                 />
@@ -109,7 +109,7 @@ function Footer(props) {
                             <a href="">
                                 <img
                                     alt="twitter"
-                                    src="img/icon_twitter.svg"
+                                    src="/img/icon_twitter.svg"
                                     width="32"
                                     height="32"
                                 />
@@ -120,7 +120,7 @@ function Footer(props) {
                         <a href="">
                             <img
                                 alt="создатель шаблона html"
-                                src="img/logo.svg"
+                                src="/img/logo.svg"
                                 width="27"
                                 height="34"
                             />

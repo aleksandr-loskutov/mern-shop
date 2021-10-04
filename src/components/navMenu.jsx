@@ -1,41 +1,54 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const NavMenu = () => {
     return (
         <nav className="main-menu">
             <div className="menu-catalog">
-                <a className="main-menu-link" href="catalog.html">
+                <Link to={"/catalog/"} className="main-menu-link">
                     каталог товаров
-                </a>
+                </Link>
                 <img
                     alt="крест-раскрытие-меню"
-                    src="img/cross.png"
+                    src="/img/cross.png"
                     width="15"
                     height="15"
                 />
                 <div className="submenu">
                     <ul className="submenu-main-list">
                         <li>
-                            <a href="catalog.html">Виртуальная реальность</a>
+                            <Link to={"/catalog/odnokamernie"}>
+                                Однокамерные
+                            </Link>
                         </li>
                         <li>
-                            <a href="catalog.html">Моноподы для селфи</a>
-                        </li>
-                        <li>
-                            <a href="catalog.html">Экшн-камеры</a>
-                        </li>
-                    </ul>
-                    <ul className="submenu-main-list">
-                        <li>
-                            <a href="catalog.html">Фитнес-браслеты</a>
-                        </li>
-                        <li>
-                            <a href="catalog.html">Умные часы</a>
+                            <Link to={"/catalog/dvukhkamernie"}>
+                                Двухкамерные
+                            </Link>
                         </li>
                     </ul>
                     <ul className="submenu-main-list">
                         <li>
-                            <a href="catalog.html">Квадрокоптер</a>
+                            <Link to={"/catalog/side-by-side"}>
+                                Side by Side
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to={"/catalog/vstraivaemie-side-by-side"}>
+                                Встраиваемые Side by Side
+                            </Link>
+                        </li>
+                    </ul>
+                    <ul className="submenu-main-list">
+                        <li>
+                            <Link to={"/catalog/minikholodilniki"}>
+                                Минихолодильники
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to={"/catalog/avtomobilnie"}>
+                                Автомобильные
+                            </Link>
                         </li>
                     </ul>
                 </div>

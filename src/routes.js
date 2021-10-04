@@ -36,7 +36,7 @@ export const authRoutes = [
 
 export const publicRoutes = [
     {
-        path: CATEGORY_ROUTE + "/:categoryId",
+        path: CATEGORY_ROUTE + "/:alias?",
         component: Category
     },
     {
