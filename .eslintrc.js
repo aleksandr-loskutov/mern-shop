@@ -15,7 +15,7 @@ module.exports = {
     rules: {
         "react/prop-types": 0,
         semi: [2, "always"],
-        indent: ["error", 4],
+        indent: ["error", 4, { SwitchCase: 1 }],
         "multiline-ternary": ["off"],
         "space-before-function-paren": [
             "error",

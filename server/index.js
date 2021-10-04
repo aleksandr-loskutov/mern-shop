@@ -5,10 +5,13 @@ const authRouter = require("./routes/authRouter");
 const PORT = config.get("serverPort");
 const DB_URL = config.get("dbUrl");
 const app = express();
+const cors = require("cors");
 const router = require("./routes/index");
 const errorHandler = require("./middleware/errorHandler");
 app.use(express.json());
+app.use(cors());
 app.use("/api", router);
+
 app.use(errorHandler);
 
 const start = async () => {
