@@ -52,7 +52,8 @@ class CategoryController {
     }
     async getAll(req, res) {
         try {
-            const categories = await Category.find({});
+            const categories = await Category.find({ name: { $ne: "root" } });
+
             return res.status(200).json(categories);
         } catch (e) {}
     }

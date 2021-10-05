@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategories } from "../store/actions/categories";
 
 const NavMenu = () => {
+    const state = useSelector((state) => state.categories);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchCategories());
+    }, []);
     return (
         <nav className="main-menu">
             <div className="menu-catalog">
@@ -14,42 +22,17 @@ const NavMenu = () => {
                     width="15"
                     height="15"
                 />
+
                 <div className="submenu">
-                    <ul className="submenu-main-list">
-                        <li>
-                            <Link to={"/catalog/odnokamernie"}>
-                                Однокамерные
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to={"/catalog/dvukhkamernie"}>
-                                Двухкамерные
-                            </Link>
-                        </li>
-                    </ul>
-                    <ul className="submenu-main-list">
-                        <li>
-                            <Link to={"/catalog/side-by-side"}>
-                                Side by Side
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to={"/catalog/vstraivaemie-side-by-side"}>
-                                Встраиваемые Side by Side
-                            </Link>
-                        </li>
-                    </ul>
-                    <ul className="submenu-main-list">
-                        <li>
-                            <Link to={"/catalog/minikholodilniki"}>
-                                Минихолодильники
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to={"/catalog/avtomobilnie"}>
-                                Автомобильные
-                            </Link>
-                        </li>
+                    <ul className={"submenu-main-list"}>
+                        {state.categories.length > 0 &&
+                            state.categories.map((cat) => (
+                                <li key={cat._id}>
+                                    <Link to={`/catalog/${cat.urlAlias}`}>
+                                        {cat.name}
+                                    </Link>
+                                </li>
+                            ))}
                     </ul>
                 </div>
             </div>
