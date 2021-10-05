@@ -4,7 +4,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createStore, compose, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import { categoriesReducer } from "./store/reducers/rootReducer";
+import combineReducers from "./store/reducers/rootReducer";
 import thunk from "redux-thunk";
 const composeEnhancers =
     (typeof window !== "undefined" &&
@@ -12,7 +12,7 @@ const composeEnhancers =
     compose;
 
 const store = createStore(
-    categoriesReducer,
+    combineReducers,
     composeEnhancers(applyMiddleware(thunk))
 );
 ReactDOM.render(
