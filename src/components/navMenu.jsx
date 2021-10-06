@@ -9,7 +9,7 @@ const NavMenu = () => {
 
     useEffect(() => {
         dispatch(fetchCategories());
-    }, []);
+    }, [dispatch]);
     return (
         <nav className="main-menu">
             <div className="menu-catalog">
