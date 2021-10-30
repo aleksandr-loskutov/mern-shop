@@ -1,7 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# temp
+/src
+# custom
 server/config/
 !server/config/example_default.json
 .idea
+/trash
 # dependencies
 **/node_modules
 /.pnp
@@ -10,8 +14,10 @@ server/config/
 # testing
 /coverage
 
+
 # production
 /build
+/dist
 
 # misc
 .DS_Store
