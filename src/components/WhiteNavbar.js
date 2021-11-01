@@ -23,7 +23,7 @@ import { fetchCategories } from "../store/actions/categories";
 // core components
 
 function WhiteNavbar() {
-    const state = useSelector((state) => state.categories);
+    const { categories } = useSelector((state) => state.categories);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -102,8 +102,8 @@ function WhiteNavbar() {
                                     КАТАЛОГ
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-danger" right>
-                                    {state.categories.length > 0 &&
-                                        state.categories.map((cat) => (
+                                    {categories.length > 0 &&
+                                        categories.map((cat) => (
                                             <DropdownItem
                                                 key={cat._id}
                                                 to={`/catalog/${cat.urlAlias}`}
