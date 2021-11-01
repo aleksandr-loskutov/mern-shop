@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 // JavaScript plugin that hides or shows a component based on your scroll
 import Headroom from "headroom.js";
@@ -18,9 +18,17 @@ import {
     Form,
     Input
 } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategories } from "../store/actions/categories";
 // core components
 
 function WhiteNavbar() {
+    const state = useSelector((state) => state.categories);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchCategories());
+    }, [dispatch]);
     const [bodyClick, setBodyClick] = React.useState(false);
     const [collapseOpen, setCollapseOpen] = React.useState(false);
     React.useEffect(() => {
@@ -94,21 +102,16 @@ function WhiteNavbar() {
                                     КАТАЛОГ
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-danger" right>
-                                    <DropdownItem to="/catalog" tag={Link}>
-                                        Все холодильники
-                                    </DropdownItem>
-                                    <DropdownItem
-                                        to="/catalog/odnokamernie"
-                                        tag={Link}
-                                    >
-                                        Однокамерные
-                                    </DropdownItem>
-                                    <DropdownItem
-                                        to="/catalog/dvuhkamernie"
-                                        tag={Link}
-                                    >
-                                        Двухкамерные
-                                    </DropdownItem>
+                                    {state.categories.length > 0 &&
+                                        state.categories.map((cat) => (
+                                            <DropdownItem
+                                                key={cat._id}
+                                                to={`/catalog/${cat.urlAlias}`}
+                                                tag={Link}
+                                            >
+                                                {cat.name}
+                                            </DropdownItem>
+                                        ))}
                                 </DropdownMenu>
                             </UncontrolledDropdown>
                             <UncontrolledDropdown nav inNavbar>
