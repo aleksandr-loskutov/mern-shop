@@ -10,6 +10,7 @@ const Index = () => {
     return (
         <>
             <WhiteNavbar />
+
             <IndexHeader />
             <div className="main">
                 <FeaturedProducts />
