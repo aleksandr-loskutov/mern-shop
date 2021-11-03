@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { validator } from "./validator";
 const FormComponent = ({
     children,
     validatorConfig,
@@ -10,29 +9,35 @@ const FormComponent = ({
 }) => {
     const [data, setData] = useState(defaultData || {});
     const [errors, setErrors] = useState({});
-    const handleChange = useCallback(
-        (target) => {
-            setData((prevState) => ({
-                ...prevState,
-                [target.name]: target.value
-            }));
-        },
-        [setData]
-    );
+    const handleChange = useCallback((target) => {
+        setData((prevState) => ({
+            ...prevState,
+            [target.name]: target.value
+        }));
+    }, []);
     const validate = useCallback(
         (data) => {
-            const errors = validator(data, validatorConfig);
-            setErrors(errors);
-            return Object.keys(errors).length === 0;
+            validatorConfig
+                .validate(data)
+                .then(() => setErrors({}))
+                .catch((err) => {
+                    setErrors({ [err.path]: err.message });
+                });
+            return (
+                Object.keys(errors).length === 0 && Object.keys(data).length > 0
+            );
         },
         [validatorConfig, setErrors]
     );
     const handleSubmit = (e) => {
         e.preventDefault();
-        const isValid = validate();
+        // console.log("handleSubmit");
+        const isValid = validate(data);
         if (!isValid) return;
+        console.log("handleSubmit", isValid);
         onSubmit(data);
     };
+
     useEffect(() => {
         if (Object.keys(data).length > 0) {
             validate(data);
@@ -50,6 +55,8 @@ const FormComponent = ({
 
     const clonedElements = React.Children.map(children, (child) => {
         const childType = typeof child.type;
+        // для отладки в будущем при оптимизации рендеров типы могут изменяться при использовании memo у полей
+        // console.log("child", child, "type", childType);
         let config = {};
         if (childType === "object") {
             if (!child.props.name) {
@@ -65,8 +72,8 @@ const FormComponent = ({
                 onKeyDown: handleKeyDown
             };
         }
-        if (childType === "string") {
-            if (child.type === "button") {
+        if (childType === "function") {
+            if (child.props.tag === "button") {
                 if (
                     child.props.type === "submit" ||
                     child.props.type === undefined
