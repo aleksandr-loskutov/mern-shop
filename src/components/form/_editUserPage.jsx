@@ -4,7 +4,7 @@ import api from "../../api";
 import FormComponent, { TextField, SelectField } from "./index";
 import { Button, Card, CardTitle, Col, Container, Row } from "reactstrap";
 
-const EditUserPage = () => {
+const _editUserPage = () => {
     const userId = "67rdca3eeb7f6fgeed471818";
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(false);
@@ -108,4 +108,4 @@ const EditUserPage = () => {
     );
 };
 
-export default EditUserPage;
+export default _editUserPage;

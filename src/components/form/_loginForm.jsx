@@ -3,7 +3,7 @@ import { validator } from "../../utils/ validator";
 import TextField from "../common/form/textField";
 import CheckBoxField from "../common/form/checkBoxField";
 
-const LoginForm = () => {
+const _loginForm = () => {
     const [data, setData] = useState({
         email: "",
         password: "",
@@ -94,4 +94,4 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;
+export default _loginForm;
