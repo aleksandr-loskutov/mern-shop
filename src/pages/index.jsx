@@ -5,6 +5,7 @@ import WhiteNavbar from "../components/WhiteNavbar";
 
 import FeaturedProducts from "../components/featuredProducts";
 import SectionCards from "../components/SectionCards";
+import Section from "../components/section";
 
 const Index = () => {
     return (
@@ -12,9 +13,9 @@ const Index = () => {
             <WhiteNavbar />
 
             <IndexHeader />
-            <div className="main">
+            <Section>
                 <FeaturedProducts />
-            </div>
+            </Section>
             <SectionCards />
             <Footer />
         </>
