@@ -1,19 +1,19 @@
 import React from "react";
 import Footer from "../components/footer";
-import IndexHeader from "../components/IndexHeader";
+import IndexHeader from "../components/_prototypes/IndexHeader";
 import WhiteNavbar from "../components/WhiteNavbar";
 import FeaturedProducts from "../components/featuredProducts";
-import SectionCards from "../components/SectionCards";
-import Section from "../components/section";
+import SectionCards from "../components/_prototypes/SectionCards";
+import Page from "../components/page";
 
 const Index = () => {
     return (
         <>
             <WhiteNavbar />
             <IndexHeader />
-            <Section>
+            <Page>
                 <FeaturedProducts />
-            </Section>
+            </Page>
             <SectionCards />
             <Footer />
         </>
