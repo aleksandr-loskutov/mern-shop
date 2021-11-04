@@ -6,6 +6,7 @@ server/config/
 !server/config/example_default.json
 .idea
 /trash
+**/_prototypes
 # dependencies
 **/node_modules
 /.pnp

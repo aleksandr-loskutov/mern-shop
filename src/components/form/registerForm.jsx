@@ -1,144 +1,83 @@
-import React, { useEffect, useState } from "react";
-import { validator } from "../../utils/ validator";
-import TextField from "../common/form/textField";
-import api from "../../api";
-import SelectField from "../common/form/selectField";
-import RadioField from "../common/form/radio.Field";
-import MultiSelectField from "../common/form/multiSelectField";
-import CheckBoxField from "../common/form/checkBoxField";
-
+import React from "react";
+import { Button, Card, CardTitle, Col, Container, Row } from "reactstrap";
+import FormComponent, { TextField } from "./index";
+import { Link } from "react-router-dom";
+import * as yup from "yup";
 const RegisterForm = () => {
-    const [data, setData] = useState({
-        email: "",
-        password: "",
-        profession: "",
-        sex: "male",
-        qualities: [],
-        licence: false
+    const handleSubmit = (data) => {
+        console.log("data", data);
+        console.log("success");
+    };
+    const validateSchema = yup.object().shape({
+        password: yup
+            .string()
+            .required("пароль обязателен")
+            .matches(
+                /(?=.*[A-Z])/,
+                "Пароль должен содержать как минимум 1 заглавную букву"
+            )
+            .matches(
+                /(?=.*[0-9])/,
+                "Пароль должен содержать как минимум 1 число"
+            )
+            .matches(
+                /(?=.*[!@#$%^&*])/,
+                "Пароль должен содержать как минимум 1 спецсимвол из @#$%^&*"
+            )
+            .matches(/(?=.{8,})/, "Пароль должен быть минимум 8 символов"),
+        email: yup
+            .string()
+            .required("Email обязателен")
+            .email("Email введен не корректно"),
+        passwordConfirmation: yup
+            .string()
+            .oneOf([yup.ref("password"), null], "Пароли должны совпадать")
     });
-    const [qualities, setQualities] = useState({});
-    const [professions, setProfession] = useState([]);
-    const [errors, setErrors] = useState({});
-    useEffect(() => {
-        api.professions.fetchAll().then((data) => setProfession(data));
-        api.qualities.fetchAll().then((data) => setQualities(data));
-    }, []);
-    const handleChange = (target) => {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
-    };
-    const validatorConfog = {
-        email: {
-            isRequired: {
-                message: "Электронная почта обязательна для заполнения"
-            },
-            isEmail: {
-                message: "Email введен некорректно"
-            }
-        },
-        password: {
-            isRequired: {
-                message: "Пароль обязательна для заполнения"
-            },
-            isCapitalSymbol: {
-                message: "Пароль должен содержать хотя бы одну заглавную букву"
-            },
-            isContainDigit: {
-                message: "Пароль должен содержать хотя бы одно число"
-            },
-            min: {
-                message: "Пароль должен состаять миниму из 8 символов",
-                value: 8
-            }
-        },
-        profession: {
-            isRequired: {
-                message: "Обязательно выберите вашу профессию"
-            }
-        },
-        licence: {
-            isRequired: {
-                message:
-                    "Вы не можете использовать наш сервис без подтреврждения лицензионного соглашения"
-            }
-        }
-    };
-    useEffect(() => {
-        validate();
-    }, [data]);
-    const validate = () => {
-        const errors = validator(data, validatorConfog);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-    const isValid = Object.keys(errors).length === 0;
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const isValid = validate();
-        if (!isValid) return;
-        console.log(data);
-    };
     return (
-        <form onSubmit={handleSubmit}>
-            <TextField
-                label="Электронная почта"
-                name="email"
-                value={data.email}
-                onChange={handleChange}
-                error={errors.email}
-            />
-            <TextField
-                label="Пароль"
-                type="password"
-                name="password"
-                value={data.password}
-                onChange={handleChange}
-                error={errors.password}
-            />
-            <SelectField
-                label="Выбери свою профессию"
-                defaultOption="Choose..."
-                options={professions}
-                onChange={handleChange}
-                value={data.profession}
-                error={errors.profession}
-            />
-            <RadioField
-                options={[
-                    { name: "Male", value: "male" },
-                    { name: "Female", value: "female" },
-                    { name: "Other", value: "other" }
-                ]}
-                value={data.sex}
-                name="sex"
-                onChange={handleChange}
-                label="Выберите ваш пол"
-            />
-            <MultiSelectField
-                options={qualities}
-                onChange={handleChange}
-                name="qualities"
-                label="Выберите ваши качесвта"
-            />
-            <CheckBoxField
-                value={data.licence}
-                onChange={handleChange}
-                name="licence"
-                error={errors.licence}
-            >
-                Подтвердить <a>лицензионное соглашение</a>
-            </CheckBoxField>
-            <button
-                type="submit"
-                disabled={!isValid}
-                className="btn btn-primary w-100 mx-auto"
-            >
-                Submit
-            </button>
-        </form>
+        <Container>
+            <Row>
+                <Col className="ml-auto mr-auto" lg="4" md="6" sm="6">
+                    <Card className="card-register">
+                        <CardTitle tag="h3">Регистрация</CardTitle>
+                        <FormComponent
+                            onSubmit={handleSubmit}
+                            validatorConfig={validateSchema}
+                            className="register-form"
+                            defaultData={{
+                                email: "",
+                                password: "",
+                                passwordConfirmation: ""
+                            }}
+                        >
+                            <TextField
+                                label="Электронная почта"
+                                name="email"
+                                autoFocus
+                            />
+                            <TextField label="Пароль" name="password" />
+                            <TextField
+                                label="Повторите пароль"
+                                name="passwordConfirmation"
+                            />
+                            <Button
+                                block
+                                type="submit"
+                                className="btn-round btn-primary btn-lg mx-auto"
+                                color="danger"
+                            >
+                                Регистрация
+                            </Button>
+                        </FormComponent>
+                        <div className="login m-2">
+                            <p>
+                                Уже есть аккаунт?{" "}
+                                <Link to="/login/">Войдите</Link>.
+                            </p>
+                        </div>
+                    </Card>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 

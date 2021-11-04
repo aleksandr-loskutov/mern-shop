@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import api from "../../api";
-import FormComponent, { TextField, SelectField } from "./index";
+import api from "../../../api";
+import FormComponent, { TextField, SelectField } from "../index";
 import { Button, Card, CardTitle, Col, Container, Row } from "reactstrap";
 
 const _editUserPage = () => {

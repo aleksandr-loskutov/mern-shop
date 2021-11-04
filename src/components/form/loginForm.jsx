@@ -1,13 +1,38 @@
 import React from "react";
 import { Button, Card, CardTitle, Col, Container, Row } from "reactstrap";
-import FormComponent, { TextField } from "../components/form/index";
+import FormComponent, { TextField } from "./index";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
-const RegisterForm = () => {
+const LoginForm = () => {
     const handleSubmit = (data) => {
         console.log("data", data);
         console.log("success");
     };
+    // const validatorConfig = {
+    //     email: {
+    //         isRequired: {
+    //             message: "Электронная почта обязательна для заполнения"
+    //         },
+    //         isEmail: {
+    //             message: "Email введен некорректно"
+    //         }
+    //     },
+    //     password: {
+    //         isRequired: {
+    //             message: "Пароль обязателен для заполнения"
+    //         },
+    //         isCapitalSymbol: {
+    //             message: "Пароль должен содержать хотя бы одну заглавную букву"
+    //         },
+    //         isContainDigit: {
+    //             message: "Пароль должен содержать хотя бы одно число"
+    //         },
+    //         min: {
+    //             message: "Пароль должен состаять миниму из 8 символов",
+    //             value: 8
+    //         }
+    //     }
+    // };
     const validateSchema = yup.object().shape({
         password: yup
             .string()
@@ -28,25 +53,22 @@ const RegisterForm = () => {
         email: yup
             .string()
             .required("Email обязателен")
-            .email("Email введен не корректно"),
-        passwordConfirmation: yup
-            .string()
-            .oneOf([yup.ref("password"), null], "Пароли должны совпадать")
+            .email("Email введен не корректно")
     });
     return (
         <Container>
             <Row>
                 <Col className="ml-auto mr-auto" lg="4" md="6" sm="6">
                     <Card className="card-register">
-                        <CardTitle tag="h3">Регистрация</CardTitle>
+                        <CardTitle tag="h3">Войти</CardTitle>
                         <FormComponent
                             onSubmit={handleSubmit}
                             validatorConfig={validateSchema}
                             className="register-form"
-                            defaultData={{
-                                email: "",
-                                password: ""
-                            }}
+                            // defaultData={{
+                            //     email: "",
+                            //     password: ""
+                            // }}
                         >
                             <TextField
                                 label="Электронная почта"
@@ -54,23 +76,22 @@ const RegisterForm = () => {
                                 autoFocus
                             />
                             <TextField label="Пароль" name="password" />
-                            <TextField
-                                label="Повторите пароль"
-                                name="passwordConfirmation"
-                            />
                             <Button
                                 block
                                 type="submit"
                                 className="btn-round btn-primary btn-lg mx-auto"
                                 color="danger"
                             >
-                                Регистрация
+                                Вход
                             </Button>
                         </FormComponent>
                         <div className="login m-2">
                             <p>
-                                Уже есть аккаунт?{" "}
-                                <Link to="/login/">Войдите</Link>.
+                                Нет аккаунта?{" "}
+                                <Link to="/login/register">
+                                    Зарегистрируйтесь
+                                </Link>
+                                .
                             </p>
                         </div>
                     </Card>
@@ -80,4 +101,4 @@ const RegisterForm = () => {
     );
 };
 
-export default RegisterForm;
+export default LoginForm;

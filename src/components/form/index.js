@@ -1,3 +1,3 @@
 import FormComponent from "./FormComponent";
-export * from "./fields";
+export * from "./fields/fields";
 export default FormComponent;
