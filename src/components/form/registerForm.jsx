@@ -9,6 +9,9 @@ const RegisterForm = () => {
         console.log("success");
     };
     const validateSchema = yup.object().shape({
+        passwordConfirmation: yup
+            .string()
+            .oneOf([yup.ref("password"), null], "Пароли должны совпадать"),
         password: yup
             .string()
             .required("пароль обязателен")
@@ -28,10 +31,7 @@ const RegisterForm = () => {
         email: yup
             .string()
             .required("Email обязателен")
-            .email("Email введен не корректно"),
-        passwordConfirmation: yup
-            .string()
-            .oneOf([yup.ref("password"), null], "Пароли должны совпадать")
+            .email("Email введен не корректно")
     });
     return (
         <Container>

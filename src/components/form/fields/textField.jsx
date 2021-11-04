@@ -29,15 +29,11 @@ const TextField = ({ label, type, name, value, onChange, error, ...rest }) => {
 
                 {type === "password" && (
                     <button
-                        className="btn btn-outline-secondary"
+                        className="btn-sm btn-group-toggle border-0 "
                         type="button"
                         onClick={toggleShowPassword}
                     >
-                        <i
-                            className={
-                                "bi bi-eye" + (showPassword ? "-slash" : "")
-                            }
-                        ></i>
+                        <i className={"nc-icon nc-key-25"}></i>
                     </button>
                 )}
                 {error && <div className="invalid-feedback ">{error}</div>}

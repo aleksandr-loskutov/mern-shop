@@ -8,31 +8,6 @@ const LoginForm = () => {
         console.log("data", data);
         console.log("success");
     };
-    // const validatorConfig = {
-    //     email: {
-    //         isRequired: {
-    //             message: "Электронная почта обязательна для заполнения"
-    //         },
-    //         isEmail: {
-    //             message: "Email введен некорректно"
-    //         }
-    //     },
-    //     password: {
-    //         isRequired: {
-    //             message: "Пароль обязателен для заполнения"
-    //         },
-    //         isCapitalSymbol: {
-    //             message: "Пароль должен содержать хотя бы одну заглавную букву"
-    //         },
-    //         isContainDigit: {
-    //             message: "Пароль должен содержать хотя бы одно число"
-    //         },
-    //         min: {
-    //             message: "Пароль должен состаять миниму из 8 символов",
-    //             value: 8
-    //         }
-    //     }
-    // };
     const validateSchema = yup.object().shape({
         password: yup
             .string()
@@ -65,17 +40,17 @@ const LoginForm = () => {
                             onSubmit={handleSubmit}
                             validatorConfig={validateSchema}
                             className="register-form"
-                            // defaultData={{
-                            //     email: "",
-                            //     password: ""
-                            // }}
                         >
                             <TextField
                                 label="Электронная почта"
                                 name="email"
                                 autoFocus
                             />
-                            <TextField label="Пароль" name="password" />
+                            <TextField
+                                label="Пароль"
+                                name="password"
+                                type="password"
+                            />
                             <Button
                                 block
                                 type="submit"

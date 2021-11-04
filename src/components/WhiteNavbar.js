@@ -167,25 +167,25 @@ function WhiteNavbar() {
                                     Войти
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-danger" right>
-                                    <DropdownItem to="/about-us" tag={Link}>
+                                    <DropdownItem to="/login" tag={Link}>
+                                        <i className="nc-icon nc-bullet-list-67" />
+                                        Вход
+                                    </DropdownItem>
+                                    <DropdownItem to="/user" tag={Link}>
+                                        <i className="nc-icon nc-badge" />
+                                        Мои данные
+                                    </DropdownItem>
+                                    <DropdownItem to="/user/orders" tag={Link}>
                                         <i className="nc-icon nc-bank" />
                                         Мои заказы
                                     </DropdownItem>
 
-                                    <DropdownItem to="/blog-post" tag={Link}>
-                                        <i className="nc-icon nc-badge" />
-                                        Мои данные
-                                    </DropdownItem>
                                     <DropdownItem
                                         to="/admin/product/add"
                                         tag={Link}
                                     >
                                         <i className="nc-icon nc-basket" />
                                         Добавить продукт
-                                    </DropdownItem>
-                                    <DropdownItem to="/blog-posts" tag={Link}>
-                                        <i className="nc-icon nc-bullet-list-67" />
-                                        Выход
                                     </DropdownItem>
                                 </DropdownMenu>
                             </UncontrolledDropdown>
@@ -194,8 +194,8 @@ function WhiteNavbar() {
                                 <Button
                                     className="btn-round"
                                     color="danger"
-                                    href="https://www.creative-tim.com/product/paper-kit-pro-react?ref=pkpr-white-navbar"
-                                    target="_blank"
+                                    to="/cart"
+                                    tag={Link}
                                 >
                                     <i className="nc-icon nc-cart-simple" />{" "}
                                     {"0"}
