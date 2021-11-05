@@ -27,6 +27,7 @@ const FormComponent = ({
                 Object.keys(errors).length === 0 && Object.keys(data).length > 0
             );
         },
+        // eslint-disable-next-line
         [validatorConfig, setErrors]
     );
     const handleSubmit = (e) => {
@@ -42,6 +43,7 @@ const FormComponent = ({
         if (Object.keys(data).length > 0) {
             validate(data);
         }
+        // eslint-disable-next-line
     }, [data]);
     const handleKeyDown = useCallback((event) => {
         if (event.keyCode === 13) {

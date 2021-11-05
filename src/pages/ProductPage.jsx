@@ -6,12 +6,7 @@ import Select from "react-select";
 import {
     Button,
     Card,
-    CardHeader,
-    CardBody,
-    CardTitle,
-    UncontrolledCollapse,
     FormGroup,
-    Container,
     Row,
     Col,
     Carousel,
@@ -21,9 +16,7 @@ import {
 } from "reactstrap";
 
 // core components
-import Footer from "../components/footer";
 import Page from "../components/page";
-import WhiteNavbar from "../components/WhiteNavbar";
 import Breadcrumbs from "../components/breadcrumbs";
 
 // carousel items
@@ -51,10 +44,6 @@ const carouselItems = [
 ];
 
 function ProductPage() {
-    // collapse states and functions
-    const [collapseOne, setCollapseOne] = React.useState(false);
-    const [collapseTwo, setCollapseTwo] = React.useState(false);
-    const [collapseThree, setCollapseThree] = React.useState(false);
     // react-select states
     const [colorSelect, setColorSelect] = React.useState({
         value: "1",
