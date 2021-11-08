@@ -1,13 +1,13 @@
 export const ADMIN_ROUTE = "/admin";
 export const ADMIN_PRODUCT_ADD_ROUTE = "/admin/product/add";
-export const ADMIN_CATEGORY_ADD_ROUTE = "/admin/category/add";
-export const ADMIN_USER_ROUTE = "/admin/user/add";
-export const ADMIN_ORDER_ADD_ROUTE = "/admin/order/add";
-export const ADMIN_POST_ADD_ROUTE = "/admin/post/add";
 export const ADMIN_PRODUCTS_ROUTE = "/admin/products/:productId?/:edit?";
+export const ADMIN_CATEGORY_ADD_ROUTE = "/admin/category/add";
 export const ADMIN_CATEGORIES_ROUTE = "/admin/categories/:categoryId?/:edit?";
+export const ADMIN_USER_ROUTE = "/admin/user/add";
 export const ADMIN_USERS_ROUTE = "/admin/users/:userId?/:edit?";
+export const ADMIN_ORDER_ADD_ROUTE = "/admin/order/add";
 export const ADMIN_ORDERS_ROUTE = "/admin/orders/:orderId?/:edit?";
+export const ADMIN_POST_ADD_ROUTE = "/admin/post/add";
 export const ADMIN_POSTS_ROUTE = "/admin/posts/:postId?/:edit?";
 // auth user
 export const USER_ROUTE = "/user";

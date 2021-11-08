@@ -12,7 +12,7 @@ import {
 const FeaturedProducts = () => {
     return (
         <>
-            <div className="section section-gray" id="cards">
+            <div className="section" id="cards">
                 <Container className="tim-container">
                     <h4 className="title">
                         <small>Cards with products</small>
