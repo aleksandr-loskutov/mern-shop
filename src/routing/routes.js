@@ -25,20 +25,20 @@ import {
     SEARCH_ROUTE
 } from "../utils/consts";
 import Admin from "../pages/Admin/admin";
+import AddUser from "../pages/Admin/AddUser";
+import AdminUsers from "../layouts/adminUsers";
+import AddOrder from "../pages/Admin/AddOrder";
+import AddPost from "../pages/Admin/AddPost";
+import AdminProducts from "../layouts/adminProducts";
+import AdminCategories from "../layouts/adminCategories";
+import AdminOrders from "../layouts/adminOrders";
+import AdminPosts from "../layouts/adminPosts";
 import Cart from "../pages/cart";
 import Index from "../pages/index.jsx";
 import ContactUs from "../pages/ContactUs.jsx";
 import Error404 from "../pages/Error404.jsx";
 import ProductPage from "../pages/ProductPage.jsx";
 import SearchWithSidebar from "../pages/SearchWithSidebar.jsx";
-import AddUser from "../pages/Admin/AddUser";
-import AddOrder from "../pages/Admin/AddOrder";
-import AddPost from "../pages/Admin/AddPost";
-import AdminProducts from "../layouts/adminProducts";
-import AdminCategories from "../layouts/adminCategories";
-import AdminUsers from "../layouts/adminUsers";
-import AdminOrders from "../layouts/adminOrders";
-import AdminPosts from "../layouts/adminPosts";
 import CheckOut from "../pages/User/checkOut";
 import UserOrders from "../layouts/userOrders";
 import OrderSuccess from "../pages/User/orderSuccess";

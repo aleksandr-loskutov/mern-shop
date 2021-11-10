@@ -175,7 +175,7 @@ function WhiteNavbar() {
                                         <i className="nc-icon nc-badge" />
                                         Мои данные
                                     </DropdownItem>
-                                    <DropdownItem to="/user/orders" tag={Link}>
+                                    <DropdownItem to="/user/orders/" tag={Link}>
                                         <i className="nc-icon nc-bank" />
                                         Мои заказы
                                     </DropdownItem>
