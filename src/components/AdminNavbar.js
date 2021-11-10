@@ -73,25 +73,12 @@ function AdminNavBar() {
                                 <DropdownToggle
                                     className="mr-2"
                                     color="default"
-                                    caret
                                     nav
+                                    to="/admin/orders/"
+                                    tag={Link}
                                 >
                                     ЗАКАЗЫ
                                 </DropdownToggle>
-                                <DropdownMenu className="dropdown-danger" right>
-                                    <DropdownItem
-                                        to="/admin/orders/"
-                                        tag={Link}
-                                    >
-                                        Все заказы
-                                    </DropdownItem>
-                                    <DropdownItem
-                                        to="/admin/order/add"
-                                        tag={Link}
-                                    >
-                                        Создать заказ
-                                    </DropdownItem>
-                                </DropdownMenu>
                             </UncontrolledDropdown>
                             <UncontrolledDropdown nav inNavbar>
                                 <DropdownToggle
