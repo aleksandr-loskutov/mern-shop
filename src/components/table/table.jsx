@@ -3,11 +3,11 @@ import React from "react";
 import TableBody from "./tableBody";
 import TableHeader from "./tableHeader";
 import { Col, Row, Table } from "reactstrap";
-
+// class for table className="ml-auto mr-auto mt-3" md="11"
 const TableComponent = ({ columns, data, children }) => {
     return (
         <Row>
-            <Col className="ml-auto mr-auto mt-3" md="11">
+            <Col>
                 <Table responsive>
                     {children || (
                         <>
