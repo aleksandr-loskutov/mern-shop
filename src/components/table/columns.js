@@ -45,6 +45,79 @@ export const columnsForAdminOrdersTable = {
     }
 };
 export const columnsForUserOrdersTable = columnsForAdminOrdersTable;
+export const columnsForAdminEditUser = {
+    name: {
+        path: "name",
+        name: "Имя",
+        component: (user) => <span>{user.name}</span>
+    },
+    email: {
+        path: "email",
+        name: "Почта",
+        component: (user) => <span>{user.email}</span>
+    },
+    city: {
+        path: "city",
+        name: "Город",
+        component: (user) => <span></span>
+    },
+    birthDate: {
+        path: "birthDate",
+        name: "Дата",
+        component: (user) => <span>{user.birthDate}</span>
+    },
+    role: {
+        path: "role",
+        name: "Роль",
+        component: (user) => <span>user</span>
+    },
+    action: {
+        path: "action",
+        name: "Действия",
+        component: (user) => (
+            <>
+                <Button
+                    className="btn-link mr-1"
+                    color="info"
+                    data-toggle="tooltip"
+                    id="tooltip542628903"
+                    size="sm"
+                    type="button"
+                    to={`${user.id}`}
+                    tag={Link}
+                >
+                    <i className="nc-icon nc-alert-circle-i" />
+                </Button>
+                <UncontrolledTooltip
+                    delay={0}
+                    placement="top"
+                    target="tooltip542628903"
+                >
+                    Просмотр
+                </UncontrolledTooltip>
+                <Button
+                    className="btn-link mr-1"
+                    color="success"
+                    data-toggle="tooltip"
+                    id="tooltip278266693"
+                    size="sm"
+                    type="button"
+                    to={`${user.id}/edit`}
+                    tag={Link}
+                >
+                    <i className="fa fa-edit" />
+                </Button>
+                <UncontrolledTooltip
+                    delay={0}
+                    placement="top"
+                    target="tooltip278266693"
+                >
+                    Редактировать
+                </UncontrolledTooltip>
+            </>
+        )
+    }
+};
 export const columnsForAdminProductsTable = {
     code: {
         path: "code",
