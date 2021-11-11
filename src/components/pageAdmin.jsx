@@ -11,7 +11,7 @@ function PageAdmin({ children, sectionClass, title }) {
                 <div className={sectionClass || "section"}>
                     <Container>
                         {title && (
-                            <h2 className="section-title text-center">
+                            <h2 className="section-title text-center mb-3">
                                 {title}
                             </h2>
                         )}
