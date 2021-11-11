@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, ButtonGroup, Col, Row, Table } from "reactstrap";
-import Page from "../components/page";
+import Page from "../../components/page";
 
 const Cart = () => {
     return (

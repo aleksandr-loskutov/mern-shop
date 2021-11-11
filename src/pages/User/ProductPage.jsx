@@ -16,8 +16,8 @@ import {
 } from "reactstrap";
 
 // core components
-import Page from "../components/page";
-import Breadcrumbs from "../components/breadcrumbs";
+import Page from "../../components/page";
+import Breadcrumbs from "../../components/breadcrumbs";
 
 // carousel items
 const carouselItems = [

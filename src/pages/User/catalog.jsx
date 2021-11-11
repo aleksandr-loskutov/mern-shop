@@ -18,8 +18,8 @@ import {
 // core components
 
 import { useParams } from "react-router-dom";
-import ProductList from "../components/productList";
-import Page from "../components/page";
+import ProductList from "../../components/productList";
+import Page from "../../components/page";
 
 function Catalog() {
     // states for collapses
