@@ -25,7 +25,7 @@ import {
     SEARCH_ROUTE
 } from "../utils/consts";
 import Admin from "../pages/Admin/admin";
-import AddUser from "../pages/Admin/AddUser";
+import AddUser from "../components/form/AddUser";
 import AdminUsers from "../layouts/adminUsers";
 import AddOrder from "../pages/Admin/AddOrder";
 import AddPost from "../pages/Admin/AddPost";
@@ -33,21 +33,21 @@ import AdminProducts from "../layouts/adminProducts";
 import AdminCategories from "../layouts/adminCategories";
 import AdminOrders from "../layouts/adminOrders";
 import AdminPosts from "../layouts/adminPosts";
-import Cart from "../pages/cart";
+import Cart from "../pages/User/cart";
 import Index from "../pages/index.jsx";
-import ContactUs from "../pages/ContactUs.jsx";
+import ContactUs from "../pages/User/ContactUs.jsx";
 import Error404 from "../pages/Error404.jsx";
-import ProductPage from "../pages/ProductPage.jsx";
-import SearchWithSidebar from "../pages/SearchWithSidebar.jsx";
+import ProductPage from "../pages/User/ProductPage.jsx";
+import SearchWithSidebar from "../pages/User/SearchWithSidebar.jsx";
 import CheckOut from "../pages/User/checkOut";
 import UserOrders from "../layouts/userOrders";
 import OrderSuccess from "../pages/User/orderSuccess";
-import Catalog from "../pages/catalog.jsx";
-import Posts from "../pages/posts";
+import Catalog from "../pages/User/catalog.jsx";
+import Posts from "../pages/User/posts";
 import AddCategory from "../pages/Admin/AddCategory";
 import UserSettings from "../pages/User/userSettings.jsx";
 import AddProduct from "../pages/Admin/AddProduct";
-import LoginPage from "../pages/loginPage";
+import LoginPage from "../pages/User/loginPage";
 
 export const authRoutes = [
     {
