@@ -8,10 +8,13 @@ class CategoryController {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                return res.status(400).json({
-                    message: "Ошибка при добавлении категории",
-                    errors
-                });
+                return res
+                    .status(400)
+                    .json({
+                        status: 400,
+                        message: "Ошибка при добавлении категории",
+                        errors
+                    });
             }
             const { name, description, img, metaTitle, categoryId } = req.body;
             //TODO sanitize special chars in name before cyrToLat
@@ -21,6 +24,7 @@ class CategoryController {
             const checkForName = await Category.findOne({ name: name });
             if (checkForName) {
                 return res.status(400).json({
+                    status: 400,
                     message:
                         "Категория с таким наименованием / URL алиасом уже есть в базе"
                 });
@@ -45,8 +49,9 @@ class CategoryController {
             });
             await category.save();
             return res.status(200).json({
+                status: 200,
                 message: "Успешно добавлена категория",
-                obj: category
+                content: category
             });
         } catch (e) {}
     }
@@ -54,15 +59,25 @@ class CategoryController {
         try {
             const categories = await Category.find({ name: { $ne: "root" } });
 
-            return res.status(200).json(categories);
+            return res.status(200).json({
+                status: 200,
+                content: categories,
+                message: "Successfully categories retrieved"
+            });
         } catch (e) {}
     }
     async getOne(req, res) {
         try {
             const category = await Category.findById(req.params.id);
             return category
-                ? res.status(200).json(category)
-                : res.status(404).json({ message: "Категория не найдена" });
+                ? res.status(200).json({
+                      status: 200,
+                      content: category,
+                      message: "Successfully category retrieved"
+                  })
+                : res
+                      .status(404)
+                      .json({ status: 404, message: "Категория не найдена" });
         } catch (e) {}
     }
     async update(req, res) {
@@ -72,13 +87,20 @@ class CategoryController {
                 { $set: req.body },
                 { new: true }
             );
-            res.status(200).json(category);
+            res.status(200).json({
+                status: 200,
+                content: category,
+                message: "Successfully category updated"
+            });
         } catch (e) {}
     }
     async delete(req, res) {
         try {
             await Category.deleteOne({ _id: req.params.id });
-            res.status(200).json({ message: "Категория была удалена" });
+            res.status(200).json({
+                status: 200,
+                message: "Категория была удалена"
+            });
         } catch (e) {}
     }
 }
