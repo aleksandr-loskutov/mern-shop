@@ -10,6 +10,7 @@ class OrderController {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return res.status(400).json({
+                    status: 400,
                     message: "Ошибка при добавлении заказа",
                     errors
                 });
@@ -33,20 +34,35 @@ class OrderController {
             await order.save();
             //TODO сгенерировать новую корзину для пользователя
             return res.status(200).json({
+                status: 200,
                 message: "Успешно добавлен заказ",
-                obj: order
+                content: order
             });
         } catch (e) {}
     }
     async getAll(req, res) {
         try {
-        } catch (e) {
-            console.log(e);
-            res.status(400).json({ message: "Ошибка" });
-        }
+            const orders = await Order.find();
+
+            return res.status(200).json({
+                status: 200,
+                content: orders,
+                message: "Successfully orders retrieved"
+            });
+        } catch (e) {}
     }
     async getOne(req, res) {
         try {
+            const order = await Order.findById(req.params.id);
+            return order
+                ? res.status(200).json({
+                      status: 200,
+                      content: order,
+                      message: "Successfully order retrieved"
+                  })
+                : res
+                      .status(404)
+                      .json({ status: 404, message: "order not found" });
         } catch (e) {}
     }
     async getByUser(req, res) {
