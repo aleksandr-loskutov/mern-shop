@@ -10,9 +10,11 @@ class ProductController {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                return res
-                    .status(400)
-                    .json({ message: "Ошибка при добавлении товара", errors });
+                return res.status(400).json({
+                    status: 400,
+                    message: "Ошибка при добавлении товара",
+                    errors
+                });
             }
 
             const {
@@ -36,7 +38,9 @@ class ProductController {
             const checkForName = await Product.findOne({ name: name });
             if (checkForName) {
                 return res.status(400).json({
-                    message: "Товар с таким наименованием уже есть в базе"
+                    status: 400,
+                    message: "Товар с таким наименованием уже есть в базе",
+                    errors
                 });
             }
             let category = categoryId;
@@ -66,23 +70,34 @@ class ProductController {
             });
             await product.save();
             return res.status(200).json({
-                message: " Успешно добавлен товар",
-                obj: product
+                message: "Успешно добавлен",
+                status: 200,
+                content: product
             });
         } catch (e) {}
     }
     async getAll(req, res) {
         try {
             const products = await Product.find({});
-            return res.status(200).json(products);
+            return res.status(200).json({
+                message: "Получены товары",
+                status: 200,
+                content: products
+            });
         } catch (e) {}
     }
     async getOne(req, res) {
         try {
             const product = await Product.findById(req.params.id);
             return product
-                ? res.status(200).json(product)
-                : res.status(404).json({ message: "Продукт не найден" });
+                ? res.status(200).json({
+                      message: "Успешно",
+                      content: product,
+                      status: 200
+                  })
+                : res
+                      .status(404)
+                      .json({ message: "Продукт не найден", status: 400 });
         } catch (e) {}
     }
     async getByCategory(req, res) {
@@ -90,7 +105,13 @@ class ProductController {
             const products = await Product.find({
                 categoryId: req.params.categoryId
             });
-            return res.status(200).json(products);
+            return products
+                ? res.status(200).json({
+                      message: "Успешно",
+                      content: products,
+                      status: 200
+                  })
+                : res.status(404).json({ message: "Не найдено", status: 400 });
         } catch (e) {}
     }
     async update(req, res) {
@@ -100,12 +121,17 @@ class ProductController {
                 { $set: req.body },
                 { new: true }
             );
-            res.status(200).json(product);
+            res.status(200).json({
+                message: "Успешно",
+                content: product,
+                status: 200
+            });
         } catch (e) {}
     }
     async delete(req, res) {
         try {
             await Product.deleteOne({ _id: req.params.id });
+            //TODO проверка на удаление
             res.status(200).json({ message: "Продукт был удален" });
         } catch (e) {}
     }
