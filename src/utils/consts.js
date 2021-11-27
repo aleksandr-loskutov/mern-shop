@@ -27,3 +27,4 @@ export const ROOT_ROUTE = "/";
 // etc
 export const HOST = "http://localhost:4000/";
 export const API_CATEGORIES = "api/category/";
+export const API_PRODUCTS = "api/product/";
