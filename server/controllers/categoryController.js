@@ -8,13 +8,11 @@ class CategoryController {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                return res
-                    .status(400)
-                    .json({
-                        status: 400,
-                        message: "Ошибка при добавлении категории",
-                        errors
-                    });
+                return res.status(400).json({
+                    status: 400,
+                    message: "Ошибка при добавлении категории",
+                    errors
+                });
             }
             const { name, description, img, metaTitle, categoryId } = req.body;
             //TODO sanitize special chars in name before cyrToLat
@@ -58,7 +56,7 @@ class CategoryController {
     async getAll(req, res) {
         try {
             const categories = await Category.find({ name: { $ne: "root" } });
-
+            // console.log("request for getAll categories");
             return res.status(200).json({
                 status: 200,
                 content: categories,

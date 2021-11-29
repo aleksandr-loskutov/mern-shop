@@ -20,15 +20,19 @@ import {
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../store/actions/categories";
+import { useCategories } from "../hooks/useCategory";
 // core components
 
 function WhiteNavbar() {
     const { categories } = useSelector((state) => state.categories);
     const dispatch = useDispatch();
-
     useEffect(() => {
         dispatch(fetchCategories());
     }, [dispatch]);
+
+    //console.log("categories", categories);
+    // const cats = useCategories();
+    // console.log("cats", cats);
     const [bodyClick, setBodyClick] = React.useState(false);
     const [collapseOpen, setCollapseOpen] = React.useState(false);
     React.useEffect(() => {
@@ -102,8 +106,8 @@ function WhiteNavbar() {
                                     КАТАЛОГ
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-danger" right>
-                                    {categories.length > 0 &&
-                                        categories.map((cat) => (
+                                    {categories?.content?.length > 0 &&
+                                        categories.content.map((cat) => (
                                             <DropdownItem
                                                 key={cat._id}
                                                 to={`/catalog/${cat.urlAlias}`}
