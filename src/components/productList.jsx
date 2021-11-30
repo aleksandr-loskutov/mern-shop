@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
     Button,
     Card,
@@ -9,16 +9,13 @@ import {
     Row
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../store/actions/products";
 import Select from "react-select";
 
 const ProductList = ({ products, onSort, onShowMore }) => {
-    //console.log("products here", products);
-    const [defaultSelect, setDefaultSelect] = React.useState(null);
+    // console.log("products here", products);
     const selectOptions = [
-        { value: "", label: "Дешевле", isDisabled: true },
-        { value: "1", label: "Дороже " }
+        { value: "asc", label: "Дешевле" },
+        { value: "desc", label: "Дороже " }
     ];
     return (
         <>
@@ -26,13 +23,13 @@ const ProductList = ({ products, onSort, onShowMore }) => {
                 <Col md="3" sm="3" className="ml-auto">
                     <FormGroup>
                         <Select
+                            isSearchable={false}
                             className="react-select react-select-default"
                             classNamePrefix="react-select"
                             name="defaultSelect"
-                            value={defaultSelect}
-                            onChange={(value) => setDefaultSelect(value)}
+                            defaultValue={selectOptions[0]}
+                            onChange={(value) => onSort(value)}
                             options={selectOptions}
-                            placeholder="Сортировка"
                         />
                     </FormGroup>
                 </Col>

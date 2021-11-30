@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import _ from "lodash";
 // plugin that creates slider
 import Slider from "nouislider";
 
@@ -20,479 +21,219 @@ import {
 import { useParams } from "react-router-dom";
 import ProductList from "../../components/productList";
 import Page from "../../components/page";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../../store/actions/products";
+import Preloader from "../../components/preloader";
 
 function Catalog() {
     // states for collapses
     const { alias } = useParams();
-    const [priceRange, setPriceRange] = React.useState(true);
-    const [clothing, setClothing] = React.useState(false);
-    const [designer, setDesigner] = React.useState(false);
-    const [color, setColor] = React.useState(false);
+    const { products } = useSelector((state) => state.products);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
+    const [category, setCategory] = useState(true);
+    const [type, setType] = useState(false);
+    const [color, setColor] = useState(false);
+    const [sort, setSort] = useState("asc");
     document.documentElement.classList.remove("nav-open");
     React.useEffect(() => {
-        if (
-            !document
-                .getElementById("sliderDouble")
-                .classList.contains("noUi-target")
-        ) {
-            Slider.create(document.getElementById("sliderDouble"), {
-                start: [20, 80],
-                connect: [false, true, false],
-                step: 1,
-                range: { min: 0, max: 100 }
-            });
-        }
         document.body.classList.add("ecommerce-page");
         return function cleanup() {
             document.body.classList.remove("ecommerce-page");
         };
     });
+    const [filterFeatures, setFilterFeatures] = useState({});
+    // React.useEffect(() => {
+    //     products?.content.length > 0 ? setFilterFeatures(getSortingFeatures())
+    // },[products])
+    const handleSort = ({ value }) => {
+        setSort(value);
+    };
+    const handleShowMore = () => {};
+    const handleInputChange = (event, feature) => {
+        const { target } = event;
+        setFilterFeatures((prevState) => ({
+            ...prevState,
+            [feature]: target.checked
+        }));
+    };
+    const getSortingFeatures = (feature, arr) => {
+        const reducedArr = arr.reduce((acc, product) => {
+            acc.push(product[feature]);
+            return acc;
+        }, []);
+        return reducedArr.length > 0 ? [...new Set(reducedArr)] : [];
+    };
+    // console.log("filterFeatures", filterFeatures);
+    const filteredProducts = products?.content
+        ? _.orderBy(products.content, "price", sort)
+        : [];
+    // console.log("filteredProducts", filteredProducts);
+
     return (
         <Page title={alias ? alias : "Каталог"}>
-            <Row>
-                <Col md="3">
-                    <Card className="card-refine">
-                        <div
-                            aria-expanded={true}
-                            aria-multiselectable={true}
-                            className="panel-group"
-                            id="accordion"
-                        >
-                            <CardHeader
-                                className="card-collapse"
-                                id="priceRanger"
-                                role="tab"
+            {products?.content ? (
+                <Row>
+                    <Col md="3">
+                        <Card className="card-refine">
+                            <div
+                                aria-expanded={true}
+                                aria-multiselectable={true}
+                                className="panel-group"
+                                id="accordion"
                             >
-                                <h5 className="mb-0 panel-title">
-                                    <a
-                                        aria-expanded={priceRange}
-                                        href="#pablo"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setPriceRange(!priceRange);
-                                        }}
-                                    >
-                                        Price Range{" "}
-                                        <i className="nc-icon nc-minimal-down" />
-                                    </a>
-                                </h5>
-                            </CardHeader>
-                            <Collapse isOpen={priceRange}>
-                                <CardBody>
-                                    <div
-                                        className="slider slider-info"
-                                        id="sliderDouble"
-                                    />
-                                </CardBody>
-                            </Collapse>
-                            <CardHeader
-                                className="card-collapse"
-                                id="clothingGear"
-                                role="tab"
-                            >
-                                <h5 className="mb-0 panel-title">
-                                    <a
-                                        aria-expanded={clothing}
-                                        href="#pablo"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setClothing(!clothing);
-                                        }}
-                                    >
-                                        Clothing{" "}
-                                        <i className="nc-icon nc-minimal-down" />
-                                    </a>
-                                </h5>
-                            </CardHeader>
-                            <Collapse isOpen={clothing}>
-                                <CardBody>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultChecked
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Blazers{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Casual Shirts{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Formal Shirts{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Jeans{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Polos{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Pyjamas{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Shorts{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Trousers{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                </CardBody>
-                            </Collapse>
-                            <CardHeader
-                                className="card-collapse"
-                                id="designer"
-                                role="tab"
-                            >
-                                <h5 className="mb-0 panel-title">
-                                    <a
-                                        aria-expanded={designer}
-                                        href="#pablo"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setDesigner(!designer);
-                                        }}
-                                    >
-                                        Designer{" "}
-                                        <i className="nc-icon nc-minimal-down" />
-                                    </a>
-                                </h5>
-                            </CardHeader>
-                            <Collapse isOpen={designer}>
-                                <CardBody>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultChecked
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            All{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Acne Studio{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Alex Mill{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Alexander McQueen{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Alfred Dunhill{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            AMI{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Berena{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Berluti{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Burberry Prorsum{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Berluti{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Calvin Klein{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Club Monaco{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Dolce &amp; Gabbana{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Gucci{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Kolor{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Lanvin{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Loro Piana{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Massimo Alba{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                </CardBody>
-                            </Collapse>
-                            <CardHeader
-                                className="card-collapse"
-                                id="color"
-                                role="tab"
-                            >
-                                <h5 className="mb-0 panel-title">
-                                    <a
-                                        aria-expanded={color}
-                                        href="#pablo"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setColor(!color);
-                                        }}
-                                    >
-                                        Colour{" "}
-                                        <i className="nc-icon nc-minimal-down" />
-                                    </a>
-                                </h5>
-                            </CardHeader>
-                            <Collapse isOpen={color}>
-                                <CardBody>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultChecked
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            All{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Blue{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Brown{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Gray{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Green{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Neutrals{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input
-                                                defaultValue=""
-                                                type="checkbox"
-                                            />
-                                            Purple{" "}
-                                            <span className="form-check-sign" />
-                                        </Label>
-                                    </FormGroup>
-                                </CardBody>
-                            </Collapse>
-                        </div>
-                    </Card>
-                    {/* end card */}
-                </Col>
-                <ProductList />
-            </Row>
+                                <CardHeader
+                                    className="card-collapse"
+                                    id="categoryGear"
+                                    role="tab"
+                                >
+                                    <h5 className="mb-0 panel-title">
+                                        <a
+                                            aria-expanded={category}
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setCategory(!category);
+                                            }}
+                                        >
+                                            Каталог брендов{" "}
+                                            <i className="nc-icon nc-minimal-down" />
+                                        </a>
+                                    </h5>
+                                </CardHeader>
+                                <Collapse isOpen={category}>
+                                    <CardBody>
+                                        {" "}
+                                        {getSortingFeatures(
+                                            "brand",
+                                            products.content
+                                        ).map((brand) => (
+                                            <FormGroup check key={brand}>
+                                                <Label check>
+                                                    <Input
+                                                        onInput={(event) =>
+                                                            handleInputChange(
+                                                                event,
+                                                                brand
+                                                            )
+                                                        }
+                                                        defaultValue=""
+                                                        type="checkbox"
+                                                    />
+                                                    {brand}{" "}
+                                                    <span className="form-check-sign" />
+                                                </Label>
+                                            </FormGroup>
+                                        ))}
+                                    </CardBody>
+                                </Collapse>
+                                <CardHeader
+                                    className="card-collapse"
+                                    id="type"
+                                    role="tab"
+                                >
+                                    <h5 className="mb-0 panel-title">
+                                        <a
+                                            aria-expanded={type}
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setType(!type);
+                                            }}
+                                        >
+                                            Тип разморозки{" "}
+                                            <i className="nc-icon nc-minimal-down" />
+                                        </a>
+                                    </h5>
+                                </CardHeader>
+                                <Collapse isOpen={type}>
+                                    <CardBody>
+                                        {" "}
+                                        {getSortingFeatures(
+                                            "defrostChamberType",
+                                            products.content
+                                        ).map((type) => (
+                                            <FormGroup check key={type}>
+                                                <Label check>
+                                                    <Input
+                                                        onInput={(event) =>
+                                                            handleInputChange(
+                                                                event,
+                                                                type
+                                                            )
+                                                        }
+                                                        defaultValue=""
+                                                        type="checkbox"
+                                                    />
+                                                    {type}{" "}
+                                                    <span className="form-check-sign" />
+                                                </Label>
+                                            </FormGroup>
+                                        ))}
+                                    </CardBody>
+                                </Collapse>
+                                <CardHeader
+                                    className="card-collapse"
+                                    id="color"
+                                    role="tab"
+                                >
+                                    <h5 className="mb-0 panel-title">
+                                        <a
+                                            aria-expanded={color}
+                                            href="#"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setColor(!color);
+                                            }}
+                                        >
+                                            Colour{" "}
+                                            <i className="nc-icon nc-minimal-down" />
+                                        </a>
+                                    </h5>
+                                </CardHeader>
+                                <Collapse isOpen={color}>
+                                    <CardBody>
+                                        {" "}
+                                        {getSortingFeatures(
+                                            "color",
+                                            products.content
+                                        ).map((color) => (
+                                            <FormGroup check key={color}>
+                                                <Label check>
+                                                    <Input
+                                                        onInput={(event) =>
+                                                            handleInputChange(
+                                                                event,
+                                                                color
+                                                            )
+                                                        }
+                                                        defaultValue=""
+                                                        type="checkbox"
+                                                    />
+                                                    {color}{" "}
+                                                    <span className="form-check-sign" />
+                                                </Label>
+                                            </FormGroup>
+                                        ))}
+                                    </CardBody>
+                                </Collapse>
+                            </div>
+                        </Card>
+                        {/* end card */}
+                    </Col>
+
+                    <ProductList
+                        products={filteredProducts}
+                        onSort={handleSort}
+                        sort={sort}
+                        onShowMore={handleShowMore}
+                    />
+                </Row>
+            ) : (
+                <Preloader mx="mx-auto" />
+            )}
         </Page>
     );
 }
