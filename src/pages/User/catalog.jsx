@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
-// plugin that creates slider
-import Slider from "nouislider";
 
 // reactstrap components
 import {
@@ -45,19 +43,19 @@ function Catalog() {
         };
     });
     const [filterFeatures, setFilterFeatures] = useState({});
-    // React.useEffect(() => {
-    //     products?.content.length > 0 ? setFilterFeatures(getSortingFeatures())
-    // },[products])
+
     const handleSort = ({ value }) => {
         setSort(value);
     };
     const handleShowMore = () => {};
-    const handleInputChange = (event, feature) => {
-        const { target } = event;
-        setFilterFeatures((prevState) => ({
-            ...prevState,
-            [feature]: target.checked
-        }));
+    const handleInputChange = (feature) => {
+        setFilterFeatures((prevState) => {
+            const key = Object.keys(feature)[0];
+            return {
+                ...prevState,
+                [key]: { ...prevState[key], ...feature[key] }
+            };
+        });
     };
     const getSortingFeatures = (feature, arr) => {
         const reducedArr = arr.reduce((acc, product) => {
@@ -66,11 +64,40 @@ function Catalog() {
         }, []);
         return reducedArr.length > 0 ? [...new Set(reducedArr)] : [];
     };
-    // console.log("filterFeatures", filterFeatures);
-    const filteredProducts = products?.content
-        ? _.orderBy(products.content, "price", sort)
+
+    //todo плитка сортировочных тегов
+    const groupedProducts = products?.content
+        ? Object.keys(filterFeatures).length > 0
+            ? _.filter(products.content, (product) => {
+                  let match = false;
+                  Object.keys(filterFeatures).forEach((featureKey) => {
+                      const featureStatus =
+                          filterFeatures[featureKey]?.[product[featureKey]];
+                      const isFilterActive =
+                          Object.values(filterFeatures[featureKey]).some(
+                              (v) => v === true
+                          ) || false;
+                      switch (featureStatus) {
+                          case undefined:
+                              match = !isFilterActive;
+                              break;
+                          case false:
+                              match = !isFilterActive;
+                              break;
+                          case true:
+                              match = true;
+                              break;
+                      }
+                  });
+                  return match;
+              })
+            : products.content
         : [];
-    // console.log("filteredProducts", filteredProducts);
+    const sortedProducts =
+        groupedProducts.length > 0
+            ? _.orderBy(groupedProducts, "price", sort)
+            : [];
+    console.log("filterFeatures", filterFeatures);
 
     return (
         <Page title={alias ? alias : "Каталог"}>
@@ -114,10 +141,14 @@ function Catalog() {
                                                 <Label check>
                                                     <Input
                                                         onInput={(event) =>
-                                                            handleInputChange(
-                                                                event,
-                                                                brand
-                                                            )
+                                                            handleInputChange({
+                                                                brand: {
+                                                                    [brand]:
+                                                                        event
+                                                                            .target
+                                                                            .checked
+                                                                }
+                                                            })
                                                         }
                                                         defaultValue=""
                                                         type="checkbox"
@@ -159,10 +190,14 @@ function Catalog() {
                                                 <Label check>
                                                     <Input
                                                         onInput={(event) =>
-                                                            handleInputChange(
-                                                                event,
-                                                                type
-                                                            )
+                                                            handleInputChange({
+                                                                defrostChamberType:
+                                                                    {
+                                                                        [type]: event
+                                                                            .target
+                                                                            .checked
+                                                                    }
+                                                            })
                                                         }
                                                         defaultValue=""
                                                         type="checkbox"
@@ -204,10 +239,14 @@ function Catalog() {
                                                 <Label check>
                                                     <Input
                                                         onInput={(event) =>
-                                                            handleInputChange(
-                                                                event,
-                                                                color
-                                                            )
+                                                            handleInputChange({
+                                                                color: {
+                                                                    [color]:
+                                                                        event
+                                                                            .target
+                                                                            .checked
+                                                                }
+                                                            })
                                                         }
                                                         defaultValue=""
                                                         type="checkbox"
@@ -225,14 +264,14 @@ function Catalog() {
                     </Col>
 
                     <ProductList
-                        products={filteredProducts}
+                        products={sortedProducts}
                         onSort={handleSort}
                         sort={sort}
                         onShowMore={handleShowMore}
                     />
                 </Row>
             ) : (
-                <Preloader mx="mx-auto" />
+                <Preloader />
             )}
         </Page>
     );
