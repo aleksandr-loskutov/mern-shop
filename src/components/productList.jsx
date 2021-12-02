@@ -10,8 +10,9 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import Select from "react-select";
+import ShowMoreButton from "./showMoreButton";
 
-const ProductList = ({ products, onSort, onShowMore }) => {
+const ProductList = ({ products, onSort, onShowMore, showMore }) => {
     // console.log("products here", products);
     const selectOptions = [
         { value: "asc", label: "Дешевле" },
@@ -77,17 +78,7 @@ const ProductList = ({ products, onSort, onShowMore }) => {
                             </div>
                         )}
                     </Row>
-                    <Col className="offset-md-4" md="3">
-                        <Button
-                            className="btn-round"
-                            color="default"
-                            data-rotation-color="gray"
-                            id="successBtn"
-                            outline
-                        >
-                            Load more...
-                        </Button>
-                    </Col>{" "}
+                    {showMore && <ShowMoreButton onShowMore={onShowMore} />}
                 </div>
             </Col>
         </>
