@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
-
+import { paginate } from "../../utils/paginate";
 // reactstrap components
 import {
     Card,
@@ -32,9 +32,9 @@ function Catalog() {
         dispatch(fetchProducts());
     }, [dispatch]);
     const [category, setCategory] = useState(true);
-    const [type, setType] = useState(false);
-    const [color, setColor] = useState(false);
     const [sort, setSort] = useState("asc");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filterFeatures, setFilterFeatures] = useState({});
     document.documentElement.classList.remove("nav-open");
     React.useEffect(() => {
         document.body.classList.add("ecommerce-page");
@@ -42,12 +42,17 @@ function Catalog() {
             document.body.classList.remove("ecommerce-page");
         };
     });
-    const [filterFeatures, setFilterFeatures] = useState({});
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filterFeatures]);
     const handleSort = ({ value }) => {
         setSort(value);
     };
-    const handleShowMore = () => {};
+    const handleShowMore = () => {
+        setCurrentPage((prevState) => prevState + 1);
+    };
+    console.log("currentPage", currentPage);
     const handleInputChange = (feature) => {
         setFilterFeatures((prevState) => {
             const key = Object.keys(feature)[0];
@@ -64,29 +69,28 @@ function Catalog() {
         }, []);
         return reducedArr.length > 0 ? [...new Set(reducedArr)] : [];
     };
-
+    const getActiveFiltersCount = () => {
+        let activeFilters = 0;
+        if (Object.keys(filterFeatures).length > 0) {
+            Object.keys(filterFeatures).forEach((filterKey) => {
+                Object.values(filterFeatures[filterKey]).forEach((v) => {
+                    if (v === true) {
+                        activeFilters++;
+                    }
+                });
+            });
+        }
+        return activeFilters;
+    };
     //todo плитка сортировочных тегов
     const groupedProducts = products?.content
-        ? Object.keys(filterFeatures).length > 0
+        ? getActiveFiltersCount() > 0
             ? _.filter(products.content, (product) => {
                   let match = false;
-                  Object.keys(filterFeatures).forEach((featureKey) => {
-                      const featureStatus =
-                          filterFeatures[featureKey]?.[product[featureKey]];
-                      const isFilterActive =
-                          Object.values(filterFeatures[featureKey]).some(
-                              (v) => v === true
-                          ) || false;
-                      switch (featureStatus) {
-                          case undefined:
-                              match = !isFilterActive;
-                              break;
-                          case false:
-                              match = !isFilterActive;
-                              break;
-                          case true:
-                              match = true;
-                              break;
+                  Object.keys(filterFeatures).every((filterKey) => {
+                      if (filterFeatures[filterKey][product[filterKey]]) {
+                          match = true;
+                          return false;
                       }
                   });
                   return match;
@@ -97,8 +101,8 @@ function Catalog() {
         groupedProducts.length > 0
             ? _.orderBy(groupedProducts, "price", sort)
             : [];
-    console.log("filterFeatures", filterFeatures);
-
+    const productsCrop = paginate(sortedProducts, currentPage, 9);
+    const showMore = sortedProducts > productsCrop;
     return (
         <Page title={alias ? alias : "Каталог"}>
             {products?.content ? (
@@ -160,114 +164,17 @@ function Catalog() {
                                         ))}
                                     </CardBody>
                                 </Collapse>
-                                <CardHeader
-                                    className="card-collapse"
-                                    id="type"
-                                    role="tab"
-                                >
-                                    <h5 className="mb-0 panel-title">
-                                        <a
-                                            aria-expanded={type}
-                                            href="#"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                setType(!type);
-                                            }}
-                                        >
-                                            Тип разморозки{" "}
-                                            <i className="nc-icon nc-minimal-down" />
-                                        </a>
-                                    </h5>
-                                </CardHeader>
-                                <Collapse isOpen={type}>
-                                    <CardBody>
-                                        {" "}
-                                        {getSortingFeatures(
-                                            "defrostChamberType",
-                                            products.content
-                                        ).map((type) => (
-                                            <FormGroup check key={type}>
-                                                <Label check>
-                                                    <Input
-                                                        onInput={(event) =>
-                                                            handleInputChange({
-                                                                defrostChamberType:
-                                                                    {
-                                                                        [type]: event
-                                                                            .target
-                                                                            .checked
-                                                                    }
-                                                            })
-                                                        }
-                                                        defaultValue=""
-                                                        type="checkbox"
-                                                    />
-                                                    {type}{" "}
-                                                    <span className="form-check-sign" />
-                                                </Label>
-                                            </FormGroup>
-                                        ))}
-                                    </CardBody>
-                                </Collapse>
-                                <CardHeader
-                                    className="card-collapse"
-                                    id="color"
-                                    role="tab"
-                                >
-                                    <h5 className="mb-0 panel-title">
-                                        <a
-                                            aria-expanded={color}
-                                            href="#"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                setColor(!color);
-                                            }}
-                                        >
-                                            Colour{" "}
-                                            <i className="nc-icon nc-minimal-down" />
-                                        </a>
-                                    </h5>
-                                </CardHeader>
-                                <Collapse isOpen={color}>
-                                    <CardBody>
-                                        {" "}
-                                        {getSortingFeatures(
-                                            "color",
-                                            products.content
-                                        ).map((color) => (
-                                            <FormGroup check key={color}>
-                                                <Label check>
-                                                    <Input
-                                                        onInput={(event) =>
-                                                            handleInputChange({
-                                                                color: {
-                                                                    [color]:
-                                                                        event
-                                                                            .target
-                                                                            .checked
-                                                                }
-                                                            })
-                                                        }
-                                                        defaultValue=""
-                                                        type="checkbox"
-                                                    />
-                                                    {color}{" "}
-                                                    <span className="form-check-sign" />
-                                                </Label>
-                                            </FormGroup>
-                                        ))}
-                                    </CardBody>
-                                </Collapse>
                             </div>
                         </Card>
                         {/* end card */}
                     </Col>
 
                     <ProductList
-                        products={sortedProducts}
+                        products={productsCrop}
                         onSort={handleSort}
                         sort={sort}
                         onShowMore={handleShowMore}
+                        showMore={showMore}
                     />
                 </Row>
             ) : (
