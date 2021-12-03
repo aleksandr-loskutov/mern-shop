@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import _ from "lodash";
 import { paginate } from "../../utils/paginate";
 // reactstrap components
@@ -22,20 +22,23 @@ import Page from "../../components/page";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../store/actions/products";
 import Preloader from "../../components/preloader";
+import { fetchCategories } from "../../store/actions/categories";
 
 function Catalog() {
-    // states for collapses
     const { alias } = useParams();
     const { products } = useSelector((state) => state.products);
+    const { categories } = useSelector((state) => state.categories);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchProducts());
+        dispatch(fetchCategories());
     }, [dispatch]);
     const [category, setCategory] = useState(true);
     const [sort, setSort] = useState("asc");
     const [currentPage, setCurrentPage] = useState(1);
     const [filterFeatures, setFilterFeatures] = useState({});
     const [tags, setTags] = React.useState([]);
+    let prevAlias = useRef(alias);
     document.documentElement.classList.remove("nav-open");
     React.useEffect(() => {
         document.body.classList.add("ecommerce-page");
@@ -43,6 +46,21 @@ function Catalog() {
             document.body.classList.remove("ecommerce-page");
         };
     });
+
+    useEffect(() => {
+        if (alias && categories.content?.length > 0) {
+            const name = categories.content.filter(
+                (category) => category.urlAlias === alias
+            )[0]?.name;
+            if (name && !tags.includes(name) && prevAlias === alias) {
+                handleInputChange({ brand: { [name]: true } });
+            } else if (prevAlias !== alias) {
+                setFilterFeatures({ brand: { [name]: true } });
+                setTags([name]);
+                prevAlias = alias;
+            }
+        }
+    }, [categories, alias]);
 
     useEffect(() => {
         setCurrentPage(1);
