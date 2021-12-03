@@ -35,6 +35,7 @@ function Catalog() {
     const [sort, setSort] = useState("asc");
     const [currentPage, setCurrentPage] = useState(1);
     const [filterFeatures, setFilterFeatures] = useState({});
+    const [tags, setTags] = React.useState([]);
     document.documentElement.classList.remove("nav-open");
     React.useEffect(() => {
         document.body.classList.add("ecommerce-page");
@@ -52,15 +53,36 @@ function Catalog() {
     const handleShowMore = () => {
         setCurrentPage((prevState) => prevState + 1);
     };
-    console.log("currentPage", currentPage);
     const handleInputChange = (feature) => {
+        const key = Object.keys(feature)[0];
+        const featureName = Object.keys(feature[key])[0];
+        const isFeatureActive = Object.values(feature[key])[0];
+
         setFilterFeatures((prevState) => {
-            const key = Object.keys(feature)[0];
             return {
                 ...prevState,
                 [key]: { ...prevState[key], ...feature[key] }
             };
         });
+        setTags((prevState) => {
+            let newTags = [...prevState];
+            isFeatureActive
+                ? newTags.push(featureName)
+                : (newTags = newTags.filter((tag) => tag !== featureName));
+            return newTags;
+        });
+    };
+    const handleTags = (updatedTags) => {
+        const deletedTag = tags.filter((tag) => !updatedTags.includes(tag))[0];
+        let featureKey = "";
+        Object.keys(filterFeatures).every((key) => {
+            if (filterFeatures[key]?.[deletedTag] !== undefined) {
+                featureKey = key;
+                return false;
+            }
+            return true;
+        });
+        handleInputChange({ [featureKey]: { [deletedTag]: false } });
     };
     const getSortingFeatures = (feature, arr) => {
         const reducedArr = arr.reduce((acc, product) => {
@@ -82,7 +104,6 @@ function Catalog() {
         }
         return activeFilters;
     };
-    //todo плитка сортировочных тегов
     const groupedProducts = products?.content
         ? getActiveFiltersCount() > 0
             ? _.filter(products.content, (product) => {
@@ -144,7 +165,7 @@ function Catalog() {
                                             <FormGroup check key={brand}>
                                                 <Label check>
                                                     <Input
-                                                        onInput={(event) =>
+                                                        onChange={(event) =>
                                                             handleInputChange({
                                                                 brand: {
                                                                     [brand]:
@@ -155,6 +176,13 @@ function Catalog() {
                                                             })
                                                         }
                                                         defaultValue=""
+                                                        checked={
+                                                            tags.length > 0
+                                                                ? tags.includes(
+                                                                      brand
+                                                                  )
+                                                                : false
+                                                        }
                                                         type="checkbox"
                                                     />
                                                     {brand}{" "}
@@ -175,6 +203,8 @@ function Catalog() {
                         sort={sort}
                         onShowMore={handleShowMore}
                         showMore={showMore}
+                        tags={tags}
+                        onTags={handleTags}
                     />
                 </Row>
             ) : (
