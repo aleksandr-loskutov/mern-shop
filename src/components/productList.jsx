@@ -1,23 +1,24 @@
 import React from "react";
-import {
-    Button,
-    Card,
-    CardBody,
-    CardTitle,
-    Col,
-    FormGroup,
-    Row
-} from "reactstrap";
+import { Card, CardBody, CardTitle, Col, FormGroup, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import ShowMoreButton from "./showMoreButton";
+import TagsInput from "./_prototypes/TagsInput";
 
-const ProductList = ({ products, onSort, onShowMore, showMore }) => {
+const ProductList = ({
+    products,
+    onSort,
+    onShowMore,
+    showMore,
+    tags,
+    onTags
+}) => {
     // console.log("products here", products);
     const selectOptions = [
         { value: "asc", label: "Дешевле" },
         { value: "desc", label: "Дороже " }
     ];
+
     return (
         <>
             <Col md="9">
@@ -34,6 +35,20 @@ const ProductList = ({ products, onSort, onShowMore, showMore }) => {
                         />
                     </FormGroup>
                 </Col>
+
+                <TagsInput
+                    onChange={(tags) => onTags(tags)}
+                    tagProps={{
+                        className: "react-tagsinput-tag badge-default"
+                    }}
+                    inputProps={{
+                        className: "react-tagsinput-input",
+                        placeholder: "",
+                        disabled: true
+                    }}
+                    value={tags}
+                />
+
                 <div className="products">
                     <Row>
                         {products ? (
