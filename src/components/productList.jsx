@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import ShowMoreButton from "./showMoreButton";
 import TagsInput from "./_prototypes/TagsInput";
+import Preloader from "./preloader";
 
 const ProductList = ({
     products,
@@ -74,7 +75,8 @@ const ProductList = ({
                                                         {product.name}
                                                     </CardTitle>
                                                     <p className="card-description">
-                                                        {product.brand}
+                                                        Артикул:{" "}
+                                                        {product.article}
                                                     </p>
                                                 </div>
                                                 <div className="price">
@@ -86,11 +88,7 @@ const ProductList = ({
                                 </Col>
                             ))
                         ) : (
-                            <div className="d-flex mx-auto my-5">
-                                <div className="uil-reload-css reload-background mr-1">
-                                    <div />
-                                </div>
-                            </div>
+                            <Preloader />
                         )}
                     </Row>
                     {showMore && <ShowMoreButton onShowMore={onShowMore} />}
