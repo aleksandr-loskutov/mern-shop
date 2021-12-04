@@ -38,7 +38,7 @@ function Catalog() {
     const [currentPage, setCurrentPage] = useState(1);
     const [filterFeatures, setFilterFeatures] = useState({});
     const [tags, setTags] = React.useState([]);
-    let prevAlias = useRef(alias);
+    const prevAlias = useRef(alias);
     document.documentElement.classList.remove("nav-open");
     React.useEffect(() => {
         document.body.classList.add("ecommerce-page");
@@ -52,12 +52,12 @@ function Catalog() {
             const name = categories.content.filter(
                 (category) => category.urlAlias === alias
             )[0]?.name;
-            if (name && !tags.includes(name) && prevAlias === alias) {
+            if (name && !tags.includes(name) && prevAlias.current === alias) {
                 handleInputChange({ brand: { [name]: true } });
-            } else if (prevAlias !== alias) {
+            } else if (prevAlias.current !== alias) {
                 setFilterFeatures({ brand: { [name]: true } });
                 setTags([name]);
-                prevAlias = alias;
+                prevAlias.current = alias;
             }
         }
     }, [categories, alias]);
