@@ -58,6 +58,7 @@ function Catalog() {
             } else if (prevAlias.current !== alias) {
                 setFilters({ brand: { [name]: true } });
                 setTags([name]);
+                setSearchQuery("");
                 prevAlias.current = alias;
             }
         }
@@ -73,6 +74,7 @@ function Catalog() {
         setCurrentPage((prevState) => prevState + 1);
     };
     const handleFilterChange = (filter) => {
+        setSearchQuery("");
         const key = Object.keys(filter)[0];
         const filterName = Object.keys(filter[key])[0];
         const isFilterActive = Object.values(filter[key])[0];
@@ -103,6 +105,11 @@ function Catalog() {
         });
         handleFilterChange({ [filterKey]: { [deletedTag]: false } });
     };
+    const handleSearchQuery = ({ target }) => {
+        setFilters({});
+        setTags([]);
+        setSearchQuery(target.value);
+    };
     const getSortingFilters = (filter, arr) => {
         const reducedArr = arr.reduce((acc, product) => {
             acc.push(product[filter]);
@@ -123,27 +130,41 @@ function Catalog() {
         }
         return activeFilters;
     };
-    const groupedProducts = products?.content
-        ? getActiveFiltersCount() > 0
-            ? _.filter(products.content, (product) => {
-                  let match = false;
-                  Object.keys(filters).every((filterKey) => {
-                      if (filters[filterKey][product[filterKey]]) {
-                          match = true;
-                          return false;
-                      }
-                      return true;
-                  });
-                  return match;
+    const searchedProducts = products?.content
+        ? searchQuery
+            ? products.content.filter((product) => {
+                  return (
+                      product.name
+                          .toLowerCase()
+                          .indexOf(searchQuery.toLowerCase()) !== -1 ||
+                      product.article.indexOf(searchQuery) !== -1
+                  );
               })
             : products.content
         : [];
-    const handleSearch = () => {};
+
+    const groupedProducts =
+        searchedProducts.length > 0
+            ? getActiveFiltersCount() > 0
+                ? _.filter(searchedProducts, (product) => {
+                      let match = false;
+                      Object.keys(filters).every((filterKey) => {
+                          if (filters[filterKey][product[filterKey]]) {
+                              match = true;
+                              return false;
+                          }
+                          return true;
+                      });
+                      return match;
+                  })
+                : searchedProducts
+            : [];
+
     const sortedProducts =
         groupedProducts.length > 0
             ? _.orderBy(groupedProducts, "price", sort)
             : [];
-    const productsCrop = paginate(sortedProducts, currentPage, 9);
+    const productsCrop = paginate(sortedProducts, currentPage, 15);
     const showMore = sortedProducts > productsCrop;
     return (
         <Page title={alias ? alias : "Каталог"}>
@@ -226,6 +247,8 @@ function Catalog() {
                         showMore={showMore}
                         tags={tags}
                         onTags={handleTags}
+                        searchQuery={searchQuery}
+                        onSearch={handleSearchQuery}
                     />
                 </Row>
             ) : (

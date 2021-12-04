@@ -5,6 +5,7 @@ import Select from "react-select";
 import ShowMoreButton from "./showMoreButton";
 import TagsInput from "./_prototypes/TagsInput";
 import Preloader from "./preloader";
+import SearchForm from "./searchForm";
 
 const ProductList = ({
     products,
@@ -12,7 +13,9 @@ const ProductList = ({
     onShowMore,
     showMore,
     tags,
-    onTags
+    onTags,
+    searchQuery,
+    onSearch
 }) => {
     // console.log("products here", products);
     const selectOptions = [
@@ -22,21 +25,32 @@ const ProductList = ({
 
     return (
         <>
-            <Col md="9">
-                <Col md="3" sm="3" className="ml-auto">
-                    <FormGroup>
-                        <Select
-                            isSearchable={false}
-                            className="react-select react-select-default"
-                            classNamePrefix="react-select"
-                            name="defaultSelect"
-                            defaultValue={selectOptions[0]}
-                            onChange={(value) => onSort(value)}
-                            options={selectOptions}
-                        />
-                    </FormGroup>
-                </Col>
-
+            <Col md="9" className="mt-4">
+                <Row className="justify-content-md-between">
+                    <Col md="4" sm="4">
+                        <FormGroup className="">
+                            <SearchForm
+                                value={searchQuery}
+                                showButton={false}
+                                placeholder={"поиск.."}
+                                onChange={onSearch}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col md="3" sm="3">
+                        <FormGroup>
+                            <Select
+                                isSearchable={false}
+                                className="react-select react-select-default"
+                                classNamePrefix="react-select"
+                                name="defaultSelect"
+                                defaultValue={selectOptions[0]}
+                                onChange={(value) => onSort(value)}
+                                options={selectOptions}
+                            />
+                        </FormGroup>
+                    </Col>
+                </Row>
                 <TagsInput
                     onChange={(tags) => onTags(tags)}
                     tagProps={{
