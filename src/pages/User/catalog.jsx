@@ -36,8 +36,9 @@ function Catalog() {
     const [category, setCategory] = useState(true);
     const [sort, setSort] = useState("asc");
     const [currentPage, setCurrentPage] = useState(1);
-    const [filterFeatures, setFilterFeatures] = useState({});
+    const [filters, setFilters] = useState({});
     const [tags, setTags] = React.useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
     const prevAlias = useRef(alias);
     document.documentElement.classList.remove("nav-open");
     React.useEffect(() => {
@@ -53,9 +54,9 @@ function Catalog() {
                 (category) => category.urlAlias === alias
             )[0]?.name;
             if (name && !tags.includes(name) && prevAlias.current === alias) {
-                handleInputChange({ brand: { [name]: true } });
+                handleFilterChange({ brand: { [name]: true } });
             } else if (prevAlias.current !== alias) {
-                setFilterFeatures({ brand: { [name]: true } });
+                setFilters({ brand: { [name]: true } });
                 setTags([name]);
                 prevAlias.current = alias;
             }
@@ -64,56 +65,56 @@ function Catalog() {
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [filterFeatures]);
+    }, [filters]);
     const handleSort = ({ value }) => {
         setSort(value);
     };
     const handleShowMore = () => {
         setCurrentPage((prevState) => prevState + 1);
     };
-    const handleInputChange = (feature) => {
-        const key = Object.keys(feature)[0];
-        const featureName = Object.keys(feature[key])[0];
-        const isFeatureActive = Object.values(feature[key])[0];
+    const handleFilterChange = (filter) => {
+        const key = Object.keys(filter)[0];
+        const filterName = Object.keys(filter[key])[0];
+        const isFilterActive = Object.values(filter[key])[0];
 
-        setFilterFeatures((prevState) => {
+        setFilters((prevState) => {
             return {
                 ...prevState,
-                [key]: { ...prevState[key], ...feature[key] }
+                [key]: { ...prevState[key], ...filter[key] }
             };
         });
         setTags((prevState) => {
             let newTags = [...prevState];
-            isFeatureActive
-                ? newTags.push(featureName)
-                : (newTags = newTags.filter((tag) => tag !== featureName));
+            isFilterActive
+                ? newTags.push(filterName)
+                : (newTags = newTags.filter((tag) => tag !== filterName));
             return newTags;
         });
     };
     const handleTags = (updatedTags) => {
         const deletedTag = tags.filter((tag) => !updatedTags.includes(tag))[0];
-        let featureKey = "";
-        Object.keys(filterFeatures).every((key) => {
-            if (filterFeatures[key]?.[deletedTag] !== undefined) {
-                featureKey = key;
+        let filterKey = "";
+        Object.keys(filters).every((key) => {
+            if (filters[key]?.[deletedTag] !== undefined) {
+                filterKey = key;
                 return false;
             }
             return true;
         });
-        handleInputChange({ [featureKey]: { [deletedTag]: false } });
+        handleFilterChange({ [filterKey]: { [deletedTag]: false } });
     };
-    const getSortingFeatures = (feature, arr) => {
+    const getSortingFilters = (filter, arr) => {
         const reducedArr = arr.reduce((acc, product) => {
-            acc.push(product[feature]);
+            acc.push(product[filter]);
             return acc;
         }, []);
         return reducedArr.length > 0 ? [...new Set(reducedArr)] : [];
     };
     const getActiveFiltersCount = () => {
         let activeFilters = 0;
-        if (Object.keys(filterFeatures).length > 0) {
-            Object.keys(filterFeatures).forEach((filterKey) => {
-                Object.values(filterFeatures[filterKey]).forEach((v) => {
+        if (Object.keys(filters).length > 0) {
+            Object.keys(filters).forEach((filterKey) => {
+                Object.values(filters[filterKey]).forEach((v) => {
                     if (v === true) {
                         activeFilters++;
                     }
@@ -126,16 +127,18 @@ function Catalog() {
         ? getActiveFiltersCount() > 0
             ? _.filter(products.content, (product) => {
                   let match = false;
-                  Object.keys(filterFeatures).every((filterKey) => {
-                      if (filterFeatures[filterKey][product[filterKey]]) {
+                  Object.keys(filters).every((filterKey) => {
+                      if (filters[filterKey][product[filterKey]]) {
                           match = true;
                           return false;
                       }
+                      return true;
                   });
                   return match;
               })
             : products.content
         : [];
+    const handleSearch = () => {};
     const sortedProducts =
         groupedProducts.length > 0
             ? _.orderBy(groupedProducts, "price", sort)
@@ -176,7 +179,7 @@ function Catalog() {
                                 <Collapse isOpen={category}>
                                     <CardBody>
                                         {" "}
-                                        {getSortingFeatures(
+                                        {getSortingFilters(
                                             "brand",
                                             products.content
                                         ).map((brand) => (
@@ -184,7 +187,7 @@ function Catalog() {
                                                 <Label check>
                                                     <Input
                                                         onChange={(event) =>
-                                                            handleInputChange({
+                                                            handleFilterChange({
                                                                 brand: {
                                                                     [brand]:
                                                                         event
