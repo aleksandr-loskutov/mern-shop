@@ -1,0 +1,234 @@
+[{
+  "_id": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "name": "root"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed072"
+  },
+  "name": "POZIS",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда POZIS лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/pozis.jpg",
+  "metaTitle": "Купить холодильники POZIS",
+  "urlAlias": "pozis"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed073"
+  },
+  "name": "Hitachi",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Hitachi лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/hitachi.jpg",
+  "metaTitle": "Купить холодильники Hitachi",
+  "urlAlias": "hitachi"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed074"
+  },
+  "name": "Liebherr",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Liebherr лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/liebherr.jpg",
+  "metaTitle": "Купить холодильники Liebherr",
+  "urlAlias": "liebherr"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed075"
+  },
+  "name": "Beko",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Beko лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/beko.jpg",
+  "metaTitle": "Купить холодильники Beko",
+  "urlAlias": "beko"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed076"
+  },
+  "name": "Hiberg",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Hiberg лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/hiberg.jpg",
+  "metaTitle": "Купить холодильники Hiberg",
+  "urlAlias": "hiberg"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed077"
+  },
+  "name": "Tesler",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Tesler лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/tesler.jpg",
+  "metaTitle": "Купить холодильники Tesler",
+  "urlAlias": "tesler"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed078"
+  },
+  "name": "Smeg",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Smeg лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/smeg.jpg",
+  "metaTitle": "Купить холодильники Smeg",
+  "urlAlias": "smeg"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed079"
+  },
+  "name": "АТЛАНТ",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда АТЛАНТ лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/atlant.jpg",
+  "metaTitle": "Купить холодильники АТЛАНТ",
+  "urlAlias": "atlant"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed07a"
+  },
+  "name": "Schaub",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Schaub лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/schaub.jpg",
+  "metaTitle": "Купить холодильники Schaub",
+  "urlAlias": "schaub"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed07b"
+  },
+  "name": "Бирюса",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Бирюса лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/birjusa.jpg",
+  "metaTitle": "Купить холодильники Бирюса",
+  "urlAlias": "birjusa"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed07c"
+  },
+  "name": "Sharp",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Sharp лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/sharp.jpg",
+  "metaTitle": "Купить холодильники Sharp",
+  "urlAlias": "sharp"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed07d"
+  },
+  "name": "Indesit",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Indesit лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/indesit.jpg",
+  "metaTitle": "Купить холодильники Indesit",
+  "urlAlias": "indesit"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed07e"
+  },
+  "name": "Maunfeld",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Maunfeld лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/maunfeld.jpg",
+  "metaTitle": "Купить холодильники Maunfeld",
+  "urlAlias": "maunfeld"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed07f"
+  },
+  "name": "Weissgauff",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Weissgauff лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/weissgauff.jpg",
+  "metaTitle": "Купить холодильники Weissgauff",
+  "urlAlias": "weissgauff"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed080"
+  },
+  "name": "Bosch",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Bosch лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/bosch.jpg",
+  "metaTitle": "Купить холодильники Bosch",
+  "urlAlias": "bosch"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed081"
+  },
+  "name": "Stinol",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Stinol лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/stinol.jpg",
+  "metaTitle": "Купить холодильники Stinol",
+  "urlAlias": "stinol"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed082"
+  },
+  "name": "LG",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда LG лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/lg.jpg",
+  "metaTitle": "Купить холодильники LG",
+  "urlAlias": "lg"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed083"
+  },
+  "name": "Atlant",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Atlant лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/atlant.jpg",
+  "metaTitle": "Купить холодильники Atlant",
+  "urlAlias": "atlant"
+},{
+  "_id": {
+    "$oid": "61a225ed13dfdc69192ed084"
+  },
+  "name": "Gorenje",
+  "parentId": {
+    "$oid": "6156d9ec3bc7dd62c79388a8"
+  },
+  "description": "Холодильники бренда Gorenje лучшие в своем классе! Налетай покупай шевелись!",
+  "img": "/assets/img/brands/gorenje.jpg",
+  "metaTitle": "Купить холодильники Gorenje",
+  "urlAlias": "gorenje"
+}]
