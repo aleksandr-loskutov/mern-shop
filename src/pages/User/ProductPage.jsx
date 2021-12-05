@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // react plugin used to create DropdownMenu for selecting items
 import Select from "react-select";
 
@@ -18,6 +18,8 @@ import {
 // core components
 import Page from "../../components/page";
 import Breadcrumbs from "../../components/breadcrumbs";
+import { useParams } from "react-router-dom";
+import productService from "../../services/product.service";
 
 // carousel items
 const carouselItems = [
@@ -44,6 +46,8 @@ const carouselItems = [
 ];
 
 function ProductPage() {
+    const { alias } = useParams();
+    const [product, setProduct] = useState();
     // react-select states
     const [colorSelect, setColorSelect] = React.useState({
         value: "1",
@@ -53,6 +57,13 @@ function ProductPage() {
         value: "1",
         label: "Small "
     });
+
+    useEffect(() => {
+        productService.get(alias).then((data) => {
+            if (data.content?.[0]) setProduct(data.content[0]);
+        });
+    }, []);
+
     // carousel states and functions
     const [activeIndex, setActiveIndex] = React.useState(0);
     const [animating, setAnimating] = React.useState(false);
@@ -86,6 +97,8 @@ function ProductPage() {
             document.body.classList.remove("product-page");
         };
     });
+    console.log("product", product);
+    //   if (product) {
     return (
         <>
             <Page>
