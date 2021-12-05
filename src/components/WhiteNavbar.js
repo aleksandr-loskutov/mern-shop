@@ -21,6 +21,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../store/actions/categories";
 import { useCategories } from "../hooks/useCategory";
+import SearchForm from "./searchForm";
 // core components
 
 function WhiteNavbar() {
@@ -76,23 +77,7 @@ function WhiteNavbar() {
                         </button>
                     </div>
 
-                    <Form className="form-inline ml-5">
-                        <Input
-                            className="mr-sm-2 "
-                            placeholder="Поиск"
-                            type="text"
-                        />
-                        <Button
-                            className="btn-just-icon btn-round"
-                            color="neutral"
-                            type="submit"
-                        >
-                            <i
-                                aria-hidden={true}
-                                className="nc-icon nc-zoom-split"
-                            />
-                        </Button>
-                    </Form>
+                    <SearchForm inputClasses={"border-danger"} />
 
                     <Collapse navbar isOpen={collapseOpen}>
                         <Nav className="ml-auto" navbar>
