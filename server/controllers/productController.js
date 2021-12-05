@@ -88,7 +88,13 @@ class ProductController {
     }
     async getOne(req, res) {
         try {
-            const product = await Product.findById(req.params.id);
+            const isId =
+                req.params.id.length === 24 && !req.params.id.includes("-");
+            const product = isId
+                ? await Product.findById(req.params.id)
+                : await Product.find({
+                      urlAlias: req.params.id
+                  });
             return product
                 ? res.status(200).json({
                       message: "Успешно",
