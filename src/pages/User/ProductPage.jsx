@@ -12,7 +12,11 @@ import {
     Carousel,
     CarouselItem,
     CarouselIndicators,
-    CarouselCaption
+    CarouselCaption,
+    UncontrolledCollapse,
+    CardBody,
+    CardHeader,
+    Collapse
 } from "reactstrap";
 
 // core components
@@ -64,19 +68,24 @@ function ProductPage() {
             if (data.content?.[0]) setProduct(data.content[0]);
         });
     }, []);
+
     useEffect(() => {
         if (product?.images.length > 0) {
             setCarouselItems(
-                product.images.map((image) => {
+                product.images.map((path) => {
+                    //todo fix require issue with path by direct same string image variable
                     return {
-                        src: require(image).default,
-                        altText: "",
-                        caption: ""
+                        src: require(`assets/img/products/${product.article}/${
+                            path.split("/")[4]
+                        }`).default,
+                        altText: product.name + ".",
+                        caption: "HOLODOS.COM"
                     };
                 })
             );
         }
     }, [product]);
+    console.log(carouselItems, product?.images.length);
     // carousel states and functions
     const [activeIndex, setActiveIndex] = React.useState(0);
     const [animating, setAnimating] = React.useState(false);
@@ -113,7 +122,14 @@ function ProductPage() {
     //todo fix rerender slider
     // console.log("product", product);
     // console.log("images", carouselItems);
-
+    const [collapses, setCollapses] = React.useState([1]);
+    const changeCollapse = (collapse) => {
+        if (collapses.includes(collapse)) {
+            setCollapses(collapses.filter((prop) => prop !== collapse));
+        } else {
+            setCollapses([...collapses, collapse]);
+        }
+    };
     return (
         <>
             <Page>
@@ -190,79 +206,14 @@ function ProductPage() {
                                 {/* end carousel */}
                             </Col>
                             <Col md="5" sm="6">
-                                <h2>Suede Blazer</h2>
+                                <h2>{product.name}</h2>
                                 <h4 className="price">
-                                    <strong>€ 2,900.00</strong>
+                                    <strong>₽ {product.price}</strong>
                                 </h4>
                                 <hr />
-                                <p>
-                                    This blazer in suede is a must-have of your
-                                    wardrobe. Team it with a angora blazer and a
-                                    angora sweater.
-                                </p>
-                                <span className="label label-default shipping">
-                                    Free shipping to Europe
-                                </span>
-                                <Row>
-                                    <Col md="6" sm="6">
-                                        <label>Select color</label>
-                                        <FormGroup>
-                                            <Select
-                                                className="react-select react-select-default"
-                                                classNamePrefix="react-select"
-                                                name="colorSelect"
-                                                value={colorSelect}
-                                                onChange={(value) =>
-                                                    setColorSelect(value)
-                                                }
-                                                options={[
-                                                    {
-                                                        value: "1",
-                                                        label: "Black "
-                                                    },
-                                                    {
-                                                        value: "2",
-                                                        label: "Gray"
-                                                    },
-                                                    {
-                                                        value: "3",
-                                                        label: "White"
-                                                    }
-                                                ]}
-                                                placeholder="COLOR"
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                    <Col md="6" sm="6">
-                                        <label>Select size</label>
-                                        <FormGroup>
-                                            <Select
-                                                className="react-select react-select-default"
-                                                classNamePrefix="react-select"
-                                                name="sizeSelect"
-                                                value={sizeSelect}
-                                                onChange={(value) =>
-                                                    setSizeSelect(value)
-                                                }
-                                                options={[
-                                                    {
-                                                        value: "1",
-                                                        label: "Small "
-                                                    },
-                                                    {
-                                                        value: "2",
-                                                        label: "Medium"
-                                                    },
-                                                    {
-                                                        value: "3",
-                                                        label: "Large"
-                                                    }
-                                                ]}
-                                                placeholder="SIZE"
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
+                                <p>Тип: {product.type}</p>
+                                <p>Бренд: {product.brand}</p>
+                                <p>Артикул: {product.article}</p>
                                 <hr />
                                 <Row>
                                     <Col className="offset-md-5" md="7" sm="8">
@@ -271,12 +222,90 @@ function ProductPage() {
                                             className="btn-round"
                                             color="danger"
                                         >
-                                            Add to Cart
+                                            В корзину
                                             <i className="fa fa-chevron-right" />
                                         </Button>
                                     </Col>
                                 </Row>
                             </Col>
+                        </Row>
+                        <Row className="card-body-row">
+                            <>
+                                <div id="acordeon" className="w-100">
+                                    <div
+                                        aria-multiselectable={true}
+                                        id="accordion"
+                                        role="tablist"
+                                    >
+                                        <Card className="no-transition">
+                                            <CardHeader
+                                                className="card-collapse"
+                                                id="headingOne"
+                                                role="tab"
+                                            >
+                                                <h5 className="mb-0 panel-title">
+                                                    <a
+                                                        aria-expanded={collapses.includes(
+                                                            1
+                                                        )}
+                                                        className="collapsed"
+                                                        data-parent="#accordion"
+                                                        href="#pablo"
+                                                        id="collapseOne"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            changeCollapse(1);
+                                                        }}
+                                                    >
+                                                        Характеристики
+                                                        <i className="nc-icon nc-minimal-down" />
+                                                    </a>
+                                                </h5>
+                                            </CardHeader>
+                                            <Collapse
+                                                isOpen={collapses.includes(1)}
+                                            >
+                                                <CardBody>
+                                                    {product.type}
+                                                </CardBody>
+                                            </Collapse>
+                                            <CardHeader
+                                                className="card-collapse"
+                                                id="headingTwo"
+                                                role="tab"
+                                            >
+                                                <h5 className="mb-0 panel-title">
+                                                    <a
+                                                        aria-controls="collapseTwo"
+                                                        aria-expanded={collapses.includes(
+                                                            2
+                                                        )}
+                                                        className="collapsed"
+                                                        data-parent="#accordion"
+                                                        href="#pablo"
+                                                        id="collapseTwo"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            changeCollapse(2);
+                                                        }}
+                                                    >
+                                                        Описание
+                                                        <i className="nc-icon nc-minimal-down" />
+                                                    </a>
+                                                </h5>
+                                            </CardHeader>
+                                            <Collapse
+                                                isOpen={collapses.includes(2)}
+                                            >
+                                                <CardBody>
+                                                    {product.description}
+                                                </CardBody>
+                                            </Collapse>{" "}
+                                        </Card>
+                                    </div>
+                                    {/* end acordeon */}
+                                </div>
+                            </>
                         </Row>
                         <Row className="card-body-row">
                             <Col md="4" sm="4">
