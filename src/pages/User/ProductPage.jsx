@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { ROUTES } from "../../routing/routes";
+
 // react plugin used to create DropdownMenu for selecting items
 import Select from "react-select";
-
 // reactstrap components
 import {
     Button,
@@ -16,57 +17,37 @@ import {
     UncontrolledCollapse,
     CardBody,
     CardHeader,
-    Collapse
+    Collapse,
+    Table,
+    Nav,
+    NavItem,
+    NavLink,
+    TabContent,
+    TabPane
 } from "reactstrap";
 
 // core components
 import Page from "../../components/page";
-import Breadcrumbs from "../../components/breadcrumbs";
 import { useParams } from "react-router-dom";
 import productService from "../../services/product.service";
 import Preloader from "../../components/preloader";
+import StoreServices from "../../components/storeServices";
 
-// carousel items
-// const carouselItems = [
-//     {
-//         src: require("assets/img/jacket-1.jpg").default,
-//         altText: "Somewhere",
-//         caption: "Somewhere"
-//     },
-//     {
-//         src: require("assets/img/jacket-2.jpg").default,
-//         altText: "Somewhere else",
-//         caption: "Somewhere else"
-//     },
-//     {
-//         src: require("assets/img/jacket-3.jpg").default,
-//         altText: "Here it is",
-//         caption: "Here it is"
-//     },
-//     {
-//         src: require("assets/img/jacket-4.jpg").default,
-//         altText: "Here it is",
-//         caption: "Here it is"
-//     }
-// ];
-
-function ProductPage() {
+function ProductPage({ match }) {
     const { alias } = useParams();
+    //console.log("match", match);
     const [product, setProduct] = useState();
-    // react-select states
-    const [colorSelect, setColorSelect] = React.useState({
-        value: "1",
-        label: "Black "
-    });
-    const [sizeSelect, setSizeSelect] = React.useState({
-        value: "1",
-        label: "Small "
-    });
+    // const breadcrumbs = useBreadcrumbs(ROUTES, { disableDefaults: false }); //ROUTES
     const [carouselItems, setCarouselItems] = React.useState([]);
+    const [hTabs, setHTabs] = React.useState("1");
+
+    //todo replace to redux/context
     useEffect(() => {
-        productService.get(alias).then((data) => {
-            if (data.content?.[0]) setProduct(data.content[0]);
-        });
+        if (alias) {
+            productService.get(alias).then((data) => {
+                if (data.content?.[0]) setProduct(data.content[0]);
+            });
+        }
     }, []);
 
     useEffect(() => {
@@ -85,7 +66,7 @@ function ProductPage() {
             );
         }
     }, [product]);
-    console.log(carouselItems, product?.images.length);
+
     // carousel states and functions
     const [activeIndex, setActiveIndex] = React.useState(0);
     const [animating, setAnimating] = React.useState(false);
@@ -133,7 +114,6 @@ function ProductPage() {
     return (
         <>
             <Page>
-                <Breadcrumbs />
                 {product ? (
                     <>
                         <Row>
@@ -211,9 +191,19 @@ function ProductPage() {
                                     <strong>₽ {product.price}</strong>
                                 </h4>
                                 <hr />
-                                <p>Тип: {product.type}</p>
                                 <p>Бренд: {product.brand}</p>
+                                {product.stock > 0 ? (
+                                    <p className="text-success font-weight-bold">
+                                        В наличии {product.stock} шт.
+                                    </p>
+                                ) : (
+                                    <p className="text-danger font-weight-bold">
+                                        Временно отсутствует
+                                    </p>
+                                )}
+
                                 <p>Артикул: {product.article}</p>
+
                                 <hr />
                                 <Row>
                                     <Col className="offset-md-5" md="7" sm="8">
@@ -229,136 +219,101 @@ function ProductPage() {
                                 </Row>
                             </Col>
                         </Row>
-                        <Row className="card-body-row">
-                            <>
-                                <div id="acordeon" className="w-100">
-                                    <div
-                                        aria-multiselectable={true}
-                                        id="accordion"
-                                        role="tablist"
-                                    >
-                                        <Card className="no-transition">
-                                            <CardHeader
-                                                className="card-collapse"
-                                                id="headingOne"
-                                                role="tab"
-                                            >
-                                                <h5 className="mb-0 panel-title">
-                                                    <a
-                                                        aria-expanded={collapses.includes(
-                                                            1
-                                                        )}
-                                                        className="collapsed"
-                                                        data-parent="#accordion"
-                                                        href="#pablo"
-                                                        id="collapseOne"
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            changeCollapse(1);
-                                                        }}
-                                                    >
-                                                        Характеристики
-                                                        <i className="nc-icon nc-minimal-down" />
-                                                    </a>
-                                                </h5>
-                                            </CardHeader>
-                                            <Collapse
-                                                isOpen={collapses.includes(1)}
-                                            >
-                                                <CardBody>
-                                                    {product.type}
-                                                </CardBody>
-                                            </Collapse>
-                                            <CardHeader
-                                                className="card-collapse"
-                                                id="headingTwo"
-                                                role="tab"
-                                            >
-                                                <h5 className="mb-0 panel-title">
-                                                    <a
-                                                        aria-controls="collapseTwo"
-                                                        aria-expanded={collapses.includes(
-                                                            2
-                                                        )}
-                                                        className="collapsed"
-                                                        data-parent="#accordion"
-                                                        href="#pablo"
-                                                        id="collapseTwo"
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            changeCollapse(2);
-                                                        }}
-                                                    >
-                                                        Описание
-                                                        <i className="nc-icon nc-minimal-down" />
-                                                    </a>
-                                                </h5>
-                                            </CardHeader>
-                                            <Collapse
-                                                isOpen={collapses.includes(2)}
-                                            >
-                                                <CardBody>
-                                                    {product.description}
-                                                </CardBody>
-                                            </Collapse>{" "}
-                                        </Card>
-                                    </div>
-                                    {/* end acordeon */}
-                                </div>
-                            </>
-                        </Row>
-                        <Row className="card-body-row">
-                            <Col md="4" sm="4">
-                                <div className="info">
-                                    <div className="icon icon-warning">
-                                        <i className="nc-icon nc-delivery-fast" />
-                                    </div>
-                                    <div className="description">
-                                        <h4 className="info-title">
-                                            2 Days Delivery
-                                        </h4>
-                                        <p>
-                                            Spend your time generating new
-                                            ideas. You don't have to think of
-                                            implementing anymore.
-                                        </p>
+                        <Card>
+                            <CardBody>
+                                <div className="nav-tabs-navigation text-left">
+                                    <div className="nav-tabs-wrapper">
+                                        <Nav id="tabs" role="tablist" tabs>
+                                            <NavItem>
+                                                <NavLink
+                                                    className={
+                                                        hTabs === "1"
+                                                            ? "active"
+                                                            : ""
+                                                    }
+                                                    onClick={() => {
+                                                        setHTabs("1");
+                                                    }}
+                                                    href="#"
+                                                >
+                                                    Характеристики
+                                                </NavLink>
+                                            </NavItem>
+                                            <NavItem>
+                                                <NavLink
+                                                    className={
+                                                        hTabs === "2"
+                                                            ? "active"
+                                                            : ""
+                                                    }
+                                                    onClick={() => {
+                                                        setHTabs("2");
+                                                    }}
+                                                    href="#"
+                                                >
+                                                    Описание
+                                                </NavLink>
+                                            </NavItem>
+                                        </Nav>
                                     </div>
                                 </div>
-                            </Col>
-                            <Col md="4" sm="4">
-                                <div className="info">
-                                    <div className="icon icon-danger">
-                                        <i className="nc-icon nc-credit-card" />
-                                    </div>
-                                    <div className="description">
-                                        <h4 className="info-title">
-                                            Refundable Policy
-                                        </h4>
-                                        <p>
-                                            Larger, yet dramatically thinner.
-                                            More powerful, but remarkably power
-                                            efficient.
-                                        </p>
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md="4" sm="4">
-                                <div className="info">
-                                    <div className="icon icon-success">
-                                        <i className="nc-icon nc-bulb-63" />
-                                    </div>
-                                    <div className="description">
-                                        <h4 className="info-title">
-                                            Popular Item
-                                        </h4>
-                                        <p>
-                                            Choose from a veriety of colors
-                                            resembling sugar paper pastels.
-                                        </p>
-                                    </div>
-                                </div>
-                            </Col>
-                        </Row>
+
+                                <TabContent
+                                    className="text-justify"
+                                    activeTab={"hTabs" + hTabs}
+                                >
+                                    <TabPane tabId="hTabs1">
+                                        <Table>
+                                            <tbody>
+                                                {product.features?.length > 0
+                                                    ? product.features.map(
+                                                          (feature, i) => (
+                                                              <>
+                                                                  <tr
+                                                                      key={
+                                                                          feature.name
+                                                                      }
+                                                                  >
+                                                                      <td
+                                                                          className={
+                                                                              i ===
+                                                                              0
+                                                                                  ? "text-left border-0"
+                                                                                  : "text-left"
+                                                                          }
+                                                                      >
+                                                                          {
+                                                                              feature.name
+                                                                          }
+                                                                      </td>
+
+                                                                      <td
+                                                                          className={
+                                                                              i ===
+                                                                              0
+                                                                                  ? "text-right border-0"
+                                                                                  : "text-right"
+                                                                          }
+                                                                      >
+                                                                          {
+                                                                              feature.value
+                                                                          }
+                                                                      </td>
+                                                                  </tr>
+                                                              </>
+                                                          )
+                                                      )
+                                                    : ""}
+                                            </tbody>
+                                        </Table>
+                                    </TabPane>
+                                    <TabPane tabId="hTabs2">
+                                        <p> {product.description}</p>
+                                    </TabPane>
+                                </TabContent>
+                            </CardBody>
+                        </Card>
+                        <StoreServices className={"card-body-row"} />
                     </>
                 ) : (
                     <Preloader />
