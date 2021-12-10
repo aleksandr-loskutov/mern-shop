@@ -1,23 +1,40 @@
 import React from "react";
-import { Button, Col, Row } from "reactstrap";
+import { Col, Row, Breadcrumb, BreadcrumbItem } from "reactstrap";
+import { Link } from "react-router-dom";
 
-const Breadcrumbs = () => {
-    //npm https://www.npmjs.com/package/use-react-router-breadcrumbs
+const BreadcrumbsComponent = ({ breadcrumbs, lastCrumbName }) => {
+    const crumbs = breadcrumbs.map(({ breadcrumb }, index) => (
+        <BreadcrumbItem key={breadcrumb.key}>
+            {index === breadcrumbs.length - 1 ? (
+                lastCrumbName ? (
+                    lastCrumbName
+                ) : (
+                    breadcrumb
+                )
+            ) : (
+                <Link
+                    to={
+                        breadcrumb.key === "/product"
+                            ? "/catalog/"
+                            : breadcrumb.key
+                    }
+                >
+                    {index === breadcrumbs.length - 1 && lastCrumbName
+                        ? lastCrumbName
+                        : breadcrumb}
+                </Link>
+            )}
+        </BreadcrumbItem>
+    ));
     return (
-        <Row className="title-row mt-4">
-            <Col md="2">
-                <h4 className="shop">Shop</h4>
-            </Col>
-            <Col className="ml-auto" md="4">
-                <div className="pull-right">
-                    <span className="text-muted">Order Status</span>
-                    <Button color="link">
-                        <i className="fa fa-shopping-cart" /> 0 Items
-                    </Button>
+        <Row className="title-row mt-3 mb-2">
+            <Col className="mr-auto">
+                <div className="pull-left">
+                    <Breadcrumb listClassName="bg-white">{crumbs}</Breadcrumb>
                 </div>
             </Col>
         </Row>
     );
 };
 
-export default Breadcrumbs;
+export default BreadcrumbsComponent;

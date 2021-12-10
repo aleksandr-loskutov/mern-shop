@@ -24,6 +24,7 @@ import {
     POSTS_ROUTE,
     SEARCH_ROUTE
 } from "../utils/consts";
+
 import Admin from "../pages/Admin/admin";
 import AddUser from "../components/form/AddUser";
 import AdminUsers from "../layouts/adminUsers";
@@ -34,20 +35,22 @@ import AdminCategories from "../layouts/adminCategories";
 import AdminOrders from "../layouts/adminOrders";
 import AdminPosts from "../layouts/adminPosts";
 import Cart from "../pages/User/cart";
-import Index from "../pages/index.jsx";
+import Main from "../pages/main.jsx";
 import ContactUs from "../pages/User/ContactUs.jsx";
 import Error404 from "../pages/Error404.jsx";
-import ProductPage from "../pages/User/ProductPage.jsx";
 import SearchWithSidebar from "../pages/User/SearchWithSidebar.jsx";
 import CheckOut from "../pages/User/checkOut";
 import UserOrders from "../layouts/userOrders";
 import OrderSuccess from "../pages/User/orderSuccess";
 import Catalog from "../pages/User/catalog.jsx";
+import ProductPage from "../pages/User/ProductPage.jsx";
 import Posts from "../pages/User/posts";
 import AddCategory from "../pages/Admin/AddCategory";
 import UserSettings from "../pages/User/userSettings.jsx";
 import AddProduct from "../pages/Admin/AddProduct";
 import LoginPage from "../pages/User/loginPage";
+import withBreadcrumbs from "react-router-breadcrumbs-hoc";
+import BreadcrumbsComponent from "../components/breadcrumbs";
 
 export const authRoutes = [
     {
@@ -115,46 +118,61 @@ export const authRoutes = [
 export const publicRoutes = [
     {
         path: CATEGORY_ROUTE,
+        breadcrumb: "Каталог",
         component: Catalog
     },
     {
         path: CART_ROUTE,
+        breadcrumb: "Корзина",
         component: Cart
     },
     {
         path: PRODUCT_ROUTE,
+        breadcrumb: "Каталог",
         component: ProductPage
     },
     {
         path: CHECKOUT_ROUTE,
+        breadcrumb: "Оформление заказа",
         component: CheckOut
     },
     {
         path: LOGIN_ROUTE,
+        breadcrumb: "Вход",
         component: LoginPage
     },
     {
         path: ROOT_ROUTE,
-        component: Index
+        breadcrumb: "Главная",
+        component: Main
     },
     {
         path: ORDER_SUCCESS_ROUTE,
+        breadcrumb: "Спасибо",
         component: OrderSuccess
     },
     {
         path: POSTS_ROUTE,
+        breadcrumb: "Статьи",
         component: Posts
     },
     {
         path: CONTACT_ROUTE,
+        breadcrumb: "Написать нам",
         component: ContactUs
     },
     {
         path: SEARCH_ROUTE,
+        breadcrumb: "Поиск",
         component: SearchWithSidebar
     },
     {
         path: NOT_FOUND_ROUTE,
+        breadcrumb: "Ошибка 404",
         component: Error404
     }
 ];
+
+export const Breadcrumbs = withBreadcrumbs([...publicRoutes, ...authRoutes], {
+    disableDefaults: false
+})(BreadcrumbsComponent);

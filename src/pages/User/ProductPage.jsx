@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ROUTES } from "../../routing/routes";
 
-// react plugin used to create DropdownMenu for selecting items
-import Select from "react-select";
 // reactstrap components
 import {
     Button,
@@ -28,16 +25,20 @@ import {
 
 // core components
 import Page from "../../components/page";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import productService from "../../services/product.service";
 import Preloader from "../../components/preloader";
 import StoreServices from "../../components/storeServices";
+import { useHistory } from "react-router-dom";
+import { Breadcrumbs } from "../../routing/routes";
 
-function ProductPage({ match }) {
+function ProductPage() {
     const { alias } = useParams();
-    //console.log("match", match);
+    const history = useHistory();
+    if (!alias) {
+        history.push("/catalog");
+    }
     const [product, setProduct] = useState();
-    // const breadcrumbs = useBreadcrumbs(ROUTES, { disableDefaults: false }); //ROUTES
     const [carouselItems, setCarouselItems] = React.useState([]);
     const [hTabs, setHTabs] = React.useState("1");
 
@@ -111,11 +112,15 @@ function ProductPage({ match }) {
             setCollapses([...collapses, collapse]);
         }
     };
+    //const bread = Breadcrumbs(ROUTES, { disableDefaults: true });
+    //console.log(bread);
+
     return (
         <>
             <Page>
                 {product ? (
                     <>
+                        <Breadcrumbs lastCrumbName={product.name} />
                         <Row>
                             <Col md="7" sm="6">
                                 <div className="ml-auto mr-auto" id="carousel">
@@ -186,12 +191,27 @@ function ProductPage({ match }) {
                                 {/* end carousel */}
                             </Col>
                             <Col md="5" sm="6">
-                                <h2>{product.name}</h2>
-                                <h4 className="price">
-                                    <strong>₽ {product.price}</strong>
-                                </h4>
+                                <h3>{product.name}</h3>
                                 <hr />
-                                <p>Бренд: {product.brand}</p>
+                                <h5 className="price mb-3">
+                                    <strong>Цена: {product.price}₽ </strong>
+                                </h5>{" "}
+                                <hr />
+                                <p>
+                                    Артикул:{" "}
+                                    <span className="font-weight-bold text-secondary">
+                                        {product.article}
+                                    </span>
+                                </p>
+                                <p>
+                                    Бренд:{" "}
+                                    <Link
+                                        className="font-weight-bold text-primary"
+                                        to={`/catalog/${product.brand.toLowerCase()}`}
+                                    >
+                                        {product.brand}
+                                    </Link>
+                                </p>
                                 {product.stock > 0 ? (
                                     <p className="text-success font-weight-bold">
                                         В наличии {product.stock} шт.
@@ -201,9 +221,6 @@ function ProductPage({ match }) {
                                         Временно отсутствует
                                     </p>
                                 )}
-
-                                <p>Артикул: {product.article}</p>
-
                                 <hr />
                                 <Row>
                                     <Col className="offset-md-5" md="7" sm="8">
@@ -268,39 +285,37 @@ function ProductPage({ match }) {
                                                 {product.features?.length > 0
                                                     ? product.features.map(
                                                           (feature, i) => (
-                                                              <>
-                                                                  <tr
-                                                                      key={
-                                                                          feature.name
+                                                              <tr
+                                                                  key={
+                                                                      feature.name
+                                                                  }
+                                                              >
+                                                                  <td
+                                                                      className={
+                                                                          i ===
+                                                                          0
+                                                                              ? "text-left border-0"
+                                                                              : "text-left"
                                                                       }
                                                                   >
-                                                                      <td
-                                                                          className={
-                                                                              i ===
-                                                                              0
-                                                                                  ? "text-left border-0"
-                                                                                  : "text-left"
-                                                                          }
-                                                                      >
-                                                                          {
-                                                                              feature.name
-                                                                          }
-                                                                      </td>
+                                                                      {
+                                                                          feature.name
+                                                                      }
+                                                                  </td>
 
-                                                                      <td
-                                                                          className={
-                                                                              i ===
-                                                                              0
-                                                                                  ? "text-right border-0"
-                                                                                  : "text-right"
-                                                                          }
-                                                                      >
-                                                                          {
-                                                                              feature.value
-                                                                          }
-                                                                      </td>
-                                                                  </tr>
-                                                              </>
+                                                                  <td
+                                                                      className={
+                                                                          i ===
+                                                                          0
+                                                                              ? "text-right border-0"
+                                                                              : "text-right"
+                                                                      }
+                                                                  >
+                                                                      {
+                                                                          feature.value
+                                                                      }
+                                                                  </td>
+                                                              </tr>
                                                           )
                                                       )
                                                     : ""}
