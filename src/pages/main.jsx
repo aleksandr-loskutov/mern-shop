@@ -2,7 +2,7 @@ import React from "react";
 import FeaturedProducts from "../components/featuredProducts";
 import Page from "../components/page";
 
-const Index = () => {
+const Main = () => {
     return (
         <>
             <Page>
@@ -12,4 +12,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default Main;
