@@ -34,12 +34,11 @@ import AdminProducts from "../layouts/adminProducts";
 import AdminCategories from "../layouts/adminCategories";
 import AdminOrders from "../layouts/adminOrders";
 import AdminPosts from "../layouts/adminPosts";
-import Cart from "../pages/User/cart";
 import Main from "../pages/main.jsx";
 import ContactUs from "../pages/User/ContactUs.jsx";
 import Error404 from "../pages/Error404.jsx";
 import SearchWithSidebar from "../pages/User/SearchWithSidebar.jsx";
-import CheckOut from "../pages/User/checkOut";
+import CheckOut from "../components/checkOut";
 import UserOrders from "../layouts/userOrders";
 import OrderSuccess from "../pages/User/orderSuccess";
 import Catalog from "../pages/User/catalog.jsx";
@@ -51,6 +50,7 @@ import AddProduct from "../pages/Admin/AddProduct";
 import LoginPage from "../pages/User/loginPage";
 import withBreadcrumbs from "react-router-breadcrumbs-hoc";
 import BreadcrumbsComponent from "../components/breadcrumbs";
+import CartLayout from "../layouts/cartLayout";
 
 export const authRoutes = [
     {
@@ -98,10 +98,6 @@ export const authRoutes = [
         component: AdminPosts
     },
     {
-        path: CHECKOUT_ROUTE,
-        component: CheckOut
-    },
-    {
         path: USER_ORDERS_ROUTE,
         component: UserOrders
     },
@@ -124,7 +120,7 @@ export const publicRoutes = [
     {
         path: CART_ROUTE,
         breadcrumb: "Корзина",
-        component: Cart
+        component: CartLayout
     },
     {
         path: PRODUCT_ROUTE,
