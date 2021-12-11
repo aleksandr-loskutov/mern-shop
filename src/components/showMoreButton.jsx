@@ -3,7 +3,7 @@ import { Button, Col } from "reactstrap";
 
 function ShowMoreButton({ onShowMore }) {
     return (
-        <Col className="offset-md-4" md="4">
+        <Col className="offset-md-4 mb-4" md="4">
             <Button
                 className="btn-round"
                 color="default"
