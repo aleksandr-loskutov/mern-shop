@@ -25,7 +25,7 @@ const ProductList = ({
 
     return (
         <>
-            <Col md="9" className="mt-4">
+            <Col md="9" className="mt-4 card card-refine">
                 <Row className="justify-content-md-between">
                     <Col md="4" sm="4">
                         <FormGroup className="">
@@ -54,7 +54,8 @@ const ProductList = ({
                 <TagsInput
                     onChange={(tags) => onTags(tags)}
                     tagProps={{
-                        className: "react-tagsinput-tag badge-default"
+                        className: "react-tagsinput-tag badge-secondary",
+                        style: { color: "white" }
                     }}
                     inputProps={{
                         className: "react-tagsinput-input",
