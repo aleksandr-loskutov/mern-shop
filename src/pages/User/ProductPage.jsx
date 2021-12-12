@@ -4,17 +4,13 @@ import React, { useEffect, useState } from "react";
 import {
     Button,
     Card,
-    FormGroup,
     Row,
     Col,
     Carousel,
     CarouselItem,
     CarouselIndicators,
     CarouselCaption,
-    UncontrolledCollapse,
     CardBody,
-    CardHeader,
-    Collapse,
     Table,
     Nav,
     NavItem,
@@ -31,6 +27,7 @@ import Preloader from "../../components/preloader";
 import StoreServices from "../../components/storeServices";
 import { useHistory } from "react-router-dom";
 import { Breadcrumbs } from "../../routing/routes";
+import { useCart } from "react-use-cart";
 
 function ProductPage() {
     const { alias } = useParams();
@@ -39,6 +36,7 @@ function ProductPage() {
         history.push("/catalog");
     }
     const [product, setProduct] = useState();
+    const { addItem, inCart, getItem } = useCart();
     const [carouselItems, setCarouselItems] = React.useState([]);
     const [hTabs, setHTabs] = React.useState("1");
 
@@ -102,8 +100,7 @@ function ProductPage() {
         };
     });
     //todo fix rerender slider
-    // console.log("product", product);
-    // console.log("images", carouselItems);
+
     const [collapses, setCollapses] = React.useState([1]);
     const changeCollapse = (collapse) => {
         if (collapses.includes(collapse)) {
@@ -112,8 +109,6 @@ function ProductPage() {
             setCollapses([...collapses, collapse]);
         }
     };
-    //const bread = Breadcrumbs(ROUTES, { disableDefaults: true });
-    //console.log(bread);
 
     return (
         <>
@@ -228,15 +223,29 @@ function ProductPage() {
                                             block
                                             className="btn-round"
                                             color="danger"
+                                            onClick={() =>
+                                                addItem(
+                                                    {
+                                                        id: product._id,
+                                                        price: product.price
+                                                    },
+                                                    1
+                                                )
+                                            }
                                         >
-                                            В корзину
+                                            {inCart(product._id)
+                                                ? `Уже в корзине ${
+                                                      getItem(product._id)
+                                                          .quantity
+                                                  } шт`
+                                                : "В корзину"}
                                             <i className="fa fa-chevron-right" />
                                         </Button>
                                     </Col>
                                 </Row>
                             </Col>
                         </Row>
-                        <Card>
+                        <Card className="card-refine">
                             <CardBody>
                                 <div className="nav-tabs-navigation text-left">
                                     <div className="nav-tabs-wrapper">
