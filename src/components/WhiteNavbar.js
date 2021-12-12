@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "react-use-cart";
+
 // JavaScript plugin that hides or shows a component based on your scroll
 import Headroom from "headroom.js";
 // reactstrap components
@@ -25,6 +27,7 @@ import SearchForm from "./searchForm";
 // core components
 
 function WhiteNavbar() {
+    const { items } = useCart();
     const { categories } = useSelector((state) => state.categories);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -187,7 +190,7 @@ function WhiteNavbar() {
                                     tag={Link}
                                 >
                                     <i className="nc-icon nc-cart-simple" />{" "}
-                                    {"0"}
+                                    {items.length}
                                 </Button>
                             </NavItem>
                         </Nav>
