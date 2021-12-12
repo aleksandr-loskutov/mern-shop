@@ -30,7 +30,7 @@ function CheckOut({ cartProducts }) {
     return (
         <Row>
             <Col lg="10" className="ml-auto mr-auto mt-2">
-                <Card className="pb-3">
+                <Card className="pb-3 card-refine">
                     <Form className="js-validate">
                         <Container>
                             <h3 className="title mt-3">Получатель</h3>
@@ -41,9 +41,8 @@ function CheckOut({ cartProducts }) {
                                         <span className="text-danger">*</span>
                                     </label>
                                     <Input
-                                        aria-label="Cristopher"
                                         name="firstName"
-                                        placeholder="Cristopher"
+                                        placeholder=""
                                         required=""
                                         type="text"
                                     ></Input>
@@ -54,9 +53,8 @@ function CheckOut({ cartProducts }) {
                                         <span className="text-danger">*</span>
                                     </label>
                                     <Input
-                                        aria-label="Thompson"
                                         name="lastName"
-                                        placeholder="Thompson"
+                                        placeholder=""
                                         required=""
                                         type="text"
                                     ></Input>
@@ -68,8 +66,7 @@ function CheckOut({ cartProducts }) {
                                     <div className="js-form-message">
                                         <label className="labels">Phone</label>
                                         <Input
-                                            aria-label="+4 (0762) 230991"
-                                            placeholder="+4 (0762) 230991"
+                                            placeholder=""
                                             type="text"
                                         ></Input>
                                     </div>
@@ -88,93 +85,11 @@ function CheckOut({ cartProducts }) {
                                             name="choices-single-default"
                                             type="select"
                                         >
-                                            <option>Выберите город</option>
-                                            <option defaultValue="CZ">
-                                                Czech Republic
+                                            <option defaultValue="SPB">
+                                                Санкт-Петербург
                                             </option>
-                                            <option defaultValue="DK">
-                                                Denmark
-                                            </option>
-                                            <option defaultValue="DO">
-                                                Dominican Republic
-                                            </option>
-                                            <option defaultValue="IQ">
-                                                Iraq
-                                            </option>
-                                            <option defaultValue="IL">
-                                                Israel
-                                            </option>
-                                            <option defaultValue="IT">
-                                                Italy
-                                            </option>
-                                            <option defaultValue="JM">
-                                                Jamaica
-                                            </option>
-                                            <option defaultValue="JP">
-                                                Japan
-                                            </option>
-                                            <option defaultValue="MG">
-                                                Madagascar
-                                            </option>
-                                            <option defaultValue="MT">
-                                                Malta
-                                            </option>
-                                            <option defaultValue="NO">
-                                                Norway
-                                            </option>
-                                            <option defaultValue="PL">
-                                                Poland
-                                            </option>
-                                            <option defaultValue="PT">
-                                                Portugal
-                                            </option>
-                                            <option defaultValue="RO">
-                                                Romania
-                                            </option>
-                                            <option defaultValue="RU">
-                                                Russian Federation
-                                            </option>
-                                            <option defaultValue="LC">
-                                                Saint Lucia
-                                            </option>
-                                            <option defaultValue="WS">
-                                                Samoa
-                                            </option>
-                                            <option defaultValue="SM">
-                                                San Marino
-                                            </option>
-                                            <option defaultValue="SA">
-                                                Saudi Arabia
-                                            </option>
-                                            <option defaultValue="ES">
-                                                Spain
-                                            </option>
-                                            <option defaultValue="SZ">
-                                                Swaziland
-                                            </option>
-                                            <option defaultValue="SE">
-                                                Sweden
-                                            </option>
-                                            <option defaultValue="TR">
-                                                Turkey
-                                            </option>
-                                            <option defaultValue="UG">
-                                                Uganda
-                                            </option>
-                                            <option defaultValue="UA">
-                                                Ukraine
-                                            </option>
-                                            <option defaultValue="AE">
-                                                United Arab Emirates
-                                            </option>
-                                            <option defaultValue="GB">
-                                                United Kingdom
-                                            </option>
-                                            <option defaultValue="US">
-                                                United States
-                                            </option>
-                                            <option defaultValue="VN">
-                                                Viet Nam
+                                            <option defaultValue="MSK">
+                                                Москва
                                             </option>
                                         </Input>
                                     </div>
@@ -191,9 +106,8 @@ function CheckOut({ cartProducts }) {
                                             </span>
                                         </label>
                                         <Input
-                                            aria-label="420 Long Beach, CA"
                                             name="streetAddress"
-                                            placeholder="420 Long Beach, CA"
+                                            placeholder=""
                                             required=""
                                             type="text"
                                         ></Input>
@@ -208,9 +122,8 @@ function CheckOut({ cartProducts }) {
                                             </span>
                                         </label>
                                         <Input
-                                            aria-label="340112"
                                             name="postcode"
-                                            placeholder="340112"
+                                            placeholder=""
                                             required=""
                                             type="text"
                                         ></Input>
@@ -263,17 +176,16 @@ function CheckOut({ cartProducts }) {
                             >
                                 <TabPane tabId="tab1">
                                     <Row>
-                                        <Col md="12">
+                                        <Col md="12" className="mt-4">
                                             <div className="js-form-message">
                                                 <label className="form-label">
-                                                    Card number
+                                                    Номер карты
                                                 </label>
                                                 <Input
-                                                    aria-label="**** **** **** ***"
                                                     name="cardNumber"
                                                     placeholder="**** **** **** ***"
                                                     required=""
-                                                    type="text"
+                                                    type="number"
                                                 ></Input>
                                             </div>
                                         </Col>
@@ -283,12 +195,11 @@ function CheckOut({ cartProducts }) {
                                         <Col md="8">
                                             <div className="js-form-message mb-4">
                                                 <label className="form-label">
-                                                    Card holder
+                                                    Имя на карте
                                                 </label>
                                                 <Input
-                                                    aria-label="Jack Wayley"
                                                     name="cardHolder"
-                                                    placeholder="Jack Wayley"
+                                                    placeholder=""
                                                     required=""
                                                     type="text"
                                                 ></Input>
@@ -297,10 +208,9 @@ function CheckOut({ cartProducts }) {
                                         <Col md="2">
                                             <div className="js-form-message mb-4">
                                                 <label className="form-label">
-                                                    Expiration
+                                                    Срок действия
                                                 </label>
                                                 <Input
-                                                    aria-label="MM/YY"
                                                     name="cardExpirationDate"
                                                     placeholder="MM/YY"
                                                     required=""
@@ -314,11 +224,10 @@ function CheckOut({ cartProducts }) {
                                                     CVC
                                                 </label>
                                                 <Input
-                                                    aria-label="***"
                                                     name="cardCVC"
                                                     placeholder="***"
                                                     required=""
-                                                    type="text"
+                                                    type="password"
                                                 ></Input>
                                             </div>
                                         </Col>
@@ -332,7 +241,16 @@ function CheckOut({ cartProducts }) {
                                 </TabPane>
                             </TabContent>
                             <div className="text-right mb-3">
-                                <h4> Итого к оплате: 9000</h4>
+                                <h4>
+                                    Итого к оплате:{" "}
+                                    {cartProducts.reduce(
+                                        (acc, product) =>
+                                            acc +
+                                            product.price *
+                                                product.cartQuantity,
+                                        0
+                                    )}
+                                </h4>
                             </div>
                             <div className="d-flex justify-content-between align-items-center">
                                 <Button
