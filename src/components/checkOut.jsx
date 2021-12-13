@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // JavaScript library for creating Dropdown Selects
 // import Choices from "choices.js";
 // reactstrap components
@@ -16,8 +16,24 @@ import {
 } from "reactstrap";
 import Page from "./page";
 import { Link } from "react-router-dom";
-// todo добавить Итого - сумму к оплате
+import FormComponent, { TextField } from "./form";
+import * as yup from "yup";
+import SelectField from "./form/fields/selectField";
 function CheckOut({ cartProducts }) {
+    const [data, setData] = useState({
+        name: "",
+        lastName: "",
+        phone: "",
+        city: "",
+        address: "",
+        postalCode: "",
+        paymentType: "",
+        cardNumber: "",
+        cardHolder: "",
+        cardExpirationDate: "",
+        cardCVC: ""
+    });
+    const [errors, setErrors] = useState({});
     const [activeTab, setActiveTab] = React.useState("tab1");
     React.useEffect(() => {
         document.body.classList.add("checkout-page");
@@ -27,71 +43,81 @@ function CheckOut({ cartProducts }) {
             document.body.classList.remove("checkout-page");
         };
     }, []);
+    const handleSubmit = (data) => {
+        console.log("data", data);
+        console.log("success");
+    };
+    const handleChange = (target) => {
+        setData((prevState) => ({
+            ...prevState,
+            [target.name]: target.value
+        }));
+    };
+    const cityList = [
+        {
+            name: "Санкт-Петербург",
+            value: "SPb"
+        },
+        {
+            name: "Москва",
+            value: "Msk"
+        }
+    ];
+    //TODO validation YUP
     return (
         <Row>
             <Col lg="10" className="ml-auto mr-auto mt-2">
                 <Card className="pb-3 card-refine">
-                    <Form className="js-validate">
-                        <Container>
+                    <Container>
+                        <FormComponent
+                            onSubmit={handleSubmit}
+                            className="js-validate"
+                            defaultData={{
+                                name: "",
+                                lastName: "",
+                                phone: ""
+                            }}
+                        >
                             <h3 className="title mt-3">Получатель</h3>
                             <Row>
                                 <Col md="6">
-                                    <label className="labels">
-                                        Имя{" "}
-                                        <span className="text-danger">*</span>
-                                    </label>
-                                    <Input
-                                        name="firstName"
-                                        placeholder=""
-                                        required=""
-                                        type="text"
-                                    ></Input>
+                                    <TextField
+                                        label="Имя"
+                                        name="name"
+                                        required={true}
+                                        autoFocus
+                                    />
                                 </Col>
                                 <Col md="6">
-                                    <label className="labels">
-                                        Фамилия{" "}
-                                        <span className="text-danger">*</span>
-                                    </label>
-                                    <Input
+                                    <TextField
+                                        label="Фамилия"
                                         name="lastName"
-                                        placeholder=""
-                                        required=""
-                                        type="text"
-                                    ></Input>
+                                        required={true}
+                                    />
                                 </Col>
                             </Row>
                             <br></br>
                             <Row>
                                 <Col md="6">
                                     <div className="js-form-message">
-                                        <label className="labels">Phone</label>
-                                        <Input
-                                            placeholder=""
-                                            type="text"
-                                        ></Input>
+                                        <TextField
+                                            label="Телефон"
+                                            name="phone"
+                                            required={true}
+                                        />
                                     </div>
                                 </Col>
                                 <Col md="6">
                                     <div className="mb-4">
-                                        <label className="labels">
-                                            Город{" "}
-                                            <span className="text-danger">
-                                                *
-                                            </span>
-                                        </label>
-                                        <Input
-                                            data-trigger=""
-                                            id="choices-single-default"
-                                            name="choices-single-default"
-                                            type="select"
-                                        >
-                                            <option defaultValue="SPB">
-                                                Санкт-Петербург
-                                            </option>
-                                            <option defaultValue="MSK">
-                                                Москва
-                                            </option>
-                                        </Input>
+                                        <SelectField
+                                            label="Город"
+                                            defaultOption="Выберите..."
+                                            name="city"
+                                            options={cityList}
+                                            onChange={handleChange}
+                                            defaultValue={cityList[0].value}
+                                            error={errors.city}
+                                        />
                                     </div>
                                 </Col>
                             </Row>
@@ -99,34 +125,20 @@ function CheckOut({ cartProducts }) {
                             <Row>
                                 <Col md="8">
                                     <div className="js-form-message">
-                                        <label className="labels">
-                                            Адрес доставки{" "}
-                                            <span className="text-danger">
-                                                *
-                                            </span>
-                                        </label>
-                                        <Input
-                                            name="streetAddress"
-                                            placeholder=""
-                                            required=""
-                                            type="text"
-                                        ></Input>
+                                        <TextField
+                                            label="Адрес доставки"
+                                            name="address"
+                                            required={true}
+                                        />
                                     </div>
                                 </Col>
                                 <Col md="4">
                                     <div className="js-form-message">
-                                        <label className="labels">
-                                            Почтовый индекс{" "}
-                                            <span className="text-danger">
-                                                *
-                                            </span>
-                                        </label>
-                                        <Input
-                                            name="postcode"
-                                            placeholder=""
-                                            required=""
-                                            type="text"
-                                        ></Input>
+                                        <TextField
+                                            label="Почтовый индекс"
+                                            name="postCode"
+                                            required={true}
+                                        />
                                     </div>
                                 </Col>
                             </Row>
@@ -138,9 +150,11 @@ function CheckOut({ cartProducts }) {
                                 role="tablist"
                             >
                                 <Button
-                                    color="info"
+                                    color="default"
                                     className={
-                                        activeTab === "tab1" ? "active" : ""
+                                        activeTab === "tab1"
+                                            ? "active text-white"
+                                            : ""
                                     }
                                     href="#pablo"
                                     onClick={(e) => {
@@ -154,9 +168,11 @@ function CheckOut({ cartProducts }) {
                                     Картой онлайн
                                 </Button>
                                 <Button
-                                    color="info"
+                                    color="default"
                                     className={
-                                        activeTab === "tab2" ? "active" : ""
+                                        activeTab === "tab2"
+                                            ? "active text-white"
+                                            : ""
                                     }
                                     href="#pablo"
                                     onClick={(e) => {
@@ -178,15 +194,13 @@ function CheckOut({ cartProducts }) {
                                     <Row>
                                         <Col md="12" className="mt-4">
                                             <div className="js-form-message">
-                                                <label className="form-label">
-                                                    Номер карты
-                                                </label>
-                                                <Input
+                                                <TextField
+                                                    label="Номер карты"
                                                     name="cardNumber"
-                                                    placeholder="**** **** **** ***"
-                                                    required=""
+                                                    placeholder="**** **** **** ****"
+                                                    required={activeTab}
                                                     type="number"
-                                                ></Input>
+                                                />
                                             </div>
                                         </Col>
                                     </Row>
@@ -194,47 +208,38 @@ function CheckOut({ cartProducts }) {
                                     <Row>
                                         <Col md="8">
                                             <div className="js-form-message mb-4">
-                                                <label className="form-label">
-                                                    Имя на карте
-                                                </label>
-                                                <Input
+                                                <TextField
+                                                    label="Имя на карте"
                                                     name="cardHolder"
-                                                    placeholder=""
-                                                    required=""
-                                                    type="text"
-                                                ></Input>
+                                                    required={activeTab}
+                                                />
                                             </div>
                                         </Col>
                                         <Col md="2">
                                             <div className="js-form-message mb-4">
-                                                <label className="form-label">
-                                                    Срок действия
-                                                </label>
-                                                <Input
+                                                <TextField
+                                                    label="Срок действия"
                                                     name="cardExpirationDate"
                                                     placeholder="MM/YY"
-                                                    required=""
-                                                    type="text"
-                                                ></Input>
+                                                    required={activeTab}
+                                                />
                                             </div>
                                         </Col>
                                         <Col md="2">
                                             <div className="js-form-message mb-4">
-                                                <label className="form-label">
-                                                    CVC
-                                                </label>
-                                                <Input
+                                                <TextField
+                                                    label="CVC"
                                                     name="cardCVC"
                                                     placeholder="***"
-                                                    required=""
                                                     type="password"
-                                                ></Input>
+                                                    required={activeTab}
+                                                />
                                             </div>
                                         </Col>
                                     </Row>
                                 </TabPane>
                                 <TabPane tabId="tab2">
-                                    <h5 className="text-dark mt-2">
+                                    <h5 className="text-dark mt-5">
                                         Оплата заказа при получении наличными
                                         или картой
                                     </h5>
@@ -255,21 +260,18 @@ function CheckOut({ cartProducts }) {
                             <div className="d-flex justify-content-between align-items-center">
                                 <Button
                                     to="/cart"
-                                    className="btn-round mr-1 btn btn-outline-default"
+                                    className=" mr-1 btn btn-outline-default"
                                     tag={Link}
                                 >
                                     <i className="fa fa-arrow-left mr-1"></i>В
                                     корзину
                                 </Button>
-                                <Button
-                                    className="btn-round mr-1 btn btn-outline-info btn-lg"
-                                    type="submit"
-                                >
-                                    ЗАКАЗАТЬ
+                                <Button color="danger" size="lg" type="submit">
+                                    ЗАКАЗАТЬ{" "}
                                 </Button>
                             </div>
-                        </Container>
-                    </Form>
+                        </FormComponent>
+                    </Container>
                 </Card>
             </Col>
         </Row>
