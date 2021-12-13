@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { Input } from "reactstrap";
 
-const TextField = ({ label, type, name, value, onChange, error, ...rest }) => {
+const TextField = ({
+    label,
+    type,
+    name,
+    value,
+    onChange,
+    error,
+    required,
+    ...rest
+}) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = ({ target }) => {
@@ -14,10 +24,20 @@ const TextField = ({ label, type, name, value, onChange, error, ...rest }) => {
         setShowPassword((prevState) => !prevState);
     };
     return (
-        <div className="mb-4">
-            <label htmlFor={name}> {label}</label>
-            <div className="input-group has-validation">
-                <input
+        <div className="mb-2">
+            <label htmlFor={name} className="label">
+                {" "}
+                {label}
+            </label>
+            {required && <span className="text-danger">*</span>}
+            <div
+                className={
+                    type === "password" && name !== "cardCVC"
+                        ? "input-group has-validation"
+                        : ""
+                }
+            >
+                <Input
                     type={showPassword ? "text" : type}
                     id={name}
                     name={name}
@@ -27,7 +47,7 @@ const TextField = ({ label, type, name, value, onChange, error, ...rest }) => {
                     {...rest}
                 />
 
-                {type === "password" && (
+                {type === "password" && name !== "cardCVC" && (
                     <button
                         className="btn-sm btn-group-toggle border-0 "
                         type="button"

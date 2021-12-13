@@ -15,7 +15,7 @@ const SelectField = ({
         onChange({ name: target.name, value: target.value });
     };
     const getInputClasses = () => {
-        return "form-select" + (error ? " is-invalid" : "");
+        return "custom-select" + (error ? " is-invalid" : "");
     };
     useEffect(() => console.log("render selsect"));
     const optionsArray =
@@ -25,7 +25,7 @@ const SelectField = ({
                   value: options[optionName]._id
               }))
             : options;
-
+    console.log("optionsArray", optionsArray);
     return (
         <div className="mb-4">
             <label htmlFor="validationCustom04" className="form-label">
