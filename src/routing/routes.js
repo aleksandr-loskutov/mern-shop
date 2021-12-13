@@ -47,7 +47,7 @@ import Posts from "../pages/User/posts";
 import AddCategory from "../pages/Admin/AddCategory";
 import UserSettings from "../pages/User/userSettings.jsx";
 import AddProduct from "../pages/Admin/AddProduct";
-import LoginPage from "../pages/User/loginPage";
+import LoginLayout from "../layouts/loginLayout";
 import withBreadcrumbs from "react-router-breadcrumbs-hoc";
 import BreadcrumbsComponent from "../components/breadcrumbs";
 import CartLayout from "../layouts/cartLayout";
@@ -135,7 +135,7 @@ export const publicRoutes = [
     {
         path: LOGIN_ROUTE,
         breadcrumb: "Вход",
-        component: LoginPage
+        component: LoginLayout
     },
     {
         path: ROOT_ROUTE,
