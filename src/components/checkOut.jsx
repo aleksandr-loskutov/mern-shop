@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // JavaScript library for creating Dropdown Selects
 // import Choices from "choices.js";
 // reactstrap components
@@ -10,26 +10,46 @@ import {
     TabPane,
     Container,
     Row,
-    Col
+    Col,
+    Form
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import FormComponent, { TextField } from "./form";
+import { TextField } from "./form";
 import * as yup from "yup";
 import SelectField from "./form/fields/selectField";
+const cityList = [
+    {
+        name: "Санкт-Петербург",
+        value: "SPb"
+    },
+    {
+        name: "Москва",
+        value: "Msk"
+    }
+];
 function CheckOut({ cartProducts }) {
     const [data, setData] = useState({
-        name: "Александр",
+        name: "",
         lastName: "",
         phone: "",
         city: "",
         address: "",
-        postalCode: "",
+        postCode: "",
         paymentType: "",
         cardNumber: "",
         cardHolder: "",
         cardExpirationDate: "",
         cardCVC: ""
     });
+    const cardFields = [
+        "cardNumber",
+        "cardNumber",
+        "cardHolder",
+        "cardExpirationDate",
+        "cardCVC"
+    ];
+
+    const [errors, setErrors] = useState({});
     const [activeTab, setActiveTab] = React.useState("tab1");
     React.useEffect(() => {
         document.body.classList.add("checkout-page");
@@ -39,42 +59,81 @@ function CheckOut({ cartProducts }) {
             document.body.classList.remove("checkout-page");
         };
     }, []);
-    const handleSubmit = (data) => {
-        console.log("data", data);
-        console.log("success, main handleSubmit");
-    };
+
     const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
     };
-    const cityList = [
-        {
-            name: "Санкт-Петербург",
-            value: "SPb"
-        },
-        {
-            name: "Москва",
-            value: "Msk"
-        }
-    ];
+
     const validateSchema = yup.object().shape({
-        name: yup.string().required("Заполните имя"),
-        lastName: yup.string().required("Заполните фамилию"),
-        phone: yup.string().required("Телефон обязателен")
+        cardCVC: yup.string().required("Укажите CVC"),
+        cardExpirationDate: yup.string().required("Укажите срок действия"),
+        cardHolder: yup.string().required("Укажите имя на карте"),
+        cardNumber: yup.string().required("Укажите номер карты"),
+        postCode: yup.string().required("Укажите индекс"),
+        address: yup.string().required("Укажите адрес"),
+        city: yup.string().oneOf(
+            [
+                ...cityList.reduce((acc, cityObj) => {
+                    acc.push(cityObj.value);
+                    return acc;
+                }, []),
+                null
+            ],
+            "Выберите город"
+        ),
+        phone: yup
+            .string()
+            .required("Укажите телефон")
+            .matches(/^\+?7(\d{10})$/, "Укажите корректный номер через +7"),
+        lastName: yup.string().required("Укажите фамилию"),
+        name: yup.string().required("Укажите имя")
     });
+    const isValid = () => {
+        return (
+            Object.keys(data).length > 0 &&
+            Object.keys(errors).length === 0 &&
+            Object.values(data).join("").length > 0
+        );
+    };
+
+    const validate = () => {
+        validateSchema
+            .validate(data)
+            .then(() => setErrors({}))
+            .catch((err) => {
+                setErrors({ [err.path]: err.message });
+                // if (!(cardFields.includes(err.path) && activeTab === "tab1")) {
+                // }
+            });
+
+        return isValid();
+    };
+
+    useEffect(() => {
+        if (Object.keys(data).length > 0) {
+            validate();
+        }
+        // eslint-disable-next-line
+    }, [data]);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const isValid = validate();
+        console.log("handleSubmit isValid", isValid);
+        console.log("errors", errors);
+        if (!isValid) return;
+        console.log("handleSubmit", data);
+        //отправляем
+    };
+
     return (
         <Row>
             <Col lg="10" className="ml-auto mr-auto mt-2">
                 <Card className="pb-3 card-refine">
                     <Container>
-                        <FormComponent
-                            onSubmit={handleSubmit}
-                            validatorConfig={validateSchema}
-                            className="js-validate"
-                            defaultData={data}
-                        >
+                        <Form onSubmit={handleSubmit} className="js-validate">
                             <h3 className="title mt-3">Получатель</h3>
                             <Row>
                                 <Col md="6">
@@ -82,7 +141,10 @@ function CheckOut({ cartProducts }) {
                                         label="Имя"
                                         name="name"
                                         required={true}
+                                        onChange={handleChange}
                                         autoFocus
+                                        value={data.name}
+                                        error={errors.name}
                                     />
                                 </Col>
                                 <Col md="6">
@@ -90,6 +152,9 @@ function CheckOut({ cartProducts }) {
                                         label="Фамилия"
                                         name="lastName"
                                         required={true}
+                                        onChange={handleChange}
+                                        value={data.lastName}
+                                        error={errors.lastName}
                                     />
                                 </Col>
                             </Row>
@@ -101,6 +166,9 @@ function CheckOut({ cartProducts }) {
                                             label="Телефон"
                                             name="phone"
                                             required={true}
+                                            onChange={handleChange}
+                                            value={data.phone}
+                                            error={errors.phone}
                                         />
                                     </div>
                                 </Col>
@@ -111,8 +179,9 @@ function CheckOut({ cartProducts }) {
                                             defaultOption="Выберите..."
                                             name="city"
                                             options={cityList}
+                                            defaultValue={data.city}
                                             onChange={handleChange}
-                                            defaultValue={cityList[0].value}
+                                            error={errors.city}
                                         />
                                     </div>
                                 </Col>
@@ -125,6 +194,9 @@ function CheckOut({ cartProducts }) {
                                             label="Адрес доставки"
                                             name="address"
                                             required={true}
+                                            onChange={handleChange}
+                                            value={data.address}
+                                            error={errors.address}
                                         />
                                     </div>
                                 </Col>
@@ -134,6 +206,9 @@ function CheckOut({ cartProducts }) {
                                             label="Почтовый индекс"
                                             name="postCode"
                                             required={true}
+                                            onChange={handleChange}
+                                            value={data.postCode}
+                                            error={errors.postCode}
                                         />
                                     </div>
                                 </Col>
@@ -194,8 +269,13 @@ function CheckOut({ cartProducts }) {
                                                     label="Номер карты"
                                                     name="cardNumber"
                                                     placeholder="**** **** **** ****"
-                                                    required={activeTab}
+                                                    required={
+                                                        activeTab === "tab1"
+                                                    }
                                                     type="number"
+                                                    onChange={handleChange}
+                                                    value={data.cardNumber}
+                                                    error={errors.cardNumber}
                                                 />
                                             </div>
                                         </Col>
@@ -207,7 +287,12 @@ function CheckOut({ cartProducts }) {
                                                 <TextField
                                                     label="Имя на карте"
                                                     name="cardHolder"
-                                                    required={activeTab}
+                                                    required={
+                                                        activeTab === "tab1"
+                                                    }
+                                                    onChange={handleChange}
+                                                    value={data.cardHolder}
+                                                    error={errors.cardHolder}
                                                 />
                                             </div>
                                         </Col>
@@ -217,7 +302,16 @@ function CheckOut({ cartProducts }) {
                                                     label="Срок действия"
                                                     name="cardExpirationDate"
                                                     placeholder="MM/YY"
-                                                    required={activeTab}
+                                                    required={
+                                                        activeTab === "tab1"
+                                                    }
+                                                    onChange={handleChange}
+                                                    value={
+                                                        data.cardExpirationDate
+                                                    }
+                                                    error={
+                                                        errors.cardExpirationDate
+                                                    }
                                                 />
                                             </div>
                                         </Col>
@@ -228,7 +322,12 @@ function CheckOut({ cartProducts }) {
                                                     name="cardCVC"
                                                     placeholder="***"
                                                     type="password"
-                                                    required={activeTab}
+                                                    required={
+                                                        activeTab === "tab1"
+                                                    }
+                                                    onChange={handleChange}
+                                                    value={data.cardCVC}
+                                                    error={errors.cardCVC}
                                                 />
                                             </div>
                                         </Col>
@@ -262,11 +361,16 @@ function CheckOut({ cartProducts }) {
                                     <i className="fa fa-arrow-left mr-1"></i>В
                                     корзину
                                 </Button>
-                                <Button color="danger" size="lg" type="submit">
+                                <Button
+                                    color="danger"
+                                    size="lg"
+                                    type="submit"
+                                    disabled={!isValid()}
+                                >
                                     ЗАКАЗАТЬ{" "}
                                 </Button>
                             </div>
-                        </FormComponent>
+                        </Form>
                     </Container>
                 </Card>
             </Col>
