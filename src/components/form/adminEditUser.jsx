@@ -1,9 +1,9 @@
 import React from "react";
-import { Button, Card, CardTitle, Col, Container, Row } from "reactstrap";
+import { Button, Card, Col, Row } from "reactstrap";
 import * as yup from "yup";
 import FormComponent from "./index";
 import TextField from "./fields/textField";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const AdminEditUser = ({ user }) => {
     const history = useHistory();

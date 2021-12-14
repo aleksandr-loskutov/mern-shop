@@ -16,13 +16,10 @@ import {
     Navbar,
     NavItem,
     Nav,
-    Container,
-    Form,
-    Input
+    Container
 } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../store/actions/categories";
-import { useCategories } from "../hooks/useCategory";
 import SearchForm from "./searchForm";
 // core components
 

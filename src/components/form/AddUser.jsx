@@ -1,10 +1,10 @@
 import React from "react";
 import * as yup from "yup";
-import { Button, Card, Col, Container, Row } from "reactstrap";
+import { Button, Card, Col, Row } from "reactstrap";
 import FormComponent from "./index";
 import TextField from "./fields/textField";
 import PageAdmin from "../pageAdmin";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const AddUser = () => {
     const history = useHistory();

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 const SelectField = ({
@@ -17,7 +17,7 @@ const SelectField = ({
     const getInputClasses = () => {
         return "custom-select" + (error ? " is-invalid" : "");
     };
-    useEffect(() => console.log("render selsect"));
+    // useEffect(() => console.log("render selsect"));
     const optionsArray =
         !Array.isArray(options) && typeof options === "object"
             ? Object.keys(options).map((optionName) => ({
@@ -25,7 +25,7 @@ const SelectField = ({
                   value: options[optionName]._id
               }))
             : options;
-    console.log("optionsArray", optionsArray);
+    // console.log("optionsArray", optionsArray);
     return (
         <div className="mb-4">
             <label htmlFor="validationCustom04" className="form-label">

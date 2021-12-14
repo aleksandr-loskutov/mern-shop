@@ -47,7 +47,7 @@ function ProductPage() {
                 if (data.content?.[0]) setProduct(data.content[0]);
             });
         }
-    }, []);
+    }, [alias]);
 
     useEffect(() => {
         if (product?.images.length > 0) {
@@ -101,14 +101,14 @@ function ProductPage() {
     });
     //todo fix rerender slider
 
-    const [collapses, setCollapses] = React.useState([1]);
-    const changeCollapse = (collapse) => {
-        if (collapses.includes(collapse)) {
-            setCollapses(collapses.filter((prop) => prop !== collapse));
-        } else {
-            setCollapses([...collapses, collapse]);
-        }
-    };
+    // const [collapses, setCollapses] = React.useState([1]);
+    // const changeCollapse = (collapse) => {
+    //     if (collapses.includes(collapse)) {
+    //         setCollapses(collapses.filter((prop) => prop !== collapse));
+    //     } else {
+    //         setCollapses([...collapses, collapse]);
+    //     }
+    // };
 
     return (
         <>

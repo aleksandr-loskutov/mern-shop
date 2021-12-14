@@ -6,22 +6,19 @@ import {
     Button,
     ButtonGroup,
     Card,
-    Form,
-    Input,
     TabContent,
     TabPane,
     Container,
     Row,
     Col
 } from "reactstrap";
-import Page from "./page";
 import { Link } from "react-router-dom";
 import FormComponent, { TextField } from "./form";
 import * as yup from "yup";
 import SelectField from "./form/fields/selectField";
 function CheckOut({ cartProducts }) {
     const [data, setData] = useState({
-        name: "",
+        name: "Александр",
         lastName: "",
         phone: "",
         city: "",
@@ -33,7 +30,6 @@ function CheckOut({ cartProducts }) {
         cardExpirationDate: "",
         cardCVC: ""
     });
-    const [errors, setErrors] = useState({});
     const [activeTab, setActiveTab] = React.useState("tab1");
     React.useEffect(() => {
         document.body.classList.add("checkout-page");
@@ -45,7 +41,7 @@ function CheckOut({ cartProducts }) {
     }, []);
     const handleSubmit = (data) => {
         console.log("data", data);
-        console.log("success");
+        console.log("success, main handleSubmit");
     };
     const handleChange = (target) => {
         setData((prevState) => ({
@@ -63,7 +59,11 @@ function CheckOut({ cartProducts }) {
             value: "Msk"
         }
     ];
-    //TODO validation YUP
+    const validateSchema = yup.object().shape({
+        name: yup.string().required("Заполните имя"),
+        lastName: yup.string().required("Заполните фамилию"),
+        phone: yup.string().required("Телефон обязателен")
+    });
     return (
         <Row>
             <Col lg="10" className="ml-auto mr-auto mt-2">
@@ -71,12 +71,9 @@ function CheckOut({ cartProducts }) {
                     <Container>
                         <FormComponent
                             onSubmit={handleSubmit}
+                            validatorConfig={validateSchema}
                             className="js-validate"
-                            defaultData={{
-                                name: "",
-                                lastName: "",
-                                phone: ""
-                            }}
+                            defaultData={data}
                         >
                             <h3 className="title mt-3">Получатель</h3>
                             <Row>
@@ -116,7 +113,6 @@ function CheckOut({ cartProducts }) {
                                             options={cityList}
                                             onChange={handleChange}
                                             defaultValue={cityList[0].value}
-                                            error={errors.city}
                                         />
                                     </div>
                                 </Col>

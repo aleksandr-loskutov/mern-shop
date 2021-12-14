@@ -39,6 +39,7 @@ function CartLayout() {
                 setIsLoaded(true);
             }
         }
+        // eslint-disable-next-line
     }, [products, items]);
     return (
         <Page title={checkout ? "Оформление заказа" : "Корзина"}>

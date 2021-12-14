@@ -58,9 +58,10 @@ const FormComponent = ({
     const clonedElements = React.Children.map(children, (child) => {
         const childType = typeof child.type;
         // для отладки в будущем при оптимизации рендеров типы могут изменяться при использовании memo у полей
-        // console.log("child", child, "type", childType);
+
         let config = {};
         if (childType === "object") {
+            console.log("child object", child, "type", childType);
             if (!child.props.name) {
                 throw new Error(
                     "Name property is required for field component " + child
@@ -74,6 +75,7 @@ const FormComponent = ({
                 onKeyDown: handleKeyDown
             };
         }
+        // console.log("config", config);
         if (childType === "function") {
             if (child.props.tag === "button") {
                 if (
@@ -86,6 +88,7 @@ const FormComponent = ({
         }
         return React.cloneElement(child, config);
     });
+    // console.log("clonedElements", clonedElements);
     return (
         <form className={className} onSubmit={handleSubmit}>
             {clonedElements}

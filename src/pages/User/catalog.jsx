@@ -62,6 +62,7 @@ function Catalog() {
                 prevAlias.current = alias;
             }
         }
+        // eslint-disable-next-line
     }, [categories, alias]);
 
     useEffect(() => {
@@ -186,7 +187,7 @@ function Catalog() {
                                     <h5 className="mb-0 panel-title">
                                         <a
                                             aria-expanded={category}
-                                            href="#"
+                                            href="#link"
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 setCategory(!category);
