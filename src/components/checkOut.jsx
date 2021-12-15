@@ -27,6 +27,17 @@ const cityList = [
         value: "Msk"
     }
 ];
+const deliveryMethods = [
+    {
+        name: "Самовывоз",
+        value: "pickup"
+    },
+    {
+        name: "Курьер (+700 руб.)",
+        value: "courier",
+        price: 700
+    }
+];
 function CheckOut({ cartProducts }) {
     const [data, setData] = useState({
         name: "",
@@ -35,11 +46,13 @@ function CheckOut({ cartProducts }) {
         city: "",
         address: "",
         postCode: "",
+        deliveryMethod: "pickup",
         paymentType: "",
         cardNumber: "",
         cardHolder: "",
         cardExpirationDate: "",
-        cardCVC: ""
+        cardCVC: "",
+        extraPrice: 0
     });
     const cardFields = [
         "cardNumber",
@@ -50,7 +63,7 @@ function CheckOut({ cartProducts }) {
     ];
 
     const [errors, setErrors] = useState({});
-    const [activeTab, setActiveTab] = React.useState("tab1");
+    const [activeTab, setActiveTab] = React.useState("card");
     React.useEffect(() => {
         document.body.classList.add("checkout-page");
         window.scrollTo(0, 0);
@@ -61,10 +74,23 @@ function CheckOut({ cartProducts }) {
     }, []);
 
     const handleChange = (target) => {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
+        setData((prevState) => {
+            const extra = { extraPrice: 0 };
+            if (target.name === "deliveryMethod") {
+                const found = deliveryMethods.find(
+                    (method) =>
+                        method.value === target.value && method.price > 0
+                );
+                found
+                    ? (extra.extraPrice = found.price)
+                    : (extra.extraPrice = 0);
+            }
+            return {
+                ...prevState,
+                ...extra,
+                [target.name]: target.value
+            };
+        });
     };
 
     const validateSchema = yup.object().shape({
@@ -72,6 +98,16 @@ function CheckOut({ cartProducts }) {
         cardExpirationDate: yup.string().required("Укажите срок действия"),
         cardHolder: yup.string().required("Укажите имя на карте"),
         cardNumber: yup.string().required("Укажите номер карты"),
+        deliveryMethod: yup.string().oneOf(
+            [
+                ...deliveryMethods.reduce((acc, methodObj) => {
+                    acc.push(methodObj.value);
+                    return acc;
+                }, []),
+                null
+            ],
+            "Выберите способ получения заказа"
+        ),
         postCode: yup.string().required("Укажите индекс"),
         address: yup.string().required("Укажите адрес"),
         city: yup.string().oneOf(
@@ -104,9 +140,13 @@ function CheckOut({ cartProducts }) {
             .validate(data)
             .then(() => setErrors({}))
             .catch((err) => {
-                setErrors({ [err.path]: err.message });
-                // if (!(cardFields.includes(err.path) && activeTab === "tab1")) {
-                // }
+                const error = cardFields.includes(err.path)
+                    ? activeTab === "card"
+                        ? { [err.path]: err.message }
+                        : {}
+                    : { [err.path]: err.message };
+
+                setErrors(error);
             });
 
         return isValid();
@@ -115,9 +155,15 @@ function CheckOut({ cartProducts }) {
     useEffect(() => {
         if (Object.keys(data).length > 0) {
             validate();
+            // console.log("errors", errors);
         }
+        if (data.paymentType !== activeTab)
+            setData((prevState) => {
+                return { ...prevState, paymentType: activeTab };
+            });
         // eslint-disable-next-line
-    }, [data]);
+    }, [data, activeTab]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
@@ -158,7 +204,7 @@ function CheckOut({ cartProducts }) {
                                     />
                                 </Col>
                             </Row>
-                            <br></br>
+
                             <Row>
                                 <Col md="6">
                                     <div className="js-form-message">
@@ -213,8 +259,27 @@ function CheckOut({ cartProducts }) {
                                     </div>
                                 </Col>
                             </Row>
-                            <br></br>
-
+                            <Row className="mt-3 justify-content-center">
+                                <Col md="5">
+                                    <h4 className="pull-right mt-1">
+                                        Способ получения заказа:
+                                    </h4>
+                                </Col>
+                                <Col md="5">
+                                    <div className="text-center">
+                                        <SelectField
+                                            defaultOption="Выберите..."
+                                            name="deliveryMethod"
+                                            options={deliveryMethods}
+                                            defaultValue={
+                                                deliveryMethods[0].value
+                                            }
+                                            onChange={handleChange}
+                                            error={errors.deliveryMethod}
+                                        />
+                                    </div>
+                                </Col>
+                            </Row>
                             <h4 className="title">Способ оплаты</h4>
                             <ButtonGroup
                                 className="nav nav-tabs nav-tabs-primary"
@@ -223,14 +288,14 @@ function CheckOut({ cartProducts }) {
                                 <Button
                                     color="default"
                                     className={
-                                        activeTab === "tab1"
+                                        activeTab === "card"
                                             ? "active text-white"
                                             : ""
                                     }
                                     href="#pablo"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        setActiveTab("tab1");
+                                        setActiveTab("card");
                                     }}
                                     outline
                                     role="tablist"
@@ -241,14 +306,14 @@ function CheckOut({ cartProducts }) {
                                 <Button
                                     color="default"
                                     className={
-                                        activeTab === "tab2"
+                                        activeTab === "onDelivery"
                                             ? "active text-white"
                                             : ""
                                     }
                                     href="#pablo"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        setActiveTab("tab2");
+                                        setActiveTab("onDelivery");
                                     }}
                                     outline
                                     role="tablist"
@@ -261,7 +326,7 @@ function CheckOut({ cartProducts }) {
                                 className="tab-space"
                                 activeTab={activeTab}
                             >
-                                <TabPane tabId="tab1">
+                                <TabPane tabId="card">
                                     <Row>
                                         <Col md="12" className="mt-4">
                                             <div className="js-form-message">
@@ -270,7 +335,7 @@ function CheckOut({ cartProducts }) {
                                                     name="cardNumber"
                                                     placeholder="**** **** **** ****"
                                                     required={
-                                                        activeTab === "tab1"
+                                                        activeTab === "card"
                                                     }
                                                     type="number"
                                                     onChange={handleChange}
@@ -288,7 +353,7 @@ function CheckOut({ cartProducts }) {
                                                     label="Имя на карте"
                                                     name="cardHolder"
                                                     required={
-                                                        activeTab === "tab1"
+                                                        activeTab === "card"
                                                     }
                                                     onChange={handleChange}
                                                     value={data.cardHolder}
@@ -302,8 +367,9 @@ function CheckOut({ cartProducts }) {
                                                     label="Срок действия"
                                                     name="cardExpirationDate"
                                                     placeholder="MM/YY"
+                                                    type="number"
                                                     required={
-                                                        activeTab === "tab1"
+                                                        activeTab === "card"
                                                     }
                                                     onChange={handleChange}
                                                     value={
@@ -323,7 +389,7 @@ function CheckOut({ cartProducts }) {
                                                     placeholder="***"
                                                     type="password"
                                                     required={
-                                                        activeTab === "tab1"
+                                                        activeTab === "card"
                                                     }
                                                     onChange={handleChange}
                                                     value={data.cardCVC}
@@ -333,7 +399,7 @@ function CheckOut({ cartProducts }) {
                                         </Col>
                                     </Row>
                                 </TabPane>
-                                <TabPane tabId="tab2">
+                                <TabPane tabId="onDelivery">
                                     <h5 className="text-dark mt-5">
                                         Оплата заказа при получении наличными
                                         или картой
@@ -349,7 +415,7 @@ function CheckOut({ cartProducts }) {
                                             product.price *
                                                 product.cartQuantity,
                                         0
-                                    )}
+                                    ) + data.extraPrice}
                                 </h4>
                             </div>
                             <div className="d-flex justify-content-between align-items-center">
