@@ -28,12 +28,12 @@ const SelectField = ({
     // console.log("optionsArray", optionsArray);
     return (
         <div className="mb-4">
-            <label htmlFor="validationCustom04" className="form-label">
+            <label htmlFor={`validationCustom${name}`} className="form-label">
                 {label}
             </label>
             <select
                 className={getInputClasses()}
-                id="validationCustom04"
+                id={`validationCustom${name}`}
                 name={name}
                 value={value}
                 onChange={handleChange}
