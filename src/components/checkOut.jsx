@@ -75,6 +75,7 @@ function CheckOut({ cartProducts }) {
 
     const handleChange = (target) => {
         setData((prevState) => {
+            //adding extra price
             const extra = { extraPrice: 0 };
             if (target.name === "deliveryMethod") {
                 const found = deliveryMethods.find(
@@ -85,19 +86,40 @@ function CheckOut({ cartProducts }) {
                     ? (extra.extraPrice = found.price)
                     : (extra.extraPrice = 0);
             }
+            //adding slash to card expire field
+            const cardExpireDateWithSlash = {
+                cardExpirationDate: data.cardExpirationDate
+            };
+            if (target.name === "cardExpirationDate") {
+                target.value.length === 2 && !target.value.includes("/")
+                    ? (cardExpireDateWithSlash.cardExpirationDate =
+                          target.value + "/")
+                    : (cardExpireDateWithSlash.cardExpirationDate =
+                          target.value);
+            }
             return {
                 ...prevState,
+                [target.name]: target.value,
                 ...extra,
-                [target.name]: target.value
+                ...cardExpireDateWithSlash
             };
         });
     };
 
     const validateSchema = yup.object().shape({
-        cardCVC: yup.string().required("Укажите CVC"),
-        cardExpirationDate: yup.string().required("Укажите срок действия"),
+        cardCVC: yup
+            .string()
+            .required("Укажите CVC")
+            .matches(/^\d{3}$/, "Укажите корректный номер"),
+        cardExpirationDate: yup
+            .string()
+            .required("Укажите срок действия")
+            .matches(/^\d{2}\/\d{2}$/, "Укажите в формате MM/YY"),
         cardHolder: yup.string().required("Укажите имя на карте"),
-        cardNumber: yup.string().required("Укажите номер карты"),
+        cardNumber: yup
+            .string()
+            .required("Укажите номер карты")
+            .matches(/^\d{16}$/, "Укажите корректный номер"),
         deliveryMethod: yup.string().oneOf(
             [
                 ...deliveryMethods.reduce((acc, methodObj) => {
@@ -108,7 +130,10 @@ function CheckOut({ cartProducts }) {
             ],
             "Выберите способ получения заказа"
         ),
-        postCode: yup.string().required("Укажите индекс"),
+        postCode: yup
+            .string()
+            .required("Укажите индекс")
+            .matches(/^\d{6}$/, "Укажите корректный индекс"),
         address: yup.string().required("Укажите адрес"),
         city: yup.string().oneOf(
             [
@@ -155,7 +180,6 @@ function CheckOut({ cartProducts }) {
     useEffect(() => {
         if (Object.keys(data).length > 0) {
             validate();
-            // console.log("errors", errors);
         }
         if (data.paymentType !== activeTab)
             setData((prevState) => {
@@ -167,8 +191,8 @@ function CheckOut({ cartProducts }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
-        console.log("handleSubmit isValid", isValid);
-        console.log("errors", errors);
+        // console.log("handleSubmit isValid", isValid);
+        // console.log("errors", errors);
         if (!isValid) return;
         console.log("handleSubmit", data);
         //отправляем
@@ -180,7 +204,21 @@ function CheckOut({ cartProducts }) {
                 <Card className="pb-3 card-refine">
                     <Container>
                         <Form onSubmit={handleSubmit} className="js-validate">
-                            <h3 className="title mt-3">Получатель</h3>
+                            <Row>
+                                {" "}
+                                <Col md="6">
+                                    <h3 className="title mt-3">Получатель</h3>
+                                </Col>{" "}
+                                <Col md="6">
+                                    <a
+                                        className="text-info mt-3 pull-right "
+                                        href="#link"
+                                        onClick={() => setData(getDemoData())}
+                                    >
+                                        Заполнить демо данными?
+                                    </a>
+                                </Col>
+                            </Row>
                             <Row>
                                 <Col md="6">
                                     <TextField
@@ -367,7 +405,6 @@ function CheckOut({ cartProducts }) {
                                                     label="Срок действия"
                                                     name="cardExpirationDate"
                                                     placeholder="MM/YY"
-                                                    type="number"
                                                     required={
                                                         activeTab === "card"
                                                     }
@@ -444,4 +481,21 @@ function CheckOut({ cartProducts }) {
     );
 }
 
+function getDemoData() {
+    return {
+        name: "Иван",
+        lastName: "Иванов",
+        phone: "+79216666666",
+        city: "SPb",
+        address: "ул. Ленина дом 3/2 кв. 42",
+        postCode: "194080",
+        deliveryMethod: "pickup",
+        paymentType: "card",
+        cardNumber: "5455545554543432",
+        cardHolder: "Ivanov Ivan",
+        cardExpirationDate: "05/23",
+        cardCVC: "543",
+        extraPrice: 0
+    };
+}
 export default CheckOut;
