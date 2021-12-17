@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
-
+import cyrillicToTranslit from "cyrillic-to-translit-js";
 // reactstrap components
 import {
     Button,
     FormGroup,
     Input,
-    InputGroupAddon,
-    InputGroupText,
-    InputGroup,
     Row,
     Col,
-    CustomInput
+    CustomInput,
+    Form
 } from "reactstrap";
 
 // core components
@@ -22,6 +20,8 @@ import { fetchProducts } from "../../store/actions/products";
 import { fetchCategories } from "../../store/actions/categories";
 import SelectField from "../../components/form/fields/selectField";
 import Preloader from "../../components/preloader";
+import TextField from "../../components/form/fields/textField";
+import * as yup from "yup";
 
 function AddProduct() {
     const [data, setData] = useState({
@@ -32,12 +32,13 @@ function AddProduct() {
         article: "",
         manufacturerCode: "",
         price: "",
-        images: "",
+        discount: "",
+        images: [],
         description: "",
-        features: "",
+        features: [],
         featured: false,
         status: true,
-        stock: ""
+        stock: "1"
     });
     const { products } = useSelector((state) => state.products);
     const { categories } = useSelector((state) => state.categories);
@@ -49,14 +50,66 @@ function AddProduct() {
         dispatch(fetchProducts());
         dispatch(fetchCategories());
     }, [dispatch]);
+    const validateSchema = yup.object().shape({
+        status: yup.string().required("Укажите "),
+        featured: yup.string().required("Укажите "),
+        features: yup.array().required("Укажите параметры"),
+        description: yup
+            .string()
+            .required("Укажите описание")
+            .matches(
+                /^.{100,2000}$/,
+                "Укажите описание от 100 до 2000 символов"
+            ),
+        images: yup.array().required("Загрузите фото"),
+        manufacturerCode: yup.string().required("Укажите код"),
+        article: yup.string().required("Укажите артикул"),
+        discount: yup
+            .string()
+            .matches(/^(\s*|[1-9][0-9]?)$/, "Укажите от 1 до 99"),
+        price: yup
+            .string()
+            .required("Укажите цену")
+            .matches(/^\d+$/, "Укажите корректную цену"),
+        stock: yup
+            .string()
+            .required("Укажите наличие")
+            .matches(/^\d+$/, "Укажите число"),
+        categoryId: yup.string().required("Укажите категорию"),
+        name: yup.string().required("Укажите название")
+    });
+    const validate = () => {
+        validateSchema
+            .validate(data)
+            .then(() => setErrors({}))
+            .catch((err) => setErrors({ [err.path]: err.message }));
+        // console.log("validate", isValid());
+        return isValid();
+    };
 
     const handleChange = (target) => {
         setData((prevState) => {
+            const alias = { urlAlias: prevState.urlAlias };
+            if (target.name === "name") {
+                alias.urlAlias = cyrillicToTranslit()
+                    .transform(target.value, "-")
+                    .toLowerCase();
+            }
             return {
                 ...prevState,
-                [target.name]: target.value
+                [target.name]: target.value,
+                ...alias
             };
         });
+    };
+
+    const isValid = () => {
+        return (
+            isLoaded &&
+            Object.keys(data).length > 0 &&
+            Object.keys(errors).length === 0 &&
+            Object.values(data).join("").length > 0
+        );
     };
     document.documentElement.classList.remove("nav-open");
     React.useEffect(() => {
@@ -68,185 +121,251 @@ function AddProduct() {
         };
     });
     useEffect(() => {
-        if (products?.content?.length > 0 && categories?.content?.length > 0) {
+        if (products?.content.length > 0 && categories?.content.length > 0) {
             if (!isLoaded) {
                 setIsLoaded(true);
             }
         }
         // eslint-disable-next-line
     }, [products, categories]);
+
+    useEffect(() => {
+        if (Object.keys(data).length > 0) {
+            validate();
+        }
+        // eslint-disable-next-line
+    }, [data]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const isValid = validate();
+        // console.log("handleSubmit isValid", isValid);
+        // console.log("errors", errors);
+        if (!isValid) return;
+        console.log("handleSubmit", data);
+        //отправляем
+    };
+    const handleImageChange = (file) => {
+        setData((prevState) => {
+            return { ...prevState, images: [...prevState.images, file] };
+        });
+    };
     return (
         <PageAdmin title="Добавить товар">
             {isLoaded ? (
                 <>
-                    <Row>
-                        <Col md="5" sm="5">
-                            <h6>Изображение</h6>
-                            <ImageUpload />
-                            <h6>Категория / бренд товара</h6>
-                            <div id="tags-2">
-                                <SelectField
-                                    defaultOption="Выберите..."
-                                    name="category"
-                                    options={categories.content.reduce(
-                                        (acc, category) => {
-                                            acc.push({
-                                                name: category.name,
-                                                value: category._id
-                                            });
-                                            return acc;
-                                        },
-                                        []
-                                    )}
-                                    defaultValue=""
-                                    onChange={handleChange}
-                                    error={errors.city}
+                    <Form onSubmit={handleSubmit}>
+                        <Row>
+                            <Col md="5" sm="5">
+                                <h6>Изображение</h6>
+                                <ImageUpload
+                                    error={errors.name}
+                                    onChange={handleImageChange}
                                 />
-                            </div>
-
-                            <h6>Статус</h6>
-                            <div className="mb-1">
-                                <CustomInput
-                                    type="switch"
-                                    id="status"
-                                    name="status"
-                                    className="custom-switch-success"
-                                    label="Отображать товар в каталоге?"
-                                    onChange={() =>
-                                        setData((prevState) => {
-                                            return {
-                                                ...prevState,
-                                                status: !prevState.status
-                                            };
-                                        })
-                                    }
-                                    checked={data.status}
-                                />
-                            </div>
-                            <h6>Лидер продаж </h6>
-                            <div className="mb-1">
-                                <CustomInput
-                                    type="switch"
-                                    id="featured"
-                                    name="featured"
-                                    className="custom-switch-warning"
-                                    label="Отображать на главной?"
-                                    onChange={() =>
-                                        setData((prevState) => {
-                                            return {
-                                                ...prevState,
-                                                featured: !prevState.featured
-                                            };
-                                        })
-                                    }
-                                    checked={data.featured}
-                                />
-                            </div>
-                        </Col>
-                        <Col md="7" sm="7">
-                            <FormGroup>
-                                <h6>
-                                    Название товара{" "}
-                                    <span className="icon-danger">*</span>
-                                </h6>
-                                <Input className="border-input" type="text" />
-                            </FormGroup>
-                            <FormGroup>
-                                <h6>
-                                    Алиас товара (ЧПУ){" "}
-                                    <span className="icon-danger">*</span>
-                                </h6>
-                                <Input className="border-input" type="text" />
-                            </FormGroup>
-                            <Row className="price-row">
-                                <Col md="6">
-                                    <h6>
-                                        Цена{" "}
-                                        <span className="icon-danger">*</span>
-                                    </h6>
-                                    <InputGroup className="border-input">
-                                        <Input
-                                            className="border-input"
+                                <h6>Статус</h6>
+                                <div className="mb-1">
+                                    <CustomInput
+                                        type="switch"
+                                        id="status"
+                                        name="status"
+                                        className="custom-switch-success"
+                                        label="Отображать товар в каталоге?"
+                                        onChange={() =>
+                                            setData((prevState) => {
+                                                return {
+                                                    ...prevState,
+                                                    status: !prevState.status
+                                                };
+                                            })
+                                        }
+                                        checked={data.status}
+                                    />
+                                </div>
+                                <h6>Лидер продаж </h6>
+                                <div className="mb-1">
+                                    <CustomInput
+                                        type="switch"
+                                        id="featured"
+                                        name="featured"
+                                        className="custom-switch-warning"
+                                        label="Отображать на главной?"
+                                        onChange={() =>
+                                            setData((prevState) => {
+                                                return {
+                                                    ...prevState,
+                                                    featured:
+                                                        !prevState.featured
+                                                };
+                                            })
+                                        }
+                                        checked={data.featured}
+                                    />
+                                </div>
+                            </Col>
+                            <Col md="7" sm="7">
+                                <FormGroup>
+                                    <TextField
+                                        label={
+                                            "Название товара" +
+                                            (data.urlAlias.length > 0
+                                                ? ` | алиас : ${data.urlAlias}`
+                                                : "")
+                                        }
+                                        required={true}
+                                        name="name"
+                                        defaultValue={data.name}
+                                        placeholder=""
+                                        type="text"
+                                        onChange={handleChange}
+                                        error={errors.name}
+                                    />
+                                </FormGroup>
+                                <Row className="price-row">
+                                    <Col md="6">
+                                        <SelectField
+                                            label="Категория / бренд"
+                                            defaultOption="Выберите..."
+                                            name="categoryId"
+                                            options={categories.content.reduce(
+                                                (acc, category) => {
+                                                    acc.push({
+                                                        name: category.name,
+                                                        value: category._id
+                                                    });
+                                                    return acc;
+                                                },
+                                                []
+                                            )}
                                             defaultValue=""
-                                            type="text"
+                                            onChange={handleChange}
+                                            error={errors.categoryId}
                                         />
-                                        <InputGroupAddon addonType="append">
-                                            <InputGroupText>
-                                                <i className="fa fa-euro" />
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                    </InputGroup>
-                                </Col>
-                                <Col md="6">
-                                    <h6>Скидка %</h6>
-                                    <InputGroup className="border-input">
-                                        <Input
-                                            className="border-input"
-                                            defaultValue=""
+                                    </Col>
+                                    <Col md="6">
+                                        <TextField
+                                            label="Наличие на складе"
+                                            name="stock"
+                                            defaultValue={data.stock}
+                                            placeholder="шт."
                                             type="text"
+                                            onChange={handleChange}
+                                            error={errors.stock}
                                         />
-                                        <InputGroupAddon addonType="append">
-                                            <InputGroupText>%</InputGroupText>
-                                        </InputGroupAddon>
-                                    </InputGroup>
-                                </Col>
-                            </Row>
-                            <FormGroup>
-                                <h6>Описание товара</h6>
-                                <Input
-                                    className="textarea-limited"
-                                    maxLength="150"
-                                    placeholder="Описание товара..."
-                                    rows="13"
-                                    type="textarea"
-                                />
-                                <h5>
-                                    <small>
-                                        <span
-                                            className="pull-right"
-                                            id="textarea-limited-message"
-                                        >
-                                            не более 2000 символов
-                                        </span>
-                                    </small>
-                                </h5>
-                            </FormGroup>
-                        </Col>
-                    </Row>
-                    <Row className="buttons-row">
-                        <Col md="4" sm="4">
-                            <Button
-                                block
-                                className="btn-round"
-                                color="danger"
-                                outline
-                                type="reset"
-                            >
-                                Назад
-                            </Button>
-                        </Col>
-                        <Col md="4" sm="4">
-                            <Button
-                                block
-                                className="btn-round"
-                                color="primary"
-                                outline
-                                type="submit"
-                            >
-                                Сохранить
-                            </Button>
-                        </Col>
-                        <Col md="4" sm="4">
-                            <Button
-                                block
-                                className="btn-round"
-                                color="primary"
-                                type="submit"
-                            >
-                                Сохранить и добавить еще
-                            </Button>
-                        </Col>
-                    </Row>
+                                    </Col>
+                                </Row>
+                                <Row className="price-row">
+                                    <Col md="6">
+                                        <TextField
+                                            label="Цена"
+                                            required={true}
+                                            name="price"
+                                            defaultValue={data.price}
+                                            placeholder="₽"
+                                            type="text"
+                                            onChange={handleChange}
+                                            error={errors.price}
+                                        />
+                                    </Col>
+                                    <Col md="6">
+                                        <TextField
+                                            label="Скидка"
+                                            name="discount"
+                                            defaultValue={data.discount}
+                                            placeholder="%"
+                                            type="text"
+                                            onChange={handleChange}
+                                            error={errors.discount}
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row className="price-row">
+                                    <Col md="6">
+                                        <TextField
+                                            label="Артикул"
+                                            required={true}
+                                            name="article"
+                                            defaultValue={data.article}
+                                            placeholder=""
+                                            type="text"
+                                            onChange={handleChange}
+                                            error={errors.article}
+                                        />
+                                    </Col>
+                                    <Col md="6">
+                                        <TextField
+                                            label="Код производителя"
+                                            name="manufacturerCode"
+                                            defaultValue={data.manufacturerCode}
+                                            placeholder=""
+                                            type="text"
+                                            onChange={handleChange}
+                                            error={errors.manufacturerCode}
+                                        />
+                                    </Col>
+                                </Row>
+                                <FormGroup>
+                                    <h6>Описание товара</h6>
+                                    <Input
+                                        className="textarea-limited"
+                                        maxLength="2000"
+                                        name="description"
+                                        placeholder="Описание товара..."
+                                        rows="5"
+                                        type="textarea"
+                                        defaultValue={data.description}
+                                        onChange={handleChange}
+                                        error={errors.description}
+                                    />
+                                    <h5>
+                                        <small>
+                                            <span
+                                                className="pull-right"
+                                                id="textarea-limited-message"
+                                            >
+                                                не более 2000 символов
+                                            </span>
+                                        </small>
+                                    </h5>
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                        <Row className="buttons-row">
+                            <Col md="4" sm="4">
+                                <Button
+                                    block
+                                    className="btn-round"
+                                    color="danger"
+                                    outline
+                                    type="reset"
+                                >
+                                    Назад
+                                </Button>
+                            </Col>
+                            <Col md="4" sm="4">
+                                <Button
+                                    block
+                                    className="btn-round"
+                                    color="primary"
+                                    outline
+                                    type="submit"
+                                    disabled={!isValid()}
+                                >
+                                    Сохранить
+                                </Button>
+                            </Col>
+                            <Col md="4" sm="4">
+                                <Button
+                                    block
+                                    className="btn-round"
+                                    color="primary"
+                                    type="submit"
+                                    disabled={!isValid()}
+                                >
+                                    Сохранить и добавить еще
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Form>
                 </>
             ) : (
                 <Preloader blockClass="mt-5" />
@@ -254,5 +373,31 @@ function AddProduct() {
         </PageAdmin>
     );
 }
-
+function getDemoData() {
+    return {
+        name: "Холодильник",
+        urlAlias: "holodilnik",
+        categoryId: "",
+        brand: "",
+        article: "",
+        manufacturerCode: "",
+        price: "",
+        discount: "",
+        images: "",
+        description:
+            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aperiam aspernatur dolor ducimus et eveniet fugit\n" +
+            "impedit in necessitatibus nemo officia perferendis praesentium quasi rerum, sed sit tempora veniam voluptates.\n" +
+            "Accusantium amet atque aut cum dicta dolores, doloribus dolorum eligendi excepturi, hic ipsum libero modi nemo\n" +
+            "neque perferendis praesentium provident quae quaerat quas quibusdam quidem, rem saepe sequi ut voluptatem?\n" +
+            "Alias consequuntur doloribus earum iure molestias optio possimus quia quo rerum temporibus. Aliquam amet autem\n" +
+            "eaque fugiat necessitatibus neque officia placeat quis, sapiente similique tenetur ut vel voluptates. Culpa, saepe?\n" +
+            "Ad consequatur dicta id inventore laudantium nesciunt nostrum soluta ullam, unde? Ab aspernatur commodi dicta\n" +
+            "doloribus error facilis necessitatibus neque nisi non officiis perferendis provident, quos rem reprehenderit tenetur\n" +
+            "vero.",
+        features: "",
+        featured: false,
+        status: true,
+        stock: ""
+    };
+}
 export default AddProduct;
