@@ -213,7 +213,14 @@ function CheckOut({ cartProducts }) {
                                     <a
                                         className="text-info mt-3 pull-right "
                                         href="#link"
-                                        onClick={() => setData(getDemoData())}
+                                        onClick={() =>
+                                            setData((prevState) => {
+                                                return {
+                                                    ...prevState,
+                                                    ...getDemoData()
+                                                };
+                                            })
+                                        }
                                     >
                                         Заполнить демо данными?
                                     </a>
