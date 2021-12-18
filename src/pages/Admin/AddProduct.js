@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { sanitize } from "string-sanitizer";
 import cyrillicToTranslit from "cyrillic-to-translit-js";
 // reactstrap components
 import {
@@ -50,19 +51,9 @@ function AddProduct() {
         dispatch(fetchProducts());
         dispatch(fetchCategories());
     }, [dispatch]);
+    //        features: yup.array().required("Укажите параметры"),
+    //        images: yup.array().required("Загрузите фото"),
     const validateSchema = yup.object().shape({
-        status: yup.string().required("Укажите "),
-        featured: yup.string().required("Укажите "),
-        features: yup.array().required("Укажите параметры"),
-        description: yup
-            .string()
-            .required("Укажите описание")
-            .matches(
-                /^.{100,2000}$/,
-                "Укажите описание от 100 до 2000 символов"
-            ),
-        images: yup.array().required("Загрузите фото"),
-        manufacturerCode: yup.string().required("Укажите код"),
         article: yup.string().required("Укажите артикул"),
         discount: yup
             .string()
@@ -91,9 +82,11 @@ function AddProduct() {
         setData((prevState) => {
             const alias = { urlAlias: prevState.urlAlias };
             if (target.name === "name") {
-                alias.urlAlias = cyrillicToTranslit()
-                    .transform(target.value, "-")
-                    .toLowerCase();
+                alias.urlAlias = sanitize(
+                    cyrillicToTranslit()
+                        .transform(target.value, "-")
+                        .toLowerCase()
+                );
             }
             return {
                 ...prevState,
@@ -121,7 +114,7 @@ function AddProduct() {
         };
     });
     useEffect(() => {
-        if (products?.content.length > 0 && categories?.content.length > 0) {
+        if (products?.content?.length > 0 && categories?.content?.length > 0) {
             if (!isLoaded) {
                 setIsLoaded(true);
             }
@@ -150,10 +143,29 @@ function AddProduct() {
             return { ...prevState, images: [...prevState.images, file] };
         });
     };
+    // console.log("isValid()", isValid(), "errors", errors);
     return (
         <PageAdmin title="Добавить товар">
             {isLoaded ? (
                 <>
+                    <Row className="justify-content-end">
+                        <Col md="3">
+                            <a
+                                className="text-info mt-3 pull-right "
+                                href="#link"
+                                onClick={() =>
+                                    setData((prevState) => {
+                                        return {
+                                            ...prevState,
+                                            ...getDemoData()
+                                        };
+                                    })
+                                }
+                            >
+                                Заполнить демо данными?
+                            </a>
+                        </Col>
+                    </Row>
                     <Form onSubmit={handleSubmit}>
                         <Row>
                             <Col md="5" sm="5">
@@ -213,14 +225,14 @@ function AddProduct() {
                                         }
                                         required={true}
                                         name="name"
-                                        defaultValue={data.name}
+                                        value={data.name}
                                         placeholder=""
                                         type="text"
                                         onChange={handleChange}
                                         error={errors.name}
                                     />
                                 </FormGroup>
-                                <Row className="price-row">
+                                <Row className="mb-1">
                                     <Col md="6">
                                         <SelectField
                                             label="Категория / бренд"
@@ -236,7 +248,7 @@ function AddProduct() {
                                                 },
                                                 []
                                             )}
-                                            defaultValue=""
+                                            value={data.categoryId}
                                             onChange={handleChange}
                                             error={errors.categoryId}
                                         />
@@ -245,7 +257,7 @@ function AddProduct() {
                                         <TextField
                                             label="Наличие на складе"
                                             name="stock"
-                                            defaultValue={data.stock}
+                                            value={data.stock}
                                             placeholder="шт."
                                             type="text"
                                             onChange={handleChange}
@@ -253,13 +265,13 @@ function AddProduct() {
                                         />
                                     </Col>
                                 </Row>
-                                <Row className="price-row">
+                                <Row className="mb-3">
                                     <Col md="6">
                                         <TextField
                                             label="Цена"
                                             required={true}
                                             name="price"
-                                            defaultValue={data.price}
+                                            value={data.price}
                                             placeholder="₽"
                                             type="text"
                                             onChange={handleChange}
@@ -270,7 +282,7 @@ function AddProduct() {
                                         <TextField
                                             label="Скидка"
                                             name="discount"
-                                            defaultValue={data.discount}
+                                            value={data.discount}
                                             placeholder="%"
                                             type="text"
                                             onChange={handleChange}
@@ -284,7 +296,7 @@ function AddProduct() {
                                             label="Артикул"
                                             required={true}
                                             name="article"
-                                            defaultValue={data.article}
+                                            value={data.article}
                                             placeholder=""
                                             type="text"
                                             onChange={handleChange}
@@ -295,7 +307,7 @@ function AddProduct() {
                                         <TextField
                                             label="Код производителя"
                                             name="manufacturerCode"
-                                            defaultValue={data.manufacturerCode}
+                                            value={data.manufacturerCode}
                                             placeholder=""
                                             type="text"
                                             onChange={handleChange}
@@ -312,7 +324,7 @@ function AddProduct() {
                                         placeholder="Описание товара..."
                                         rows="5"
                                         type="textarea"
-                                        defaultValue={data.description}
+                                        value={data.description}
                                         onChange={handleChange}
                                         error={errors.description}
                                     />
@@ -373,31 +385,23 @@ function AddProduct() {
         </PageAdmin>
     );
 }
+
 function getDemoData() {
     return {
-        name: "Холодильник",
-        urlAlias: "holodilnik",
-        categoryId: "",
-        brand: "",
-        article: "",
-        manufacturerCode: "",
-        price: "",
+        name: "Холодильник Pozis SD-323",
+        urlAlias: "holodilnik-pozis-sd-323",
+        categoryId: "61a225ed13dfdc69192ed072",
+        brand: "Pozis",
+        article: "1200541",
+        manufacturerCode: "SD-323-6MAS",
+        price: "10000",
         discount: "",
-        images: "",
+        images: [],
         description:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aperiam aspernatur dolor ducimus et eveniet fugit\n" +
-            "impedit in necessitatibus nemo officia perferendis praesentium quasi rerum, sed sit tempora veniam voluptates.\n" +
-            "Accusantium amet atque aut cum dicta dolores, doloribus dolorum eligendi excepturi, hic ipsum libero modi nemo\n" +
-            "neque perferendis praesentium provident quae quaerat quas quibusdam quidem, rem saepe sequi ut voluptatem?\n" +
-            "Alias consequuntur doloribus earum iure molestias optio possimus quia quo rerum temporibus. Aliquam amet autem\n" +
-            "eaque fugiat necessitatibus neque officia placeat quis, sapiente similique tenetur ut vel voluptates. Culpa, saepe?\n" +
-            "Ad consequatur dicta id inventore laudantium nesciunt nostrum soluta ullam, unde? Ab aspernatur commodi dicta\n" +
-            "doloribus error facilis necessitatibus neque nisi non officiis perferendis provident, quos rem reprehenderit tenetur\n" +
-            "vero.",
-        features: "",
-        featured: false,
-        status: true,
-        stock: ""
+            "impedit in necessitatibus nemo officia perferendis praesentium quasi rerum, sed sit tempora veniam voluptates.\n",
+        features: [],
+        stock: "3"
     };
 }
 export default AddProduct;
