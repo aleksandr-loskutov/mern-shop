@@ -1,6 +1,7 @@
 const Product = require("../models/product");
 const Category = require("../models/category");
 const { validationResult } = require("express-validator");
+const { sanitize } = require("string-sanitizer");
 const cyrillicToTranslit = require("cyrillic-to-translit-js");
 const { json } = require("express");
 const { log } = require("nodemon/lib/utils");
@@ -20,21 +21,21 @@ class ProductController {
             const {
                 name,
                 description,
-                img,
                 price,
-                sale,
                 discount,
                 stock,
-                rating,
-                color,
                 brand,
-                metaTitle,
-                categoryId
+                article,
+                categoryId,
+                manufacturerCode,
+                file,
+                features,
+                status,
+                featured
             } = req.body;
-            //TODO sanitize special chars in name before cyrToLat
-            const alias = cyrillicToTranslit()
-                .transform(name, "-")
-                .toLowerCase();
+            const alias = sanitize(
+                cyrillicToTranslit().transform(name, "-").toLowerCase()
+            );
             const checkForName = await Product.findOne({ name: name });
             if (checkForName) {
                 return res.status(400).json({
@@ -56,22 +57,22 @@ class ProductController {
             const product = new Product({
                 name: name,
                 description: description,
-                img: img,
-                sale: sale,
+                images: [file ? file.path : ""],
                 discount: discount,
                 stock: stock,
-                rating: rating,
-                color: color,
                 brand: brand,
-                metaTitle: metaTitle,
                 categoryId: category,
                 price: price,
-                urlAlias: alias
+                urlAlias: alias,
+                featured: featured,
+                status: status,
+                manufacturerCode: manufacturerCode,
+                article: article
             });
             await product.save();
-            return res.status(200).json({
+            return res.status(201).json({
                 message: "Успешно добавлен",
-                status: 200,
+                status: 201,
                 content: product
             });
         } catch (e) {}
