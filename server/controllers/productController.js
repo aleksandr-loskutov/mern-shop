@@ -16,65 +16,68 @@ class ProductController {
                     message: "Ошибка при добавлении товара",
                     errors
                 });
-            }
+            } else {
+                const {
+                    name,
+                    description,
+                    price,
+                    discount,
+                    stock,
+                    brand,
+                    article,
+                    categoryId,
+                    manufacturerCode,
+                    features,
+                    status,
+                    featured
+                } = req.body;
+                const alias = sanitize(
+                    cyrillicToTranslit().transform(name, "-").toLowerCase()
+                );
+                const checkForName = await Product.findOne({ name: name });
+                if (checkForName) {
+                    return res.status(400).json({
+                        status: 400,
+                        message: "Товар с таким наименованием уже есть в базе",
+                        errors
+                    });
+                }
 
-            const {
-                name,
-                description,
-                price,
-                discount,
-                stock,
-                brand,
-                article,
-                categoryId,
-                manufacturerCode,
-                file,
-                features,
-                status,
-                featured
-            } = req.body;
-            const alias = sanitize(
-                cyrillicToTranslit().transform(name, "-").toLowerCase()
-            );
-            const checkForName = await Product.findOne({ name: name });
-            if (checkForName) {
-                return res.status(400).json({
-                    status: 400,
-                    message: "Товар с таким наименованием уже есть в базе",
-                    errors
+                let category = categoryId;
+                // if (!category || category.isEmpty()) {
+                //     console.log("условие");
+                //     let root = await Category.findOne({ name: "root" });
+                //     if (!root) {
+                //         root = new Category({ name: "root" });
+                //         await root.save();
+                //     }
+                //     category = root._id;
+                // }
+
+                const product = new Product({
+                    name: name,
+                    description: description,
+                    images: [
+                        req.file ? req.file.destination + req.file.filename : ""
+                    ],
+                    discount: discount,
+                    stock: stock,
+                    brand: brand,
+                    categoryId: category,
+                    price: price,
+                    urlAlias: alias,
+                    featured: featured,
+                    status: status,
+                    manufacturerCode: manufacturerCode,
+                    article: article
+                });
+                await product.save();
+                return res.status(201).json({
+                    message: "Успешно добавлен",
+                    status: 201,
+                    content: product
                 });
             }
-            let category = categoryId;
-            if (!category || category.isEmpty()) {
-                let root = await Category.findOne({ name: "root" });
-                if (!root) {
-                    root = new Category({ name: "root" });
-                    await root.save();
-                }
-                category = root._id;
-            }
-            // console.log(category);
-            const product = new Product({
-                name: name,
-                description: description,
-                images: [file ? file.path : ""],
-                discount: discount,
-                stock: stock,
-                brand: brand,
-                categoryId: category,
-                price: price,
-                urlAlias: alias,
-                featured: featured,
-                status: status,
-                manufacturerCode: manufacturerCode,
-                article: article
-            });
-            await product.save();
-            return res.status(201).json({
-                message: "Успешно добавлен",
-                status: 201,
-                content: product
-            });
         } catch (e) {}
     }
     async getAll(req, res) {

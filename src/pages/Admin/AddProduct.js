@@ -34,7 +34,7 @@ function AddProduct() {
         manufacturerCode: "",
         price: "",
         discount: "",
-        images: [],
+        image: undefined,
         description: "",
         features: [],
         featured: false,
@@ -52,7 +52,7 @@ function AddProduct() {
         dispatch(fetchCategories());
     }, [dispatch]);
     //        features: yup.array().required("Укажите параметры"),
-    //        images: yup.array().required("Загрузите фото"),
+    //        image: yup.array().required("Загрузите фото"),
     const validateSchema = yup.object().shape({
         article: yup.string().required("Укажите артикул"),
         discount: yup
@@ -140,7 +140,7 @@ function AddProduct() {
     };
     const handleImageChange = (file) => {
         setData((prevState) => {
-            return { ...prevState, images: [...prevState.images, file] };
+            return { ...prevState, image: file };
         });
     };
     // console.log("isValid()", isValid(), "errors", errors);
@@ -396,7 +396,6 @@ function getDemoData() {
         manufacturerCode: "SD-323-6MAS",
         price: "10000",
         discount: "",
-        images: [],
         description:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aperiam aspernatur dolor ducimus et eveniet fugit\n" +
             "impedit in necessitatibus nemo officia perferendis praesentium quasi rerum, sed sit tempora veniam voluptates.\n",
