@@ -15,7 +15,11 @@ const productService = {
         return data;
     },
     create: async (content) => {
-        const { data } = await httpService.post(productEndPoint, content);
+        const formData = new FormData();
+        Object.keys(content).forEach((key) =>
+            formData.append(key, content[key])
+        );
+        const { data } = await httpService.post(productEndPoint, formData);
         return data;
     },
     delete: async (id) => {
