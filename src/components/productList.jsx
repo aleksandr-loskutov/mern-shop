@@ -75,14 +75,13 @@ const ProductList = ({
                                             <Link
                                                 to={`/product/${product.urlAlias}`}
                                             >
-                                                <img
-                                                    alt={product.name + "."}
-                                                    className="img-rounded img-responsive"
-                                                    src={
-                                                        require(`assets/img/products/${product.article}/${product.article}.jpg`)
-                                                            .default
-                                                    }
-                                                />
+                                                {product.images?.length > 0 && (
+                                                    <img
+                                                        alt={product.name + "."}
+                                                        className="img-rounded img-responsive"
+                                                        src={product.images[0]}
+                                                    />
+                                                )}
                                             </Link>
                                             <CardBody>
                                                 <div className="card-description">

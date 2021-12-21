@@ -53,11 +53,8 @@ function ProductPage() {
         if (product?.images.length > 0) {
             setCarouselItems(
                 product.images.map((path) => {
-                    //todo fix require issue with path by direct same string image variable
                     return {
-                        src: require(`assets/img/products/${product.article}/${
-                            path.split("/")[4]
-                        }`).default,
+                        src: path,
                         altText: product.name + ".",
                         caption: "HOLODOS.COM"
                     };

@@ -26,18 +26,19 @@ const Cart = ({ cartProducts, updateItemQuantity }) => {
                                                 <Link
                                                     to={`/product/${product.urlAlias}`}
                                                 >
-                                                    <img
-                                                        alt={product.name}
-                                                        src={
-                                                            require(`assets/img/products/${
-                                                                product.article
-                                                            }/${
-                                                                product.images[0].split(
-                                                                    "/"
-                                                                )[4]
-                                                            }`).default
-                                                        }
-                                                    />
+                                                    {product.images?.length >
+                                                        0 && (
+                                                        <img
+                                                            alt={
+                                                                product.name +
+                                                                "."
+                                                            }
+                                                            src={
+                                                                product
+                                                                    .images[0]
+                                                            }
+                                                        />
+                                                    )}
                                                 </Link>
                                             </div>
                                         </td>
