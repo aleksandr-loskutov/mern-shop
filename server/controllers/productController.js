@@ -31,8 +31,8 @@ class ProductController {
                     status,
                     featured
                 } = req.body;
-                const alias = sanitize(
-                    cyrillicToTranslit().transform(name, "-").toLowerCase()
+                const alias = sanitize.addDash(
+                    cyrillicToTranslit().transform(name, " ").toLowerCase()
                 );
                 const checkForName = await Product.findOne({ name: name });
                 if (checkForName) {
@@ -58,7 +58,7 @@ class ProductController {
                     name: name,
                     description: description,
                     images: [
-                        req.file ? req.file.destination + req.file.filename : ""
+                        req.file ? "/images/uploads/" + req.file.filename : ""
                     ],
                     discount: discount,
                     stock: stock,
