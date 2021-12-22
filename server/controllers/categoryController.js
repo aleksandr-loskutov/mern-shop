@@ -1,5 +1,6 @@
 const Category = require("../models/category");
 const { validationResult } = require("express-validator");
+const { sanitize } = require("string-sanitizer");
 const cyrillicToTranslit = require("cyrillic-to-translit-js");
 const Product = require("../models/product");
 
@@ -14,11 +15,10 @@ class CategoryController {
                     errors
                 });
             }
-            const { name, description, img, metaTitle, categoryId } = req.body;
-            //TODO sanitize special chars in name before cyrToLat
-            const alias = cyrillicToTranslit()
-                .transform(name, "-")
-                .toLowerCase();
+            const { name, description, file, metaTitle, categoryId } = req.body;
+            const alias = sanitize.addDash(
+                cyrillicToTranslit().transform(name).toLowerCase()
+            );
             const checkForName = await Category.findOne({ name: name });
             if (checkForName) {
                 return res.status(400).json({
@@ -42,7 +42,7 @@ class CategoryController {
                 description: description,
                 parentId: parentCat,
                 metaTitle: metaTitle,
-                img: img,
+                img: file ? file.path : "",
                 urlAlias: alias
             });
             await category.save();
