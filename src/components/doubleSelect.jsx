@@ -5,21 +5,23 @@ import Select from "react-select";
 function DoubleSelect({
     featureOptions,
     featureValuesOptions,
-    defaultValueFeature,
-    onSelectFeature,
-    onSelectFeatureValue
+    onSelect,
+    defaultValue,
+    index
 }) {
+    // console.log("featureOptions", featureOptions);
+    // console.log("defaultValueFeature", defaultValueFeature);
     return (
         <Row>
             <Col md="6" sm="6">
                 <FormGroup>
                     <Select
-                        isSearchable={true}
+                        isSearchable={false}
                         className="react-select react-select-default"
                         classNamePrefix="react-select"
-                        name="defaultSelect"
-                        defaultValue={defaultValueFeature}
-                        onChange={(value) => onSelectFeature(value)}
+                        name={`defaultSelect${index}`}
+                        defaultValue={defaultValue}
+                        onChange={(value) => onSelect(value)}
                         options={featureOptions}
                     />
                 </FormGroup>
@@ -27,12 +29,11 @@ function DoubleSelect({
             <Col md="6" sm="6">
                 <FormGroup>
                     <Select
-                        isSearchable={true}
+                        isSearchable={false}
                         className="react-select react-select-default"
                         classNamePrefix="react-select"
-                        name="defaultSelect2"
-                        defaultValue={[]}
-                        onChange={(value) => onSelectFeatureValue(value)}
+                        name={`defaultSelect${index + 1}`}
+                        onChange={(value) => onSelect(value)}
                         options={featureValuesOptions}
                     />
                 </FormGroup>
