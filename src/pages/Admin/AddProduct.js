@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { sanitize } from "string-sanitizer";
 import cyrillicToTranslit from "cyrillic-to-translit-js";
+import productService from "../../services/product.service";
 // reactstrap components
 import {
     Button,
@@ -23,6 +24,8 @@ import SelectField from "../../components/form/fields/selectField";
 import Preloader from "../../components/preloader";
 import TextField from "../../components/form/fields/textField";
 import * as yup from "yup";
+import Select from "react-select";
+import DoubleSelect from "../../components/doubleSelect";
 
 function AddProduct() {
     const [data, setData] = useState({
@@ -45,6 +48,7 @@ function AddProduct() {
     const { categories } = useSelector((state) => state.categories);
     const [isLoaded, setIsLoaded] = useState(false);
     const [errors, setErrors] = useState({});
+    const features = useRef();
     // console.log("categories", categories.content);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -82,10 +86,8 @@ function AddProduct() {
         setData((prevState) => {
             const alias = { urlAlias: prevState.urlAlias };
             if (target.name === "name") {
-                alias.urlAlias = sanitize(
-                    cyrillicToTranslit()
-                        .transform(target.value, "-")
-                        .toLowerCase()
+                alias.urlAlias = sanitize.addDash(
+                    cyrillicToTranslit().transform(target.value).toLowerCase()
                 );
             }
             return {
@@ -117,11 +119,24 @@ function AddProduct() {
         if (products?.content?.length > 0 && categories?.content?.length > 0) {
             if (!isLoaded) {
                 setIsLoaded(true);
+                features.current = getFeatures(products.content);
+                features.current.keys.length > 0 &&
+                    setData((prevState) => {
+                        return {
+                            ...prevState,
+                            features: [
+                                {
+                                    name: features.current.keys[0].value,
+                                    value: ""
+                                }
+                            ]
+                        };
+                    });
             }
         }
         // eslint-disable-next-line
     }, [products, categories]);
-
+    // console.log("data", data);
     useEffect(() => {
         if (Object.keys(data).length > 0) {
             validate();
@@ -129,13 +144,18 @@ function AddProduct() {
         // eslint-disable-next-line
     }, [data]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
+
         // console.log("handleSubmit isValid", isValid);
         // console.log("errors", errors);
         if (!isValid) return;
         console.log("handleSubmit", data);
+        const resp = await productService.create(data);
+
+        console.log("response", resp);
+        // console.log("handleSubmit", data);
         //отправляем
     };
     const handleImageChange = (file) => {
@@ -143,7 +163,94 @@ function AddProduct() {
             return { ...prevState, image: file };
         });
     };
-    // console.log("isValid()", isValid(), "errors", errors);
+    const getFeatures = (productsArray) => {
+        return productsArray.reduce(
+            (acc, product) => {
+                if (product.features?.length > 0) {
+                    product.features.forEach((feature) => {
+                        if (feature.name in acc.all) {
+                            if (
+                                !acc.all[feature.name].includes(feature.value)
+                            ) {
+                                acc.all[feature.name].push(feature.value);
+                            }
+                        } else {
+                            acc.all[feature.name] = [feature.value];
+                        }
+                        if (
+                            !acc.keys.some((key) => key.label === feature.name)
+                        ) {
+                            acc.keys.push({
+                                label: feature.name,
+                                value: feature.name,
+                                input: "key"
+                            });
+                        }
+                        if (
+                            !acc.values.some(
+                                (value) => value.label === feature.value
+                            )
+                        ) {
+                            acc.values.push({
+                                label: feature.value,
+                                value: feature.value,
+                                input: "value"
+                            });
+                        }
+                    });
+                }
+                return acc;
+            },
+            { all: {}, keys: [], values: [] }
+        );
+    };
+
+    const handleSelectFeature = (value) => {
+        // console.log("handleSelectFeature", value);
+        setData((prevState) => {
+            const kvp =
+                value.input === "key"
+                    ? { name: value.value, value: "" }
+                    : { name: value.key, value: value.value };
+            // console.log("kvp", kvp);
+            return {
+                ...prevState,
+                features: [
+                    ...prevState.features.map((feature, index) =>
+                        index === value.index ? kvp : feature
+                    )
+                ]
+            };
+        });
+        // console.log("data.features", data.features);
+    };
+
+    useEffect(() => {
+        if (data.features?.length > 0) {
+            const count = data.features.reduce(
+                (acc, feature) =>
+                    feature.name !== "" && feature.value !== "" ? acc + 1 : acc,
+                0
+            );
+            if (
+                count === data.features.length &&
+                data.features.length < features?.current?.keys.length
+            ) {
+                const nextFeature = {
+                    name: features.current.keys[data.features.length].value,
+                    value: ""
+                };
+                console.log("nextFeature", nextFeature);
+                setData((prevState) => {
+                    return {
+                        ...prevState,
+                        features: [...prevState.features, nextFeature]
+                    };
+                });
+            }
+        }
+    }, [data.features]);
+    console.log("data.features", data.features);
     return (
         <PageAdmin title="Добавить товар">
             {isLoaded ? (
@@ -315,6 +422,71 @@ function AddProduct() {
                                         />
                                     </Col>
                                 </Row>
+                                {features.current?.keys.length > 0 && (
+                                    <Row>
+                                        <Col className="text-center">
+                                            <span className="mt-0 mb-2 mr-2">
+                                                конструктор параметров
+                                            </span>
+                                            <a
+                                                className="text-info"
+                                                href="#link"
+                                                onClick={() =>
+                                                    setData((prevState) => {
+                                                        return {
+                                                            ...prevState,
+                                                            features: [
+                                                                {
+                                                                    name: features
+                                                                        .current
+                                                                        .keys[0]
+                                                                        .value,
+                                                                    value: ""
+                                                                }
+                                                            ]
+                                                        };
+                                                    })
+                                                }
+                                            >
+                                                ( сбросить )
+                                            </a>
+                                        </Col>
+                                    </Row>
+                                )}
+
+                                {features.current?.keys.length > 0 &&
+                                    data.features.length > 0 &&
+                                    data.features.map((feature, index) => {
+                                        return (
+                                            <DoubleSelect
+                                                key={index}
+                                                index={index}
+                                                featureOptions={features.current.keys.map(
+                                                    (f) => {
+                                                        return {
+                                                            ...f,
+                                                            index: index
+                                                        };
+                                                    }
+                                                )}
+                                                featureValuesOptions={features.current.all[
+                                                    feature.name
+                                                ].map((f) => {
+                                                    return {
+                                                        label: f,
+                                                        value: f,
+                                                        key: feature.name,
+                                                        input: "value",
+                                                        index: index
+                                                    };
+                                                })}
+                                                defaultValue={
+                                                    features.current.keys[index]
+                                                }
+                                                onSelect={handleSelectFeature}
+                                            />
+                                        );
+                                    })}
                                 <FormGroup>
                                     <h6>Описание товара</h6>
                                     <Input
