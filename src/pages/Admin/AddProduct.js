@@ -81,7 +81,7 @@ function AddProduct() {
         // console.log("validate", isValid());
         return isValid();
     };
-
+    console.log("data", data.features);
     const handleChange = (target) => {
         setData((prevState) => {
             const alias = { urlAlias: prevState.urlAlias };
@@ -136,7 +136,7 @@ function AddProduct() {
         }
         // eslint-disable-next-line
     }, [products, categories]);
-    // console.log("data", data);
+
     useEffect(() => {
         if (Object.keys(data).length > 0) {
             validate();
@@ -147,15 +147,10 @@ function AddProduct() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
-
-        // console.log("handleSubmit isValid", isValid);
-        // console.log("errors", errors);
         if (!isValid) return;
         console.log("handleSubmit", data);
         const resp = await productService.create(data);
-
         console.log("response", resp);
-        // console.log("handleSubmit", data);
         //отправляем
     };
     const handleImageChange = (file) => {
@@ -206,13 +201,11 @@ function AddProduct() {
     };
 
     const handleSelectFeature = (value) => {
-        // console.log("handleSelectFeature", value);
         setData((prevState) => {
             const kvp =
                 value.input === "key"
                     ? { name: value.value, value: "" }
                     : { name: value.key, value: value.value };
-            // console.log("kvp", kvp);
             return {
                 ...prevState,
                 features: [
@@ -222,7 +215,6 @@ function AddProduct() {
                 ]
             };
         });
-        // console.log("data.features", data.features);
     };
 
     useEffect(() => {
@@ -240,7 +232,6 @@ function AddProduct() {
                     name: features.current.keys[data.features.length].value,
                     value: ""
                 };
-                console.log("nextFeature", nextFeature);
                 setData((prevState) => {
                     return {
                         ...prevState,
@@ -250,7 +241,8 @@ function AddProduct() {
             }
         }
     }, [data.features]);
-    console.log("data.features", data.features);
+
+    const handleShowMore = () => {};
     return (
         <PageAdmin title="Добавить товар">
             {isLoaded ? (
@@ -461,14 +453,21 @@ function AddProduct() {
                                             <DoubleSelect
                                                 key={index}
                                                 index={index}
-                                                featureOptions={features.current.keys.map(
-                                                    (f) => {
+                                                featureOptions={features.current.keys
+                                                    .map((f) => {
                                                         return {
                                                             ...f,
                                                             index: index
                                                         };
-                                                    }
-                                                )}
+                                                    })
+                                                    .filter(
+                                                        (f) =>
+                                                            !data.features.some(
+                                                                (feat) =>
+                                                                    feat.name ===
+                                                                    f.value
+                                                            )
+                                                    )}
                                                 featureValuesOptions={features.current.all[
                                                     feature.name
                                                 ].map((f) => {
@@ -484,6 +483,7 @@ function AddProduct() {
                                                     features.current.keys[index]
                                                 }
                                                 onSelect={handleSelectFeature}
+                                                onShowMore={handleShowMore}
                                             />
                                         );
                                     })}
@@ -571,7 +571,7 @@ function getDemoData() {
         description:
             "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aperiam aspernatur dolor ducimus et eveniet fugit\n" +
             "impedit in necessitatibus nemo officia perferendis praesentium quasi rerum, sed sit tempora veniam voluptates.\n",
-        features: [],
+        features: [{ name: "Тип", value: "" }],
         stock: "3"
     };
 }
