@@ -7,7 +7,7 @@
   "_id": {
     "$oid": "61a225ed13dfdc69192ed072"
   },
-  "name": "POZIS",
+  "name": "Pozis",
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
@@ -91,7 +91,7 @@
   "_id": {
     "$oid": "61a225ed13dfdc69192ed079"
   },
-  "name": "АТЛАНТ",
+  "name": "Atlant",
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
@@ -111,18 +111,6 @@
   "img": "/assets/img/brands/schaub.jpg",
   "metaTitle": "Купить холодильники Schaub",
   "urlAlias": "schaub"
-},{
-  "_id": {
-    "$oid": "61a225ed13dfdc69192ed07b"
-  },
-  "name": "Бирюса",
-  "parentId": {
-    "$oid": "6156d9ec3bc7dd62c79388a8"
-  },
-  "description": "Холодильники бренда Бирюса лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/birjusa.jpg",
-  "metaTitle": "Купить холодильники Бирюса",
-  "urlAlias": "birjusa"
 },{
   "_id": {
     "$oid": "61a225ed13dfdc69192ed07c"
@@ -207,18 +195,6 @@
   "img": "/assets/img/brands/lg.jpg",
   "metaTitle": "Купить холодильники LG",
   "urlAlias": "lg"
-},{
-  "_id": {
-    "$oid": "61a225ed13dfdc69192ed083"
-  },
-  "name": "Atlant",
-  "parentId": {
-    "$oid": "6156d9ec3bc7dd62c79388a8"
-  },
-  "description": "Холодильники бренда Atlant лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/atlant.jpg",
-  "metaTitle": "Купить холодильники Atlant",
-  "urlAlias": "atlant"
 },{
   "_id": {
     "$oid": "61a225ed13dfdc69192ed084"
