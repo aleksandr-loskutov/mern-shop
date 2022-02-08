@@ -1,4 +1,12 @@
 {
   "serverPort": 4000,
-  "dbUrl": "mongodb+srv://username:password@myFirstCluster.dh6mp.mongodb.net/myFirstCluster?retryWrites=true&w=majority"
+  "dbUrl": "mongodb+srv://username:password@myFirstCluster.dh6mp.mongodb.net/myFirstCluster?retryWrites=true&w=majority",
+  "secretKey": "vm-school",
+  "refreshSecretKey": "result-school",
+  "importMockData": true,
+  "createAdminIfNotExist": true,
+  "admin": {
+    "email":"admin@admin.ru",
+    "password": "admin1"
+  }
 }
