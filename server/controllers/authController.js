@@ -1,9 +1,6 @@
 const User = require("../models/user");
-const Role = require("../models/role");
-const config = require("config");
 const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken");
 const tokenService = require("../services/token.service");
 class AuthController {
     async registration(req, res) {
@@ -81,16 +78,7 @@ class AuthController {
             });
         }
     }
-    async getUsers(req, res) {
-        try {
-            const users = await User.find();
-            res.json(users);
-        } catch (e) {
-            res.status(500).json({
-                message: "На сервере возникла ошибка. Попробуйте позже."
-            });
-        }
-    }
+
     async token(req, res) {
         try {
             const { refresh_token: refreshToken } = req.body;
@@ -130,13 +118,5 @@ class AuthController {
         }
     }
 }
-// function generateAccessToken(id, role) {
-//     const payload = {
-//         id,
-//         role
-//     };
-//     return jwt.sign(payload, config.get("secretKey"), {
-//         expiresIn: "24h"
-//     });
-// }
+
 module.exports = new AuthController();
