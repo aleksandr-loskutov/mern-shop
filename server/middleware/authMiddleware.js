@@ -1,6 +1,4 @@
-const jwt = require("jsonwebtoken");
-const config = require("config");
-
+const tokenService = require("../services/token.service");
 module.exports = function (req, res, next) {
     if (req.method === "OPTIONS") {
         next();
@@ -13,8 +11,13 @@ module.exports = function (req, res, next) {
                 .status(403)
                 .json({ message: "Не авторизованный запрос" });
         }
-        const decodedTokenData = jwt.verify(token, config.get("secretKey"));
-        req.user = decodedTokenData;
+        const userDecodedData = tokenService.validateAccess(token);
+        if (!userDecodedData) {
+            return res
+                .status(403)
+                .json({ message: "Не авторизованный запрос" });
+        }
+        req.user = userDecodedData;
         next();
     } catch (e) {
         console.log(e);
