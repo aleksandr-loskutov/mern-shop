@@ -1,5 +1,4 @@
-const jwt = require("jsonwebtoken");
-const config = require("config");
+const tokenService = require("../services/token.service");
 module.exports = function (roles) {
     return function (req, res, next) {
         if (req.method === "OPTIONS") {
@@ -12,20 +11,14 @@ module.exports = function (roles) {
                     .status(403)
                     .json({ message: "Не авторизованный запрос" });
             }
-            const { roles: userRoles } = jwt.verify(
-                token,
-                config.get("secretKey")
-            );
-            let userHaveRole = false;
-            userRoles.forEach((role) => {
-                if (roles.includes(role)) {
-                    userHaveRole = true;
-                }
-            });
-            if (!userHaveRole) {
+            const user = tokenService.validateAccess(token);
+            if (user && !roles.includes(user.role)) {
                 return res
                     .status(403)
                     .json({ message: "Не авторизованный запрос" });
+            }
+            if (!req.user) {
+                req.user = user;
             }
             next();
         } catch (e) {
