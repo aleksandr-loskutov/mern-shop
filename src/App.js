@@ -3,16 +3,16 @@ import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./routing/AppRouter";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CategoriesProvider } from "./hooks/useCategory";
 import { CartProvider } from "react-use-cart";
+import AppLoader from "./components/hoc/appLoader";
 function App() {
     return (
         <BrowserRouter>
-            <CategoriesProvider>
-                <CartProvider>
+            <CartProvider>
+                <AppLoader>
                     <AppRouter />
-                </CartProvider>
-            </CategoriesProvider>
+                </AppLoader>
+            </CartProvider>
             <ToastContainer />
         </BrowserRouter>
     );
