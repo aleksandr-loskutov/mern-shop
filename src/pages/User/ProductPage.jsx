@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 // reactstrap components
 import {
@@ -22,12 +22,13 @@ import {
 // core components
 import Page from "../../components/page";
 import { Link, useParams } from "react-router-dom";
-import productService from "../../services/product.service";
 import Preloader from "../../components/preloader";
 import StoreServices from "../../components/storeServices";
 import { useHistory } from "react-router-dom";
 import { Breadcrumbs } from "../../routing/routes";
 import { useCart } from "react-use-cart";
+import { useSelector } from "react-redux";
+import { getProductByAlias } from "../../store/products";
 
 function ProductPage() {
     const { alias } = useParams();
@@ -35,19 +36,12 @@ function ProductPage() {
     if (!alias) {
         history.push("/catalog");
     }
-    const [product, setProduct] = useState();
+    //TODO
+    // const productsIsLoading = useSelector(getProductsLoadingStatus());
+    const product = useSelector(getProductByAlias(alias));
     const { addItem, inCart, getItem } = useCart();
     const [carouselItems, setCarouselItems] = React.useState([]);
     const [hTabs, setHTabs] = React.useState("1");
-
-    //todo replace to redux/context
-    useEffect(() => {
-        if (alias) {
-            productService.get(alias).then((data) => {
-                if (data.content?.[0]) setProduct(data.content[0]);
-            });
-        }
-    }, [alias]);
 
     useEffect(() => {
         if (product?.images.length > 0) {
@@ -61,6 +55,7 @@ function ProductPage() {
                 })
             );
         }
+        window.scrollTo(0, 0);
     }, [product]);
 
     // carousel states and functions
