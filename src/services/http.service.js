@@ -1,28 +1,60 @@
 import axios from "axios";
-// import logger from "./log.service";
 import { toast } from "react-toastify";
 import config from "../config.json";
-axios.defaults.baseURL = config.apiEndPoint;
-axios.interceptors.response.use(
+
+import localStorageService from "./localStorage.service";
+import authService from "./auth.service";
+
+const http = axios.create({
+    baseURL: config.apiEndPoint
+});
+
+http.interceptors.request.use(
+    async function (config) {
+        const expiresDate = localStorageService.getTokenExpiresDate();
+        const refreshToken = localStorageService.getRefreshToken();
+        const isExpired = refreshToken && expiresDate < Date.now();
+
+        if (isExpired) {
+            console.log("token isExpired", isExpired);
+            const data = await authService.refresh();
+            localStorageService.setTokens(data);
+        }
+        const accessToken = localStorageService.getAccessToken();
+        if (accessToken) {
+            config.params = {
+                ...config.params,
+                Authorization: `Bearer ${accessToken}`
+            };
+        }
+
+        return config;
+    },
+    function (error) {
+        return Promise.reject(error);
+    }
+);
+
+http.interceptors.response.use(
     (res) => res,
     function (error) {
         const expectedErrors =
             error.response &&
             error.response.status >= 400 &&
             error.response.status < 500;
+
         if (!expectedErrors) {
-            // logger.log(error);
-            toast.error("Ошибка, попробуйте позже");
+            console.log(error);
+            toast.error("Somthing was wrong. Try it later");
         }
         return Promise.reject(error);
     }
 );
-
 const httpService = {
-    get: axios.get,
-    post: axios.post,
-    put: axios.put,
-    delete: axios.delete
+    get: http.get,
+    post: http.post,
+    put: http.put,
+    delete: http.delete,
+    patch: http.patch
 };
-
 export default httpService;
