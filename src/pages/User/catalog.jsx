@@ -19,20 +19,19 @@ import {
 import { useParams } from "react-router-dom";
 import ProductList from "../../components/productList";
 import Page from "../../components/page";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../store/actions/products";
+import { useSelector } from "react-redux";
+import { getCategories } from "../../store/categories";
+import { getProducts } from "../../store/products";
 import Preloader from "../../components/preloader";
-import { fetchCategories } from "../../store/actions/categories";
 
 function Catalog() {
     const { alias } = useParams();
-    const { products } = useSelector((state) => state.products);
-    const { categories } = useSelector((state) => state.categories);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(fetchProducts());
-        dispatch(fetchCategories());
-    }, [dispatch]);
+    const categories = useSelector(getCategories());
+    const products = useSelector(getProducts());
+    //TODO
+    // const categoriesIsLoading = useSelector(getCategoriesLoadingStatus());
+    // const productsIsLoading = useSelector(getProductsLoadingStatus());
+
     const [category, setCategory] = useState(true);
     const [sort, setSort] = useState("asc");
     const [currentPage, setCurrentPage] = useState(1);
@@ -49,8 +48,8 @@ function Catalog() {
     });
 
     useEffect(() => {
-        if (alias && categories.content?.length > 0) {
-            const name = categories.content.filter(
+        if (alias && categories?.length > 0) {
+            const name = categories.filter(
                 (category) => category.urlAlias === alias
             )[0]?.name;
             if (name && !tags.includes(name) && prevAlias.current === alias) {
@@ -131,9 +130,9 @@ function Catalog() {
         }
         return activeFilters;
     };
-    const searchedProducts = products?.content
+    const searchedProducts = products
         ? searchQuery
-            ? products.content.filter((product) => {
+            ? products.filter((product) => {
                   return (
                       product.name
                           .toLowerCase()
@@ -141,7 +140,7 @@ function Catalog() {
                       product.article.indexOf(searchQuery) !== -1
                   );
               })
-            : products.content
+            : products
         : [];
 
     const groupedProducts =
@@ -169,7 +168,7 @@ function Catalog() {
     const showMore = sortedProducts > productsCrop;
     return (
         <Page title={alias ? alias : "Каталог"}>
-            {products?.content ? (
+            {products ? (
                 <Row>
                     <Col md="3">
                         <Card className="card-refine">
@@ -203,7 +202,7 @@ function Catalog() {
                                         {" "}
                                         {getSortingFilters(
                                             "brand",
-                                            products.content
+                                            products
                                         ).map((brand) => (
                                             <FormGroup check key={brand}>
                                                 <Label check>

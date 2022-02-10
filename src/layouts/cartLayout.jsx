@@ -4,26 +4,22 @@ import CheckOut from "../components/checkOut";
 import Cart from "../components/cart";
 import Page from "../components/page";
 import { useCart } from "react-use-cart";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../store/actions/products";
+import { useSelector } from "react-redux";
 import Preloader from "../components/preloader";
-
+import { getProducts } from "../store/products";
+//todo getProductsLoadingStatus
 function CartLayout() {
     const { checkout } = useParams();
     const [cartProducts, setCartProducts] = useState([]);
     const { isEmpty, items, updateItemQuantity } = useCart();
-    const { products } = useSelector((state) => state.products);
+    const products = useSelector(getProducts());
     const [isLoaded, setIsLoaded] = useState(false);
-    const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fetchProducts());
-    }, [dispatch]);
-    useEffect(() => {
-        if (products?.content?.length > 0) {
+        if (products.length > 0) {
             setCartProducts(
                 !isEmpty
                     ? items.reduce((acc, item) => {
-                          const productFromDb = products.content.find(
+                          const productFromDb = products.find(
                               (p) => p._id === item.id
                           );
                           if (productFromDb)

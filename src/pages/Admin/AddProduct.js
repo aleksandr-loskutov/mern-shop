@@ -17,14 +17,13 @@ import {
 
 import ImageUpload from "components/_prototypes/ImageUpload.js";
 import PageAdmin from "../../components/pageAdmin";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../store/actions/products";
-import { fetchCategories } from "../../store/actions/categories";
+import { useSelector } from "react-redux";
+import { getCategories } from "../../store/categories";
+import { getProducts } from "../../store/products";
 import SelectField from "../../components/form/fields/selectField";
 import Preloader from "../../components/preloader";
 import TextField from "../../components/form/fields/textField";
 import * as yup from "yup";
-import Select from "react-select";
 import DoubleSelect from "../../components/doubleSelect";
 
 function AddProduct() {
@@ -44,17 +43,15 @@ function AddProduct() {
         status: true,
         stock: "1"
     });
-    const { products } = useSelector((state) => state.products);
-    const { categories } = useSelector((state) => state.categories);
+    const products = useSelector(getProducts());
+    const categories = useSelector(getCategories());
+    //TODO
+    // const categoriesIsLoading = useSelector(getCategoriesLoadingStatus());
+    // const productsIsLoading = useSelector(getProductsLoadingStatus());
     const [isLoaded, setIsLoaded] = useState(false);
     const [errors, setErrors] = useState({});
     const features = useRef();
-    // console.log("categories", categories.content);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(fetchProducts());
-        dispatch(fetchCategories());
-    }, [dispatch]);
+    //TODO
     //        features: yup.array().required("Укажите параметры"),
     //        image: yup.array().required("Загрузите фото"),
     const validateSchema = yup.object().shape({
