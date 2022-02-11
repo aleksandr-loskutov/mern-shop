@@ -1,5 +1,8 @@
 const User = require("../models/user");
-class OrderController {
+const bcrypt = require("bcrypt");
+const config = require("config");
+
+class UserController {
     async getByUserId(req, res) {
         try {
             const { userId } = req.params;
@@ -33,8 +36,14 @@ class OrderController {
             if (!userId) {
                 res.status(401).json({ message: "Specify user id to update" });
             }
+            //admin can update anyone
             if (req.user.role === "admin") {
-                //admin can update anyone
+                const newHashedPassword = getNewHashedPassword(req.body);
+                if (!newHashedPassword) {
+                    delete req.body.password;
+                } else {
+                    req.body.password = newHashedPassword;
+                }
                 const updatedUser = await User.findByIdAndUpdate(
                     userId,
                     req.body,
@@ -42,7 +51,7 @@ class OrderController {
                         new: true
                     }
                 );
-                res.send(updatedUser);
+                res.send({ ...updatedUser["_doc"], password: "Your password" });
             } else {
                 //not admin can only update self data except role field
                 if (
@@ -50,6 +59,12 @@ class OrderController {
                     !req.body.role &&
                     req.body.role !== ""
                 ) {
+                    const newHashedPassword = getNewHashedPassword(req.body);
+                    if (!newHashedPassword) {
+                        delete req.body.password;
+                    } else {
+                        req.body.password = newHashedPassword;
+                    }
                     const updatedUser = await User.findByIdAndUpdate(
                         userId,
                         req.body,
@@ -64,9 +79,15 @@ class OrderController {
             }
         } catch (e) {
             res.status(500).json({
-                message: "На сервере возникла ошибка. Попробуйте позже."
+                message: "На сервере возникла ошибка. Попробуйте позже.",
+                error: e.message
             });
         }
     }
 }
-module.exports = new OrderController();
+function getNewHashedPassword(body) {
+    return body.password && body.password !== ""
+        ? bcrypt.hashSync(body.password, config.get("saltForPasswords"))
+        : null;
+}
+module.exports = new UserController();
