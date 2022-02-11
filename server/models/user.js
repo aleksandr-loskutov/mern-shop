@@ -3,7 +3,7 @@ const User = new Schema(
     {
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        address: { type: ObjectId, ref: "Address" },
+        receiver: { type: Object },
         role: {
             type: String,
             enum: ["user", "admin"],
