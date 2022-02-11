@@ -8,5 +8,6 @@
   "admin": {
     "email":"admin@admin.ru",
     "password": "admin1"
-  }
+  },
+  "saltForPasswords": 10
 }
