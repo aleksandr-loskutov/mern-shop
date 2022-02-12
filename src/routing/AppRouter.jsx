@@ -2,15 +2,20 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { authRoutes, publicRoutes } from "./routes";
 import { ROOT_ROUTE } from "../utils/consts";
+import ProtectedRoute from "../components/protectedRoute";
 
 const AppRouter = () => {
-    const authed = true;
     return (
         <Switch>
-            {authed &&
-                authRoutes.map(({ path, component }) => (
-                    <Route key={path} path={path} component={component} exact />
-                ))}
+            {authRoutes.map(({ path, component, role }) => (
+                <ProtectedRoute
+                    key={path}
+                    path={path}
+                    role={role}
+                    component={component}
+                    exact
+                />
+            ))}
             {publicRoutes.map(({ path, component }) => (
                 <Route key={path} path={path} component={component} exact />
             ))}
