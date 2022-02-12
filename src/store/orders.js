@@ -57,11 +57,11 @@ export const addOrder = (payload) => async (dispatch) => {
         dispatch(orderAddFailed(error.message));
     }
 };
-//todo добавить загрузку всех, и по id юзера
-export const loadOrdersList = (userId) => async (dispatch) => {
+
+export const loadOrdersList = () => async (dispatch) => {
     dispatch(ordersRequested());
     try {
-        const { content } = await orderService.get(userId);
+        const { content } = await orderService.get();
         dispatch(ordersReceved(content));
     } catch (error) {
         dispatch(ordersRequestFiled(error.message));

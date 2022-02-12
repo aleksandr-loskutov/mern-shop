@@ -1,12 +1,12 @@
 import React from "react";
 import { Container } from "reactstrap";
-import AdminNavBar from "./AdminNavbar";
+import AdminNavbar from "./AdminNavbar";
 import FooterBlack from "../kit/Footers/FooterBlack";
 
 function PageAdmin({ children, sectionClass, title }) {
     return (
         <>
-            <AdminNavBar />
+            <AdminNavbar />
             <div className="main">
                 <div className={sectionClass || "section"}>
                     <Container>

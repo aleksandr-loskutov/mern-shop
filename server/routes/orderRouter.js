@@ -20,7 +20,7 @@ router.post(
     ],
     orderController.create
 );
-router.get("/", roleMiddleware(["admin"]), orderController.getAll);
+router.get("/", authMiddleware, orderController.get);
 router.get("/user/:id", authMiddleware, orderController.getByUser);
 router.get("/:id", authMiddleware, orderController.getOne);
 module.exports = router;

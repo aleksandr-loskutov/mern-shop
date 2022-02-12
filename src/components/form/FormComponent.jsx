@@ -61,7 +61,7 @@ const FormComponent = ({
 
         let config = {};
         if (childType === "object") {
-            console.log("child object", child, "type", childType);
+            //console.log("child object", child, "type", childType);
             if (!child.props.name) {
                 throw new Error(
                     "Name property is required for field component " + child
