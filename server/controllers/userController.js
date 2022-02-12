@@ -19,14 +19,26 @@ class UserController {
         }
     }
 
-    async getAll(req, res) {
+    async get(req, res) {
         try {
-            const list = await User.find();
-            res.send(list);
+            //admin fetching all users, user fetching only yourself
+            if (req.user.role === "admin") {
+                const userList = await User.find();
+                return res.status(200).json({
+                    status: 200,
+                    content: userList,
+                    message: "Successfully users retrieved"
+                });
+            } else {
+                const user = await User.findById(req.user._id);
+                return res.status(200).json({
+                    status: 200,
+                    content: [user],
+                    message: "Successfully user retrieved"
+                });
+            }
         } catch (e) {
-            res.status(500).json({
-                message: "На сервере возникла ошибка. Попробуйте позже."
-            });
+            res.status(401).json({ message: "Unauthorized" });
         }
     }
 
