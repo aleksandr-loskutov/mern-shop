@@ -70,7 +70,9 @@ class AuthController {
                 role: user.role
             });
             await tokenService.save(user._id, tokens.refreshToken);
-            return res.status(200).send({ ...tokens, userId: user._id });
+            return res
+                .status(200)
+                .send({ ...tokens, userId: user._id, role: user.role });
         } catch (e) {
             res.status(500).json({
                 message: "На сервере возникла ошибка. Попробуйте позже."
