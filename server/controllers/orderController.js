@@ -84,19 +84,26 @@ class OrderController {
             });
         }
     }
-    async getAll(req, res) {
+    async get(req, res) {
         try {
-            const orders = await Order.find();
-
-            return res.status(200).json({
-                status: 200,
-                content: orders,
-                message: "Successfully orders retrieved"
-            });
+            //admin fetching all orders, user fetching only his own
+            if (req.user.role === "admin") {
+                const orders = await Order.find();
+                return res.status(200).json({
+                    status: 200,
+                    content: orders,
+                    message: "Successfully orders retrieved"
+                });
+            } else {
+                const userOrders = await Order.find({ userId: req.user._id });
+                return res.status(200).json({
+                    status: 200,
+                    content: userOrders,
+                    message: "Successfully user orders retrieved"
+                });
+            }
         } catch (e) {
-            res.status(500).json({
-                message: "На сервере возникла ошибка. Попробуйте позже."
-            });
+            res.status(401).json({ message: "Unauthorized" });
         }
     }
     async getOne(req, res) {
