@@ -17,6 +17,13 @@ import { Link } from "react-router-dom";
 import { TextField } from "./form";
 import * as yup from "yup";
 import SelectField from "./form/fields/selectField";
+import orderService from "../services/order.service";
+import { useCart } from "react-use-cart";
+import { useSelector } from "react-redux";
+import { getProducts } from "../store/products";
+import { validateCartProducts } from "../utils/validateCartProducts";
+import Preloader from "./preloader";
+import Page from "./page";
 const cityList = [
     {
         name: "Санкт-Петербург",
@@ -38,7 +45,22 @@ const deliveryMethods = [
         price: 700
     }
 ];
-function CheckOut({ cartProducts }) {
+function CheckOut() {
+    const [cartProducts, setCartProducts] = useState([]);
+    const { isEmpty, items } = useCart();
+    const products = useSelector(getProducts());
+    const [isLoaded, setIsLoaded] = useState(false);
+    useEffect(() => {
+        if (products.length > 0) {
+            setCartProducts(
+                !isEmpty ? validateCartProducts(items, products) : []
+            );
+            if (!isLoaded) {
+                setIsLoaded(true);
+            }
+        }
+        // eslint-disable-next-line
+    }, [products, items]);
     const [data, setData] = useState({
         name: "",
         lastName: "",
@@ -156,7 +178,8 @@ function CheckOut({ cartProducts }) {
         return (
             Object.keys(data).length > 0 &&
             Object.keys(errors).length === 0 &&
-            Object.values(data).join("").length > 0
+            Object.values(data).join("").length > 0 &&
+            cartProducts.length > 0
         );
     };
 
@@ -188,303 +211,347 @@ function CheckOut({ cartProducts }) {
         // eslint-disable-next-line
     }, [data, activeTab]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
         // console.log("handleSubmit isValid", isValid);
         // console.log("errors", errors);
         if (!isValid) return;
+        const res = await orderService.create({
+            ...data,
+            products: cartProducts
+        });
+        console.log("res", res);
+        //clear cart
+        //history push to success component
         console.log("handleSubmit", data);
         //отправляем
     };
 
     return (
-        <Row>
-            <Col lg="10" className="ml-auto mr-auto mt-2">
-                <Card className="pb-3 card-refine">
-                    <Container>
-                        <Form onSubmit={handleSubmit} className="js-validate">
-                            <Row>
-                                {" "}
-                                <Col md="6">
-                                    <h3 className="title mt-3">Получатель</h3>
-                                </Col>{" "}
-                                <Col md="6">
-                                    <a
-                                        className="text-info mt-3 pull-right "
-                                        href="#link"
-                                        onClick={() =>
-                                            setData((prevState) => {
-                                                return {
-                                                    ...prevState,
-                                                    ...getDemoData()
-                                                };
-                                            })
-                                        }
-                                    >
-                                        Заполнить демо данными?
-                                    </a>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col md="6">
-                                    <TextField
-                                        label="Имя"
-                                        name="name"
-                                        required={true}
-                                        onChange={handleChange}
-                                        autoFocus
-                                        value={data.name}
-                                        error={errors.name}
-                                    />
-                                </Col>
-                                <Col md="6">
-                                    <TextField
-                                        label="Фамилия"
-                                        name="lastName"
-                                        required={true}
-                                        onChange={handleChange}
-                                        value={data.lastName}
-                                        error={errors.lastName}
-                                    />
-                                </Col>
-                            </Row>
-
-                            <Row>
-                                <Col md="6">
-                                    <div className="js-form-message">
-                                        <TextField
-                                            label="Телефон"
-                                            name="phone"
-                                            required={true}
-                                            onChange={handleChange}
-                                            value={data.phone}
-                                            error={errors.phone}
-                                        />
-                                    </div>
-                                </Col>
-                                <Col md="6">
-                                    <div className="mb-4">
-                                        <SelectField
-                                            label="Город"
-                                            defaultOption="Выберите..."
-                                            name="city"
-                                            options={cityList}
-                                            defaultValue={data.city}
-                                            onChange={handleChange}
-                                            error={errors.city}
-                                        />
-                                    </div>
-                                </Col>
-                            </Row>
-
-                            <Row>
-                                <Col md="8">
-                                    <div className="js-form-message">
-                                        <TextField
-                                            label="Адрес доставки"
-                                            name="address"
-                                            required={true}
-                                            onChange={handleChange}
-                                            value={data.address}
-                                            error={errors.address}
-                                        />
-                                    </div>
-                                </Col>
-                                <Col md="4">
-                                    <div className="js-form-message">
-                                        <TextField
-                                            label="Почтовый индекс"
-                                            name="postCode"
-                                            required={true}
-                                            onChange={handleChange}
-                                            value={data.postCode}
-                                            error={errors.postCode}
-                                        />
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row className="mt-3 justify-content-center">
-                                <Col md="5">
-                                    <h4 className="pull-right mt-1">
-                                        Способ получения заказа:
-                                    </h4>
-                                </Col>
-                                <Col md="5">
-                                    <div className="text-center">
-                                        <SelectField
-                                            defaultOption="Выберите..."
-                                            name="deliveryMethod"
-                                            options={deliveryMethods}
-                                            defaultValue={
-                                                deliveryMethods[0].value
-                                            }
-                                            onChange={handleChange}
-                                            error={errors.deliveryMethod}
-                                        />
-                                    </div>
-                                </Col>
-                            </Row>
-                            <h4 className="title">Способ оплаты</h4>
-                            <ButtonGroup
-                                className="nav nav-tabs nav-tabs-primary"
-                                role="tablist"
-                            >
-                                <Button
-                                    color="default"
-                                    className={
-                                        activeTab === "card"
-                                            ? "active text-white"
-                                            : ""
-                                    }
-                                    href="#pablo"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setActiveTab("card");
-                                    }}
-                                    outline
-                                    role="tablist"
-                                    size="sm"
+        <Page title="Оформление заказа">
+            {isLoaded ? (
+                <Row>
+                    <Col lg="10" className="ml-auto mr-auto mt-2">
+                        <Card className="pb-3 card-refine">
+                            <Container>
+                                <Form
+                                    onSubmit={handleSubmit}
+                                    className="js-validate"
                                 >
-                                    Картой онлайн
-                                </Button>
-                                <Button
-                                    color="default"
-                                    className={
-                                        activeTab === "onDelivery"
-                                            ? "active text-white"
-                                            : ""
-                                    }
-                                    href="#pablo"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setActiveTab("onDelivery");
-                                    }}
-                                    outline
-                                    role="tablist"
-                                    size="sm"
-                                >
-                                    При получении
-                                </Button>
-                            </ButtonGroup>
-                            <TabContent
-                                className="tab-space"
-                                activeTab={activeTab}
-                            >
-                                <TabPane tabId="card">
                                     <Row>
-                                        <Col md="12" className="mt-4">
+                                        {" "}
+                                        <Col md="6">
+                                            <h3 className="title mt-3">
+                                                Получатель
+                                            </h3>
+                                        </Col>{" "}
+                                        <Col md="6">
+                                            <a
+                                                className="text-info mt-3 pull-right "
+                                                href="#link"
+                                                onClick={() =>
+                                                    setData((prevState) => {
+                                                        return {
+                                                            ...prevState,
+                                                            ...getDemoData()
+                                                        };
+                                                    })
+                                                }
+                                            >
+                                                Заполнить демо данными?
+                                            </a>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md="6">
+                                            <TextField
+                                                label="Имя"
+                                                name="name"
+                                                required={true}
+                                                onChange={handleChange}
+                                                autoFocus
+                                                value={data.name}
+                                                error={errors.name}
+                                            />
+                                        </Col>
+                                        <Col md="6">
+                                            <TextField
+                                                label="Фамилия"
+                                                name="lastName"
+                                                required={true}
+                                                onChange={handleChange}
+                                                value={data.lastName}
+                                                error={errors.lastName}
+                                            />
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col md="6">
                                             <div className="js-form-message">
                                                 <TextField
-                                                    label="Номер карты"
-                                                    name="cardNumber"
-                                                    placeholder="**** **** **** ****"
-                                                    required={
-                                                        activeTab === "card"
-                                                    }
-                                                    type="number"
+                                                    label="Телефон"
+                                                    name="phone"
+                                                    required={true}
                                                     onChange={handleChange}
-                                                    value={data.cardNumber}
-                                                    error={errors.cardNumber}
+                                                    value={data.phone}
+                                                    error={errors.phone}
+                                                />
+                                            </div>
+                                        </Col>
+                                        <Col md="6">
+                                            <div className="mb-4">
+                                                <SelectField
+                                                    label="Город"
+                                                    defaultOption="Выберите..."
+                                                    name="city"
+                                                    options={cityList}
+                                                    defaultValue={
+                                                        cityList[0].value
+                                                    }
+                                                    onChange={handleChange}
+                                                    error={errors.city}
                                                 />
                                             </div>
                                         </Col>
                                     </Row>
-                                    <br></br>
+
                                     <Row>
                                         <Col md="8">
-                                            <div className="js-form-message mb-4">
+                                            <div className="js-form-message">
                                                 <TextField
-                                                    label="Имя на карте"
-                                                    name="cardHolder"
-                                                    required={
-                                                        activeTab === "card"
-                                                    }
+                                                    label="Адрес доставки"
+                                                    name="address"
+                                                    required={true}
                                                     onChange={handleChange}
-                                                    value={data.cardHolder}
-                                                    error={errors.cardHolder}
+                                                    value={data.address}
+                                                    error={errors.address}
                                                 />
                                             </div>
                                         </Col>
-                                        <Col md="2">
-                                            <div className="js-form-message mb-4">
+                                        <Col md="4">
+                                            <div className="js-form-message">
                                                 <TextField
-                                                    label="Срок действия"
-                                                    name="cardExpirationDate"
-                                                    placeholder="MM/YY"
-                                                    required={
-                                                        activeTab === "card"
-                                                    }
+                                                    label="Почтовый индекс"
+                                                    name="postCode"
+                                                    required={true}
                                                     onChange={handleChange}
-                                                    value={
-                                                        data.cardExpirationDate
-                                                    }
-                                                    error={
-                                                        errors.cardExpirationDate
-                                                    }
-                                                />
-                                            </div>
-                                        </Col>
-                                        <Col md="2">
-                                            <div className="js-form-message mb-4">
-                                                <TextField
-                                                    label="CVC"
-                                                    name="cardCVC"
-                                                    placeholder="***"
-                                                    type="password"
-                                                    required={
-                                                        activeTab === "card"
-                                                    }
-                                                    onChange={handleChange}
-                                                    value={data.cardCVC}
-                                                    error={errors.cardCVC}
+                                                    value={data.postCode}
+                                                    error={errors.postCode}
                                                 />
                                             </div>
                                         </Col>
                                     </Row>
-                                </TabPane>
-                                <TabPane tabId="onDelivery">
-                                    <h5 className="text-dark mt-5">
-                                        Оплата заказа при получении наличными
-                                        или картой
-                                    </h5>
-                                </TabPane>
-                            </TabContent>
-                            <div className="text-right mb-3">
-                                <h4>
-                                    Итого к оплате:{" "}
-                                    {cartProducts.reduce(
-                                        (acc, product) =>
-                                            acc +
-                                            product.price *
-                                                product.cartQuantity,
-                                        0
-                                    ) + data.extraPrice}
-                                </h4>
-                            </div>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <Button
-                                    to="/cart"
-                                    className=" mr-1 btn btn-outline-default"
-                                    tag={Link}
-                                >
-                                    <i className="fa fa-arrow-left mr-1"></i>В
-                                    корзину
-                                </Button>
-                                <Button
-                                    color="danger"
-                                    size="lg"
-                                    type="submit"
-                                    disabled={!isValid()}
-                                >
-                                    ЗАКАЗАТЬ{" "}
-                                </Button>
-                            </div>
-                        </Form>
-                    </Container>
-                </Card>
-            </Col>
-        </Row>
+                                    <Row className="mt-3 justify-content-center">
+                                        <Col md="5">
+                                            <h4 className="pull-right mt-1">
+                                                Способ получения заказа:
+                                            </h4>
+                                        </Col>
+                                        <Col md="5">
+                                            <div className="text-center">
+                                                <SelectField
+                                                    defaultOption="Выберите..."
+                                                    name="deliveryMethod"
+                                                    options={deliveryMethods}
+                                                    defaultValue={
+                                                        deliveryMethods[0].value
+                                                    }
+                                                    onChange={handleChange}
+                                                    error={
+                                                        errors.deliveryMethod
+                                                    }
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <h4 className="title">Способ оплаты</h4>
+                                    <ButtonGroup
+                                        className="nav nav-tabs nav-tabs-primary"
+                                        role="tablist"
+                                    >
+                                        <Button
+                                            color="default"
+                                            className={
+                                                activeTab === "card"
+                                                    ? "active text-white"
+                                                    : ""
+                                            }
+                                            href="#pablo"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setActiveTab("card");
+                                            }}
+                                            outline
+                                            role="tablist"
+                                            size="sm"
+                                        >
+                                            Картой онлайн
+                                        </Button>
+                                        <Button
+                                            color="default"
+                                            className={
+                                                activeTab === "onDelivery"
+                                                    ? "active text-white"
+                                                    : ""
+                                            }
+                                            href="#pablo"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setActiveTab("onDelivery");
+                                            }}
+                                            outline
+                                            role="tablist"
+                                            size="sm"
+                                        >
+                                            При получении
+                                        </Button>
+                                    </ButtonGroup>
+                                    <TabContent
+                                        className="tab-space"
+                                        activeTab={activeTab}
+                                    >
+                                        <TabPane tabId="card">
+                                            <Row>
+                                                <Col md="12" className="mt-4">
+                                                    <div className="js-form-message">
+                                                        <TextField
+                                                            label="Номер карты"
+                                                            name="cardNumber"
+                                                            placeholder="**** **** **** ****"
+                                                            required={
+                                                                activeTab ===
+                                                                "card"
+                                                            }
+                                                            type="number"
+                                                            onChange={
+                                                                handleChange
+                                                            }
+                                                            value={
+                                                                data.cardNumber
+                                                            }
+                                                            error={
+                                                                errors.cardNumber
+                                                            }
+                                                        />
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <br></br>
+                                            <Row>
+                                                <Col md="8">
+                                                    <div className="js-form-message mb-4">
+                                                        <TextField
+                                                            label="Имя на карте"
+                                                            name="cardHolder"
+                                                            required={
+                                                                activeTab ===
+                                                                "card"
+                                                            }
+                                                            onChange={
+                                                                handleChange
+                                                            }
+                                                            value={
+                                                                data.cardHolder
+                                                            }
+                                                            error={
+                                                                errors.cardHolder
+                                                            }
+                                                        />
+                                                    </div>
+                                                </Col>
+                                                <Col md="2">
+                                                    <div className="js-form-message mb-4">
+                                                        <TextField
+                                                            label="Срок действия"
+                                                            name="cardExpirationDate"
+                                                            placeholder="MM/YY"
+                                                            required={
+                                                                activeTab ===
+                                                                "card"
+                                                            }
+                                                            onChange={
+                                                                handleChange
+                                                            }
+                                                            value={
+                                                                data.cardExpirationDate
+                                                            }
+                                                            error={
+                                                                errors.cardExpirationDate
+                                                            }
+                                                        />
+                                                    </div>
+                                                </Col>
+                                                <Col md="2">
+                                                    <div className="js-form-message mb-4">
+                                                        <TextField
+                                                            label="CVC"
+                                                            name="cardCVC"
+                                                            placeholder="***"
+                                                            type="password"
+                                                            required={
+                                                                activeTab ===
+                                                                "card"
+                                                            }
+                                                            onChange={
+                                                                handleChange
+                                                            }
+                                                            value={data.cardCVC}
+                                                            error={
+                                                                errors.cardCVC
+                                                            }
+                                                        />
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        </TabPane>
+                                        <TabPane tabId="onDelivery">
+                                            <h5 className="text-dark mt-5">
+                                                Оплата заказа при получении
+                                                наличными или картой
+                                            </h5>
+                                        </TabPane>
+                                    </TabContent>
+                                    <div className="text-right mb-3">
+                                        <h4>
+                                            Итого к оплате:{" "}
+                                            {cartProducts.reduce(
+                                                (acc, product) =>
+                                                    acc +
+                                                    product.price *
+                                                        product.cartQuantity,
+                                                0
+                                            ) + data.extraPrice}
+                                        </h4>
+                                    </div>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <Button
+                                            to="/cart"
+                                            className=" mr-1 btn btn-outline-default"
+                                            tag={Link}
+                                        >
+                                            <i className="fa fa-arrow-left mr-1"></i>
+                                            В корзину
+                                        </Button>
+                                        <Button
+                                            color="danger"
+                                            size="lg"
+                                            type="submit"
+                                            disabled={!isValid()}
+                                        >
+                                            ЗАКАЗАТЬ{" "}
+                                        </Button>
+                                    </div>
+                                </Form>
+                            </Container>
+                        </Card>
+                    </Col>
+                </Row>
+            ) : (
+                <Preloader blockClass="mt-5" />
+            )}
+        </Page>
     );
 }
 
