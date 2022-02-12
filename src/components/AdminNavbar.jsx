@@ -18,7 +18,7 @@ import {
 } from "reactstrap";
 // core components
 
-function AdminNavBar() {
+function AdminNavbar() {
     const [bodyClick, setBodyClick] = React.useState(false);
     const [collapseOpen, setCollapseOpen] = React.useState(false);
     React.useEffect(() => {
@@ -164,4 +164,4 @@ function AdminNavBar() {
     );
 }
 
-export default AdminNavBar;
+export default AdminNavbar;

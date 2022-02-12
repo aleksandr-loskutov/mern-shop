@@ -21,6 +21,7 @@ import {
 import { useSelector } from "react-redux";
 import { getCategories } from "../store/categories";
 import SearchForm from "./searchForm";
+import UserDropdown from "./userDropdown";
 // core components
 
 function WhiteNavbar() {
@@ -143,33 +144,7 @@ function WhiteNavbar() {
                                 </DropdownMenu>
                             </UncontrolledDropdown>
 
-                            <UncontrolledDropdown nav inNavbar>
-                                <DropdownToggle color="default" caret nav>
-                                    Войти
-                                </DropdownToggle>
-                                <DropdownMenu className="dropdown-danger" right>
-                                    <DropdownItem to="/login" tag={Link}>
-                                        <i className="nc-icon nc-bullet-list-67" />
-                                        Вход
-                                    </DropdownItem>
-                                    <DropdownItem to="/user" tag={Link}>
-                                        <i className="nc-icon nc-badge" />
-                                        Мои данные
-                                    </DropdownItem>
-                                    <DropdownItem to="/user/orders/" tag={Link}>
-                                        <i className="nc-icon nc-bank" />
-                                        Мои заказы
-                                    </DropdownItem>
-
-                                    <DropdownItem
-                                        to="/admin/product/add"
-                                        tag={Link}
-                                    >
-                                        <i className="nc-icon nc-basket" />
-                                        Добавить продукт
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </UncontrolledDropdown>
+                            <UserDropdown />
 
                             <NavItem>
                                 <Button
