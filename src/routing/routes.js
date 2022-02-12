@@ -22,7 +22,8 @@ import {
     CONTACT_ROUTE,
     NOT_FOUND_ROUTE,
     POSTS_ROUTE,
-    SEARCH_ROUTE
+    SEARCH_ROUTE,
+    LOGOUT_ROUTE
 } from "../utils/consts";
 
 import Admin from "../pages/Admin/admin";
@@ -50,55 +51,73 @@ import AddProduct from "../pages/Admin/AddProduct";
 import LoginLayout from "../layouts/loginLayout";
 import withBreadcrumbs from "react-router-breadcrumbs-hoc";
 import BreadcrumbsComponent from "../components/breadcrumbs";
-import CartLayout from "../layouts/cartLayout";
+import LogOut from "../components/logOut";
+import Cart from "../components/cart";
 
 export const authRoutes = [
     {
         path: ADMIN_ROUTE,
-        component: Admin
+        component: Admin,
+        role: "admin"
     },
     {
         path: ADMIN_PRODUCT_ADD_ROUTE,
-        component: AddProduct
+        component: AddProduct,
+        role: "admin"
     },
     {
         path: ADMIN_CATEGORY_ADD_ROUTE,
-        component: AddCategory
+        component: AddCategory,
+        role: "admin"
     },
     {
         path: ADMIN_USER_ROUTE,
-        component: AddUser
+        component: AddUser,
+        role: "admin"
     },
     {
         path: ADMIN_ORDER_ADD_ROUTE,
-        component: AddOrder
+        component: AddOrder,
+        role: "admin"
     },
     {
         path: ADMIN_POST_ADD_ROUTE,
-        component: AddPost
+        component: AddPost,
+        role: "admin"
     },
     {
         path: ADMIN_PRODUCTS_ROUTE,
-        component: AdminProducts
+        component: AdminProducts,
+        role: "admin"
     },
     {
         path: ADMIN_CATEGORIES_ROUTE,
-        component: AdminCategories
+        component: AdminCategories,
+        role: "admin"
     },
     {
         path: ADMIN_USERS_ROUTE,
-        component: AdminUsers
+        component: AdminUsers,
+        role: "admin"
     },
     {
         path: ADMIN_ORDERS_ROUTE,
-        component: AdminOrders
+        component: AdminOrders,
+        role: "admin"
     },
     {
         path: ADMIN_POSTS_ROUTE,
-        component: AdminPosts
+        component: AdminPosts,
+        role: "admin"
+    },
+    {
+        path: CHECKOUT_ROUTE,
+        breadcrumb: "Оформление заказа",
+        component: CheckOut
     },
     {
         path: USER_ORDERS_ROUTE,
+        breadcrumb: "Мои заказы",
         component: UserOrders
     },
     {
@@ -120,18 +139,14 @@ export const publicRoutes = [
     {
         path: CART_ROUTE,
         breadcrumb: "Корзина",
-        component: CartLayout
+        component: Cart
     },
     {
         path: PRODUCT_ROUTE,
         breadcrumb: "Каталог",
         component: ProductPage
     },
-    {
-        path: CHECKOUT_ROUTE,
-        breadcrumb: "Оформление заказа",
-        component: CheckOut
-    },
+
     {
         path: LOGIN_ROUTE,
         breadcrumb: "Вход",
@@ -141,11 +156,6 @@ export const publicRoutes = [
         path: ROOT_ROUTE,
         breadcrumb: "Главная",
         component: Main
-    },
-    {
-        path: ORDER_SUCCESS_ROUTE,
-        breadcrumb: "Спасибо",
-        component: OrderSuccess
     },
     {
         path: POSTS_ROUTE,
@@ -161,6 +171,11 @@ export const publicRoutes = [
         path: SEARCH_ROUTE,
         breadcrumb: "Поиск",
         component: SearchWithSidebar
+    },
+    {
+        path: LOGOUT_ROUTE,
+        breadcrumb: "Выход",
+        component: LogOut
     },
     {
         path: NOT_FOUND_ROUTE,
