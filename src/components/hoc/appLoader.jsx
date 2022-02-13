@@ -1,7 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getIsLoggedIn, loadUsersList } from "../../store/users";
-import { loadOrdersList } from "../../store/orders";
+import {
+    getIsLoggedIn,
+    loadUsersList,
+    getUsersLoadingStatus
+} from "../../store/users";
+import { loadOrdersList, getOrdersLoadingStatus } from "../../store/orders";
 import PropTypes from "prop-types";
 import {
     loadCategoriesList,
@@ -16,6 +20,8 @@ function AppLoader({ children }) {
     const isLoggedIn = useSelector(getIsLoggedIn());
     const isCategoriesLoading = useSelector(getCategoriesLoadingStatus());
     const isProductsLoading = useSelector(getProductsLoadingStatus());
+    const isOrdersLoading = useSelector(getOrdersLoadingStatus());
+    const isUsersLoading = useSelector(getUsersLoadingStatus());
     const isLoaded = !isCategoriesLoading && !isProductsLoading;
     useEffect(() => {
         dispatch(loadCategoriesList());

@@ -149,11 +149,10 @@ function AdminNavbar() {
                                 <Button
                                     className="btn-round"
                                     color="danger"
-                                    href="/"
-                                    target="_blank"
+                                    tag={Link}
+                                    to={"/"}
                                 >
-                                    <i className="nc-icon nc-minimal-right" />{" "}
-                                    МАГАЗИН
+                                    <i className="nc-icon nc-shop" /> МАГАЗИН
                                 </Button>
                             </NavItem>
                         </Nav>

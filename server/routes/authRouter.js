@@ -6,8 +6,8 @@ router.post(
     "/registration",
     [
         check("email", "Введите корректный Email").isEmail(),
-        check("password", "Пароль должен быть от 4 до 15 символов").isLength({
-            min: 4,
+        check("password", "Пароль должен быть от 5 до 15 символов").isLength({
+            min: 5,
             max: 15
         })
     ],
@@ -17,8 +17,8 @@ router.post(
     "/login",
     [
         check("email", "Введите корректный Email").normalizeEmail().isEmail(),
-        check("password", "Пароль должен содержать от 4 символов").isLength({
-            min: 4
+        check("password", "Пароль должен содержать от 5 символов").isLength({
+            min: 5
         })
     ],
     controller.login

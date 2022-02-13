@@ -81,11 +81,10 @@ export const getOrdersLoadingStatus = () => (state) => state.orders.isLoading;
 export const getOrderErrors = () => (state) => state.orders.error;
 export const getOrderByNumber = (orderNumber) => (state) => {
     if (state.orders.entities) {
-        return state.orders.entities[
-            state.orders.entities.findIndex(
-                (p) => p.orderNumber.toString() === orderNumber.toString()
-            )
-        ];
+        const index = state.orders.entities.findIndex(
+            (p) => p.orderNumber + "" === orderNumber + ""
+        );
+        return state.orders.entities[index];
     }
     return null;
 };

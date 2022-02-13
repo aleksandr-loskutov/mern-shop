@@ -59,6 +59,9 @@ class OrderController {
                 address: req.body.address,
                 postCode: req.body.postCode
             };
+            const updatedUserReceiver = await User.findByIdAndUpdate(userId, {
+                receiver
+            });
             const order = new Order({
                 userId: userId,
                 orderNumber: Date.now(),
@@ -67,10 +70,6 @@ class OrderController {
                 products: orderedProducts,
                 total,
                 payment: req.body.paymentType === "card"
-            });
-
-            const updatedUserReceiver = await User.findByIdAndUpdate(userId, {
-                receiver
             });
             await order.save();
             return res.status(200).json({
