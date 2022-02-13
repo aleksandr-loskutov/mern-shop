@@ -29,3 +29,25 @@ export const ROOT_ROUTE = "/";
 export const HOST = "http://localhost:4000/";
 export const API_CATEGORIES = "api/category/";
 export const API_PRODUCTS = "api/product/";
+
+export const CITY_LIST = [
+    {
+        name: "Санкт-Петербург",
+        value: "SPb"
+    },
+    {
+        name: "Москва",
+        value: "Msk"
+    }
+];
+export const DELIVERY_METHODS = [
+    {
+        name: "самовывоз",
+        value: "pickup"
+    },
+    {
+        name: "курьер (+700 руб.)",
+        value: "courier",
+        price: 700
+    }
+];
