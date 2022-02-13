@@ -17,38 +17,20 @@ import { Link } from "react-router-dom";
 import { TextField } from "./form";
 import * as yup from "yup";
 import SelectField from "./form/fields/selectField";
-import orderService from "../services/order.service";
 import { useCart } from "react-use-cart";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../store/products";
 import { validateCartProducts } from "../utils/validateCartProducts";
 import Preloader from "./preloader";
 import Page from "./page";
-const cityList = [
-    {
-        name: "Санкт-Петербург",
-        value: "SPb"
-    },
-    {
-        name: "Москва",
-        value: "Msk"
-    }
-];
-const deliveryMethods = [
-    {
-        name: "Самовывоз",
-        value: "pickup"
-    },
-    {
-        name: "Курьер (+700 руб.)",
-        value: "courier",
-        price: 700
-    }
-];
+import { addOrder, getOrderErrors } from "../store/orders";
+import { CITY_LIST, DELIVERY_METHODS } from "../utils/consts";
 function CheckOut() {
     const [cartProducts, setCartProducts] = useState([]);
-    const { isEmpty, items } = useCart();
+    const { isEmpty, items, emptyCart } = useCart();
     const products = useSelector(getProducts());
+    const orderError = useSelector(getOrderErrors());
+    const dispatch = useDispatch();
     const [isLoaded, setIsLoaded] = useState(false);
     useEffect(() => {
         if (products.length > 0) {
@@ -100,7 +82,7 @@ function CheckOut() {
             //adding extra price
             const extra = { extraPrice: 0 };
             if (target.name === "deliveryMethod") {
-                const found = deliveryMethods.find(
+                const found = DELIVERY_METHODS.find(
                     (method) =>
                         method.value === target.value && method.price > 0
                 );
@@ -144,7 +126,7 @@ function CheckOut() {
             .matches(/^\d{16}$/, "Укажите корректный номер"),
         deliveryMethod: yup.string().oneOf(
             [
-                ...deliveryMethods.reduce((acc, methodObj) => {
+                ...DELIVERY_METHODS.reduce((acc, methodObj) => {
                     acc.push(methodObj.value);
                     return acc;
                 }, []),
@@ -159,7 +141,7 @@ function CheckOut() {
         address: yup.string().required("Укажите адрес"),
         city: yup.string().oneOf(
             [
-                ...cityList.reduce((acc, cityObj) => {
+                ...CITY_LIST.reduce((acc, cityObj) => {
                     acc.push(cityObj.value);
                     return acc;
                 }, []),
@@ -211,23 +193,20 @@ function CheckOut() {
         // eslint-disable-next-line
     }, [data, activeTab]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
-        // console.log("handleSubmit isValid", isValid);
-        // console.log("errors", errors);
         if (!isValid) return;
-        const res = await orderService.create({
-            ...data,
-            products: cartProducts
-        });
-        console.log("res", res);
-        //clear cart
-        //history push to success component
-        console.log("handleSubmit", data);
-        //отправляем
+        dispatch(
+            addOrder(
+                {
+                    ...data,
+                    products: cartProducts
+                },
+                emptyCart
+            )
+        );
     };
-
     return (
         <Page title="Оформление заказа">
             {isLoaded ? (
@@ -306,9 +285,9 @@ function CheckOut() {
                                                     label="Город"
                                                     defaultOption="Выберите..."
                                                     name="city"
-                                                    options={cityList}
+                                                    options={CITY_LIST}
                                                     defaultValue={
-                                                        cityList[0].value
+                                                        CITY_LIST[0].value
                                                     }
                                                     onChange={handleChange}
                                                     error={errors.city}
@@ -354,9 +333,10 @@ function CheckOut() {
                                                 <SelectField
                                                     defaultOption="Выберите..."
                                                     name="deliveryMethod"
-                                                    options={deliveryMethods}
+                                                    options={DELIVERY_METHODS}
                                                     defaultValue={
-                                                        deliveryMethods[0].value
+                                                        DELIVERY_METHODS[0]
+                                                            .value
                                                     }
                                                     onChange={handleChange}
                                                     error={
@@ -524,6 +504,11 @@ function CheckOut() {
                                                 0
                                             ) + data.extraPrice}
                                         </h4>
+                                        {orderError && (
+                                            <span className="text-danger ml-auto ">
+                                                {orderError}
+                                            </span>
+                                        )}
                                     </div>
                                     <div className="d-flex justify-content-between align-items-center">
                                         <Button
