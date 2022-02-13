@@ -1,10 +1,11 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
 import orderService from "../services/order.service";
+import history from "../utils/history";
 
 const ordersSlice = createSlice({
     name: "orders",
     initialState: {
-        entities: null,
+        entities: [],
         isLoading: true,
         error: null
     },
@@ -48,13 +49,21 @@ const {
 
 const orderRequestAdd = createAction("orders/addRequest");
 
-export const addOrder = (payload) => async (dispatch) => {
+export const addOrder = (payload, emptyCart) => async (dispatch) => {
     dispatch(orderRequestAdd());
     try {
         const { content } = await orderService.create(payload);
         dispatch(orderAdded(content));
+        emptyCart();
+        history.push("/user/orders");
     } catch (error) {
-        dispatch(orderAddFailed(error.message));
+        const { message } = error.response?.data;
+        const { status: code } = error.response;
+        if (code === 400) {
+            dispatch(orderAddFailed(message));
+        } else {
+            dispatch(orderAddFailed(error.message));
+        }
     }
 };
 
@@ -69,5 +78,15 @@ export const loadOrdersList = () => async (dispatch) => {
 };
 export const getOrders = () => (state) => state.orders.entities;
 export const getOrdersLoadingStatus = () => (state) => state.orders.isLoading;
-
+export const getOrderErrors = () => (state) => state.orders.error;
+export const getOrderByNumber = (orderNumber) => (state) => {
+    if (state.orders.entities) {
+        return state.orders.entities[
+            state.orders.entities.findIndex(
+                (p) => p.orderNumber.toString() === orderNumber.toString()
+            )
+        ];
+    }
+    return null;
+};
 export default ordersReducer;
