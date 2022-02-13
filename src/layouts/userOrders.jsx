@@ -3,38 +3,20 @@ import { useParams } from "react-router-dom";
 import Page from "../components/page";
 import UserOrdersTable from "../components/userOrdersTable";
 import UserOrderDetail from "../components/userOrderDetail";
+import { getOrderByNumber, getOrders } from "../store/orders";
+import { useSelector } from "react-redux";
 
 const UserOrders = () => {
     const { orderId } = useParams();
-    const orders = [
-        {
-            _id: "1312313",
-            number: 111,
-            orderNumber: "100",
-            date: "2021",
-            deliveryMethod: "Курьер",
-            paymentMethod: "При получении",
-            status: "Не оплачен",
-            sum: "10000"
-        },
-        {
-            _id: "234234",
-            number: 112,
-            orderNumber: "200",
-            date: "3021",
-            deliveryMethod: "Курьер",
-            paymentMethod: "При получении",
-            status: "Оплачен",
-            sum: "20000"
-        }
-    ];
+    const orders = useSelector(getOrders());
+    const order = useSelector(getOrderByNumber(orderId));
 
     return (
         <Page
             title={orderId ? `Детали по заказу ${orderId}` : "История заказов"}
         >
             {orderId ? (
-                <UserOrderDetail orderId={orderId} />
+                <UserOrderDetail order={order} />
             ) : (
                 <UserOrdersTable orders={orders} />
             )}
