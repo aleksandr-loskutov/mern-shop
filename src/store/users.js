@@ -3,19 +3,21 @@ import userService from "../services/user.service";
 import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage.service";
 import history from "../utils/history";
-import { generateAuthError } from "../utils/generateAuthError";
 
 const initialState = localStorageService.getAccessToken()
     ? {
-          entities: null,
+          entities: [],
           isLoading: true,
           error: null,
-          auth: { userId: localStorageService.getUserId() },
+          auth: {
+              userId: localStorageService.getUserId(),
+              role: localStorageService.getUserRole()
+          },
           isLoggedIn: true,
           dataLoaded: false
       }
     : {
-          entities: null,
+          entities: [],
           isLoading: false,
           error: null,
           auth: null,
@@ -46,7 +48,7 @@ const usersSlice = createSlice({
             state.error = action.payload;
         },
         userCreated: (state, action) => {
-            state.entities.push(action.payload);
+            //TODO removed state.entities.push from here coz we are calling loadUsersList in appLoader if authorized
         },
         userUpdated: (state, action) => {
             state.entities[
@@ -54,7 +56,7 @@ const usersSlice = createSlice({
             ] = action.payload;
         },
         userLoggedOut: (state) => {
-            state.entities = null;
+            state.entities = [];
             state.isLoggedIn = false;
             state.auth = null;
             state.dataLoaded = false;
@@ -88,14 +90,21 @@ export const login =
         dispatch(authRequested());
         try {
             const data = await authService.login({ email, password });
-            dispatch(authRequestSuccess({ userId: data.localId }));
+            dispatch(
+                authRequestSuccess({ userId: data.userId, role: data.role })
+            );
             localStorageService.setTokens(data);
-            history.push(redirect);
+            if (data.role === "admin") {
+                history.push("/admin");
+            } else {
+                history.push(redirect);
+            }
         } catch (error) {
-            const { code, message } = error.response.data.error;
+            const { message } = error.response?.data;
+            const { status: code } = error.response;
             if (code === 400) {
-                const errorMessage = generateAuthError(message);
-                dispatch(authRequestFailed(errorMessage));
+                // const errorMessage = generateAuthError(message);
+                dispatch(authRequestFailed(message));
             } else {
                 dispatch(authRequestFailed(error.message));
             }
@@ -104,20 +113,29 @@ export const login =
 export const signUp =
     ({ email, password, ...rest }) =>
     async (dispatch) => {
+        dispatch(userCreateRequested());
         dispatch(authRequested());
         try {
-            const data = await authService.register({ email, password });
-            localStorageService.setTokens(data);
-            dispatch(authRequestSuccess({ userId: data.localId }));
+            const data = await authService.register({
+                email,
+                password
+            });
             dispatch(
-                createUser({
-                    _id: data.localId,
-                    email,
-                    ...rest
-                })
+                authRequestSuccess({ userId: data.userId, role: data.role })
             );
+            localStorageService.setTokens(data);
+            dispatch(userCreated());
+            history.push("/cart");
         } catch (error) {
-            dispatch(authRequestFailed(error.message));
+            console.log(error.message);
+            const { message } = error.response?.data;
+            const { status: code } = error.response;
+            if (code === 400) {
+                // const errorMessage = generateAuthError(message);
+                dispatch(authRequestFailed(message));
+            } else {
+                dispatch(authRequestFailed(error.message));
+            }
         }
     };
 
@@ -133,7 +151,7 @@ function createUser(payload) {
         try {
             const { content } = await userService.create(payload);
             dispatch(userCreated(content));
-            history.push("/catalog");
+            history.push("/cart");
         } catch (error) {
             dispatch(createUserFailed(error.message));
         }
@@ -175,7 +193,8 @@ export const getUserById = (userId) => (state) => {
 
 export const getIsLoggedIn = () => (state) => state.users.isLoggedIn;
 export const getDataStatus = () => (state) => state.users.dataLoaded;
-export const getCurrentUserId = () => (state) => state.users.auth.userId;
+export const getCurrentUserId = () => (state) => state.users.auth?.userId;
+export const getCurrentUserRole = () => (state) => state.users.auth?.role;
 export const getUsersLoadingStatus = () => (state) => state.users.isLoading;
 export const getAuthErrors = () => (state) => state.users.error;
 export default usersReducer;
