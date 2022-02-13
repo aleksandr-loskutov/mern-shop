@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Card, CardTitle, Col, Container, Row } from "reactstrap";
 import FormComponent, { TextField } from "./index";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthErrors, signUp } from "../../store/users";
 const RegisterForm = () => {
+    const loginError = useSelector(getAuthErrors());
+    const dispatch = useDispatch();
     const handleSubmit = (data) => {
-        console.log("data", data);
-        console.log("success");
+        dispatch(signUp(data));
     };
+
     const validateSchema = yup.object().shape({
         passwordConfirmation: yup
             .string()
@@ -16,23 +20,16 @@ const RegisterForm = () => {
             .string()
             .required("пароль обязателен")
             .matches(
-                /(?=.*[A-Z])/,
-                "Пароль должен содержать как минимум 1 заглавную букву"
-            )
-            .matches(
                 /(?=.*[0-9])/,
                 "Пароль должен содержать как минимум 1 число"
             )
-            .matches(
-                /(?=.*[!@#$%^&*])/,
-                "Пароль должен содержать как минимум 1 спецсимвол из @#$%^&*"
-            )
-            .matches(/(?=.{8,})/, "Пароль должен быть минимум 8 символов"),
+            .matches(/(?=.{5,})/, "Пароль должен быть минимум 5 символов"),
         email: yup
             .string()
             .required("Email обязателен")
             .email("Email введен не корректно")
     });
+
     return (
         <Container>
             <Row>
@@ -68,6 +65,9 @@ const RegisterForm = () => {
                                 Регистрация
                             </Button>
                         </FormComponent>
+                        {loginError && (
+                            <p className="text-danger  mt-2">{loginError}</p>
+                        )}
                         <div className="login m-2">
                             <p>
                                 Уже есть аккаунт?{" "}
