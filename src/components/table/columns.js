@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { Button, UncontrolledTooltip } from "reactstrap";
 import React from "react";
+import { getCityName } from "../../utils/getCityName";
+import { getDeliveryMethodName } from "../../utils/getDeliveryMethodName";
+import { formatDate } from "../../utils/getDate";
 
 export const columnsForAdminOrdersTable = {
     orderNumber: {
@@ -9,24 +12,30 @@ export const columnsForAdminOrdersTable = {
         component: (order) => <span>{order.orderNumber}</span>
     },
     date: {
-        path: "orderDate",
+        path: "createdAt",
         name: "Дата",
-        component: (order) => <span>{order.date}</span>
+        component: (order) => (
+            <span>{formatDate(new Date(Date.parse(order.createdAt)))}</span>
+        )
     },
     deliveryMethod: {
-        path: "orderDelivery",
+        path: "deliveryMethod",
         name: "Доставка",
-        component: (order) => <span>{order.deliveryMethod}</span>
+        component: (order) => (
+            <span>{getDeliveryMethodName(order.deliveryMethod)}</span>
+        )
     },
-    paymentMethod: {
-        path: "orderPayment",
+    payment: {
+        path: "payment",
         name: "Оплата",
-        component: (order) => <span>{order.paymentMethod}</span>
+        component: (order) => (
+            <span>{order.payment ? "оплачен" : "не оплачен"}</span>
+        )
     },
     sum: {
-        path: "orderSum",
+        path: "total",
         name: "Итого",
-        component: (order) => <span>{order.sum}</span>
+        component: (order) => <span>{order.total} ₽</span>
     },
     status: {
         path: "orderStatus",
@@ -38,7 +47,11 @@ export const columnsForAdminOrdersTable = {
         path: "action",
         name: "Действия",
         component: (order) => (
-            <Button to={`${order._id}`} tag={Link} className="btn btn-dark">
+            <Button
+                to={`/user/orders/${order.orderNumber}`}
+                tag={Link}
+                className="btn btn-dark"
+            >
                 Подробнее
             </Button>
         )
