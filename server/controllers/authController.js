@@ -34,11 +34,9 @@ class AuthController {
                 role: user.role
             });
             await tokenService.save(user._id, tokens.refreshToken);
-            return res.status(201).json({
-                message: "Пользователь успешно зарегистрирован!",
-                tokens,
-                user: { _id: user._id, role: user.role }
-            });
+            return res
+                .status(200)
+                .send({ ...tokens, userId: user._id, role: user.role });
         } catch (e) {
             console.log(e);
             res.status(400).json({ message: "Ошибка регистрации" });
@@ -89,10 +87,11 @@ class AuthController {
                 return res.status(401).json({ message: "Unauthorized" });
             }
             const tokens = tokenService.generate({
-                _id: data._id
+                _id: data._id,
+                role: data.role
             });
             await tokenService.save(data._id, tokens.refreshToken);
-            res.status(200).send({ ...tokens, _id: data._id });
+            res.status(200).send({ ...tokens, _id: data._id, role: data.role });
         } catch (e) {
             res.status(500).json({
                 message: "На сервере возникла ошибка. Попробуйте позже."
