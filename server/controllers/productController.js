@@ -42,34 +42,25 @@ class ProductController {
                         errors
                     });
                 }
-
-                let category = categoryId;
-                // if (!category || category.isEmpty()) {
-                //     console.log("условие");
-                //     let root = await Category.findOne({ name: "root" });
-                //     if (!root) {
-                //         root = new Category({ name: "root" });
-                //         await root.save();
-                //     }
-                //     category = root._id;
-                // }
-
+                //getting category name as brand for filtering purposes at the catalog
+                const category = await Category.findById(categoryId);
                 const product = new Product({
-                    name: name,
-                    description: description,
+                    name,
+                    description,
+                    features: JSON.parse(features),
                     images: [
                         req.file ? "/images/uploads/" + req.file.filename : ""
                     ],
-                    discount: discount,
-                    stock: stock,
-                    brand: brand,
-                    categoryId: category,
-                    price: price,
                     urlAlias: alias,
-                    featured: featured,
-                    status: status,
-                    manufacturerCode: manufacturerCode,
-                    article: article
+                    discount: discount ? discount : 0,
+                    stock,
+                    brand: category.name,
+                    categoryId,
+                    price,
+                    featured,
+                    status,
+                    manufacturerCode,
+                    article
                 });
                 await product.save();
                 return res.status(201).json({
