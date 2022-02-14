@@ -1,30 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
 import { sanitize } from "string-sanitizer";
 import cyrillicToTranslit from "cyrillic-to-translit-js";
-import productService from "../../services/product.service";
 // reactstrap components
-import {
-    Button,
-    FormGroup,
-    Input,
-    Row,
-    Col,
-    CustomInput,
-    Form
-} from "reactstrap";
+import { Button, FormGroup, Row, Col, CustomInput, Form } from "reactstrap";
 
 // core components
 
 import ImageUpload from "components/_prototypes/ImageUpload.js";
 import PageAdmin from "../../components/pageAdmin";
-import { useSelector } from "react-redux";
-import { getCategories } from "../../store/categories";
-import { getProducts } from "../../store/products";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    getCategories,
+    getCategoriesLoadingStatus
+} from "../../store/categories";
+import {
+    addProduct,
+    getProducts,
+    getProductsErrors,
+    getProductsLoadingStatus
+} from "../../store/products";
 import SelectField from "../../components/form/fields/selectField";
 import Preloader from "../../components/preloader";
 import TextField from "../../components/form/fields/textField";
-import * as yup from "yup";
 import DoubleSelect from "../../components/doubleSelect";
+import { getProductValidationSchema } from "../../utils/getProductValidationSchema";
+import { getFeaturesFromProducts } from "../../utils/getFeaturesFromProducts";
 
 function AddProduct() {
     const [data, setData] = useState({
@@ -43,42 +43,26 @@ function AddProduct() {
         status: true,
         stock: "1"
     });
+    console.log("data.features", data.features);
     const products = useSelector(getProducts());
     const categories = useSelector(getCategories());
-    //TODO
-    // const categoriesIsLoading = useSelector(getCategoriesLoadingStatus());
-    // const productsIsLoading = useSelector(getProductsLoadingStatus());
-    const [isLoaded, setIsLoaded] = useState(false);
+    const categoriesIsLoading = useSelector(getCategoriesLoadingStatus());
+    const productsIsLoading = useSelector(getProductsLoadingStatus());
+    const dispatch = useDispatch();
+    const isLoaded = !categoriesIsLoading && !productsIsLoading;
     const [errors, setErrors] = useState({});
+    const productAddError = useSelector(getProductsErrors());
     const features = useRef();
-    //TODO
-    //        features: yup.array().required("Укажите параметры"),
-    //        image: yup.array().required("Загрузите фото"),
-    const validateSchema = yup.object().shape({
-        article: yup.string().required("Укажите артикул"),
-        discount: yup
-            .string()
-            .matches(/^(\s*|[1-9][0-9]?)$/, "Укажите от 1 до 99"),
-        price: yup
-            .string()
-            .required("Укажите цену")
-            .matches(/^\d+$/, "Укажите корректную цену"),
-        stock: yup
-            .string()
-            .required("Укажите наличие")
-            .matches(/^\d+$/, "Укажите число"),
-        categoryId: yup.string().required("Укажите категорию"),
-        name: yup.string().required("Укажите название")
-    });
+
+    const validateSchema = getProductValidationSchema();
     const validate = () => {
         validateSchema
             .validate(data)
             .then(() => setErrors({}))
             .catch((err) => setErrors({ [err.path]: err.message }));
-        // console.log("validate", isValid());
         return isValid();
     };
-    console.log("data", data.features);
+
     const handleChange = (target) => {
         setData((prevState) => {
             const alias = { urlAlias: prevState.urlAlias };
@@ -94,7 +78,6 @@ function AddProduct() {
             };
         });
     };
-
     const isValid = () => {
         return (
             isLoaded &&
@@ -113,24 +96,22 @@ function AddProduct() {
         };
     });
     useEffect(() => {
-        if (products?.content?.length > 0 && categories?.content?.length > 0) {
-            if (!isLoaded) {
-                setIsLoaded(true);
-                features.current = getFeatures(products.content);
-                features.current.keys.length > 0 &&
-                    setData((prevState) => {
-                        return {
-                            ...prevState,
-                            features: [
-                                {
-                                    name: features.current.keys[0].value,
-                                    value: ""
-                                }
-                            ]
-                        };
-                    });
-            }
+        if (isLoaded) {
+            features.current = getFeaturesFromProducts(products);
+            features.current.keys.length > 0 &&
+                setData((prevState) => {
+                    return {
+                        ...prevState,
+                        features: [
+                            {
+                                name: features.current.keys[0].value,
+                                value: ""
+                            }
+                        ]
+                    };
+                });
         }
+
         // eslint-disable-next-line
     }, [products, categories]);
 
@@ -141,60 +122,30 @@ function AddProduct() {
         // eslint-disable-next-line
     }, [data]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log("handleSubmit", data);
-        const resp = await productService.create(data);
-        console.log("response", resp);
+        const filteredFeatures = data.features.filter(
+            (feature, index, self) => {
+                return (
+                    self.findIndex((v) => v.name === feature.name) === index &&
+                    feature.value !== ""
+                );
+            }
+        );
+        dispatch(
+            addProduct({
+                ...data,
+                features: JSON.stringify(filteredFeatures)
+            })
+        );
         //отправляем
     };
     const handleImageChange = (file) => {
         setData((prevState) => {
             return { ...prevState, image: file };
         });
-    };
-    const getFeatures = (productsArray) => {
-        return productsArray.reduce(
-            (acc, product) => {
-                if (product.features?.length > 0) {
-                    product.features.forEach((feature) => {
-                        if (feature.name in acc.all) {
-                            if (
-                                !acc.all[feature.name].includes(feature.value)
-                            ) {
-                                acc.all[feature.name].push(feature.value);
-                            }
-                        } else {
-                            acc.all[feature.name] = [feature.value];
-                        }
-                        if (
-                            !acc.keys.some((key) => key.label === feature.name)
-                        ) {
-                            acc.keys.push({
-                                label: feature.name,
-                                value: feature.name,
-                                input: "key"
-                            });
-                        }
-                        if (
-                            !acc.values.some(
-                                (value) => value.label === feature.value
-                            )
-                        ) {
-                            acc.values.push({
-                                label: feature.value,
-                                value: feature.value,
-                                input: "value"
-                            });
-                        }
-                    });
-                }
-                return acc;
-            },
-            { all: {}, keys: [], values: [] }
-        );
     };
 
     const handleSelectFeature = (value) => {
@@ -238,7 +189,6 @@ function AddProduct() {
             }
         }
     }, [data.features]);
-
     const handleShowMore = () => {};
     return (
         <PageAdmin title="Добавить товар">
@@ -334,7 +284,7 @@ function AddProduct() {
                                             label="Категория / бренд"
                                             defaultOption="Выберите..."
                                             name="categoryId"
-                                            options={categories.content.reduce(
+                                            options={categories.reduce(
                                                 (acc, category) => {
                                                     acc.push({
                                                         name: category.name,
@@ -486,7 +436,7 @@ function AddProduct() {
                                     })}
                                 <FormGroup>
                                     <h6>Описание товара</h6>
-                                    <Input
+                                    <TextField
                                         className="textarea-limited"
                                         maxLength="2000"
                                         name="description"
@@ -503,14 +453,25 @@ function AddProduct() {
                                                 className="pull-right"
                                                 id="textarea-limited-message"
                                             >
-                                                не более 2000 символов
+                                                не более{" "}
+                                                {2000 - data.description.length}{" "}
+                                                символов
                                             </span>
                                         </small>
                                     </h5>
                                 </FormGroup>
                             </Col>
                         </Row>
-                        <Row className="buttons-row">
+
+                        {productAddError && (
+                            <Row>
+                                <span className="text-danger mt-2 ml-auto mr-5 font-weight-bold">
+                                    {productAddError}
+                                </span>
+                            </Row>
+                        )}
+
+                        <Row className="buttons-row mt-3 flex-row justify-content-between">
                             <Col md="4" sm="4">
                                 <Button
                                     block
@@ -522,18 +483,7 @@ function AddProduct() {
                                     Назад
                                 </Button>
                             </Col>
-                            <Col md="4" sm="4">
-                                <Button
-                                    block
-                                    className="btn-round"
-                                    color="primary"
-                                    outline
-                                    type="submit"
-                                    disabled={!isValid()}
-                                >
-                                    Сохранить
-                                </Button>
-                            </Col>
+
                             <Col md="4" sm="4">
                                 <Button
                                     block
@@ -542,7 +492,7 @@ function AddProduct() {
                                     type="submit"
                                     disabled={!isValid()}
                                 >
-                                    Сохранить и добавить еще
+                                    Добавить товар
                                 </Button>
                             </Col>
                         </Row>
