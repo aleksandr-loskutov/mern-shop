@@ -4,6 +4,7 @@ import React from "react";
 import { getCityName } from "../../utils/getCityName";
 import { getDeliveryMethodName } from "../../utils/getDeliveryMethodName";
 import { formatDate } from "../../utils/getDate";
+import { getCategoryById } from "../../store/categories";
 
 export const columnsForAdminOrdersTable = {
     orderNumber: {
@@ -132,15 +133,27 @@ export const columnsForAdminEditUser = {
     }
 };
 export const columnsForAdminProductsTable = {
-    code: {
-        path: "code",
-        name: "Артикул",
-        component: (product) => <span>{product.code}</span>
+    photo: {
+        path: "photo",
+        name: "Фото",
+        component: (product) => <img width="70" src={product.images[0]}></img>
     },
+
     name: {
         path: "name",
         name: "Название",
-        component: (product) => <span>{product.name}</span>
+        component: (product) => (
+            <Link to={`${product._id}`}>
+                <span className="pull-left font-weight-bold text-dark ">
+                    {product.name}
+                </span>
+            </Link>
+        )
+    },
+    article: {
+        path: "code",
+        name: "Артикул",
+        component: (product) => <span>{product.article}</span>
     },
     price: {
         path: "price",
@@ -150,23 +163,26 @@ export const columnsForAdminProductsTable = {
     category: {
         path: "category",
         name: "Категория",
-        component: (product) => <span>{product.category}</span>
+        component: (product) => <span>{product.brand}</span>
     },
-    photo: {
-        path: "photo",
-        name: "Изображение",
-        component: (product) => <span>{product.photo}</span>
-    },
+
     quantity: {
         path: "quantity",
-        name: "Количество",
-        component: (product) => <span>{product.quantity}</span>
+        name: "Наличие",
+        component: (product) => <span>{product.stock}</span>
     },
 
     status: {
         path: "status",
         name: "Статус",
-        component: (product) => <span>{product.status}</span>
+        component: (product) => (
+            <i
+                className={
+                    "nc-icon " +
+                    (product.status ? "nc-check-2" : "nc-simple-remove")
+                }
+            ></i>
+        )
     },
 
     action: {
@@ -177,41 +193,24 @@ export const columnsForAdminProductsTable = {
                 <Button
                     className="btn-link mr-1"
                     color="info"
-                    data-toggle="tooltip"
-                    id="tooltip542628903"
                     size="sm"
                     type="button"
-                    to={`${product.code}`}
+                    to={`${product._id}`}
                     tag={Link}
                 >
-                    <i className="nc-icon nc-alert-circle-i" />
+                    <i className="nc-icon nc-alert-circle-i  font-weight-bolder" />
                 </Button>
-                <UncontrolledTooltip
-                    delay={0}
-                    placement="top"
-                    target="tooltip542628903"
-                >
-                    Просмотр
-                </UncontrolledTooltip>
+
                 <Button
                     className="btn-link mr-1"
                     color="success"
-                    data-toggle="tooltip"
-                    id="tooltip278266693"
                     size="sm"
                     type="button"
-                    to={`${product.code}/edit`}
+                    to={`${product._id}/edit`}
                     tag={Link}
                 >
-                    <i className="fa fa-edit" />
+                    <i className="fa fa-edit font-weight-bolder" />
                 </Button>
-                <UncontrolledTooltip
-                    delay={0}
-                    placement="top"
-                    target="tooltip278266693"
-                >
-                    Редактировать
-                </UncontrolledTooltip>
             </>
         )
     }
