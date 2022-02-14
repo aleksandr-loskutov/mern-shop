@@ -29,7 +29,7 @@ export const ROOT_ROUTE = "/";
 export const HOST = "http://localhost:4000/";
 export const API_CATEGORIES = "api/category/";
 export const API_PRODUCTS = "api/product/";
-
+export const CATALOG_PRODUCT_LIMIT = 15;
 export const CITY_LIST = [
     {
         name: "Санкт-Петербург",

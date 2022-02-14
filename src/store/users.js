@@ -145,19 +145,6 @@ export const logOut = () => (dispatch) => {
     history.push("/");
 };
 
-function createUser(payload) {
-    return async function (dispatch) {
-        dispatch(userCreateRequested());
-        try {
-            const { content } = await userService.create(payload);
-            dispatch(userCreated(content));
-            history.push("/cart");
-        } catch (error) {
-            dispatch(createUserFailed(error.message));
-        }
-    };
-}
-
 export function updateUserData(payload) {
     return async function (dispatch) {
         dispatch(userUpdateRequested());
@@ -181,6 +168,10 @@ export const loadUsersList = () => async (dispatch, getState) => {
 };
 export const getUsersList = () => (state) => state.users.entities;
 export const getCurrentUserData = () => (state) => {
+    console.log(
+        "localStorageService.getUserId()",
+        localStorageService.getUserId()
+    );
     return state.users.entities
         ? state.users.entities.find((u) => u._id === state.users.auth.userId)
         : null;

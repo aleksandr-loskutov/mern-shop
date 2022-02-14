@@ -23,15 +23,12 @@ import { useSelector } from "react-redux";
 import { getCategories } from "../../store/categories";
 import { getProducts } from "../../store/products";
 import Preloader from "../../components/preloader";
+import { CATALOG_PRODUCT_LIMIT } from "../../utils/consts";
 
 function Catalog() {
     const { alias } = useParams();
     const categories = useSelector(getCategories());
     const products = useSelector(getProducts());
-    //TODO
-    // const categoriesIsLoading = useSelector(getCategoriesLoadingStatus());
-    // const productsIsLoading = useSelector(getProductsLoadingStatus());
-
     const [category, setCategory] = useState(true);
     const [sort, setSort] = useState("asc");
     const [currentPage, setCurrentPage] = useState(1);
@@ -49,9 +46,7 @@ function Catalog() {
 
     useEffect(() => {
         if (alias && categories?.length > 0) {
-            const name = categories.filter(
-                (category) => category.urlAlias === alias
-            )[0]?.name;
+            const name = categories.find((c) => c.urlAlias === alias)?.name;
             if (name && !tags.includes(name) && prevAlias.current === alias) {
                 handleFilterChange({ brand: { [name]: true } });
             } else if (prevAlias.current !== alias) {
@@ -164,7 +159,11 @@ function Catalog() {
         groupedProducts.length > 0
             ? _.orderBy(groupedProducts, "price", sort)
             : [];
-    const productsCrop = paginate(sortedProducts, currentPage, 15);
+    const productsCrop = paginate(
+        sortedProducts,
+        currentPage,
+        CATALOG_PRODUCT_LIMIT
+    );
     const showMore = sortedProducts > productsCrop;
     return (
         <Page title={alias ? alias : "Каталог"}>
