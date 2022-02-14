@@ -33,9 +33,8 @@ import { getProductByAlias } from "../../store/products";
 function ProductPage() {
     const { alias } = useParams();
     const history = useHistory();
-    if (!alias) {
-        history.push("/catalog");
-    }
+    //todo fix proper redirect from empty or wrong product alias
+
     //TODO
     // const productsIsLoading = useSelector(getProductsLoadingStatus());
     const product = useSelector(getProductByAlias(alias));
@@ -281,47 +280,47 @@ function ProductPage() {
                                     activeTab={"hTabs" + hTabs}
                                 >
                                     <TabPane tabId="hTabs1">
-                                        <Table>
-                                            <tbody>
-                                                {product.features?.length > 0
-                                                    ? product.features.map(
-                                                          (feature, i) => (
-                                                              <tr
-                                                                  key={
-                                                                      feature.name
-                                                                  }
-                                                              >
-                                                                  <td
-                                                                      className={
-                                                                          i ===
-                                                                          0
-                                                                              ? "text-left border-0"
-                                                                              : "text-left"
-                                                                      }
-                                                                  >
-                                                                      {
-                                                                          feature.name
-                                                                      }
-                                                                  </td>
+                                        {product.features?.length > 0 ? (
+                                            <Table>
+                                                <tbody>
+                                                    {product.features.map(
+                                                        (feature, i) => (
+                                                            <tr
+                                                                key={
+                                                                    feature.name
+                                                                }
+                                                            >
+                                                                <td
+                                                                    className={
+                                                                        i === 0
+                                                                            ? "text-left border-0"
+                                                                            : "text-left"
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        feature.name
+                                                                    }
+                                                                </td>
 
-                                                                  <td
-                                                                      className={
-                                                                          i ===
-                                                                          0
-                                                                              ? "text-right border-0"
-                                                                              : "text-right"
-                                                                      }
-                                                                  >
-                                                                      {
-                                                                          feature.value
-                                                                      }
-                                                                  </td>
-                                                              </tr>
-                                                          )
-                                                      )
-                                                    : ""}
-                                            </tbody>
-                                        </Table>
+                                                                <td
+                                                                    className={
+                                                                        i === 0
+                                                                            ? "text-right border-0"
+                                                                            : "text-right"
+                                                                    }
+                                                                >
+                                                                    {
+                                                                        feature.value
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    )}
+                                                </tbody>
+                                            </Table>
+                                        ) : (
+                                            "Характеристики скоро появятся...."
+                                        )}
                                     </TabPane>
                                     <TabPane tabId="hTabs2">
                                         <p> {product.description}</p>
