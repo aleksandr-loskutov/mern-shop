@@ -4,14 +4,15 @@ import {
     addProduct,
     getProducts,
     getProductsErrors,
-    getProductsLoadingStatus
+    getProductsLoadingStatus,
+    updateProduct
 } from "../store/products";
 import { getCategories, getCategoriesLoadingStatus } from "../store/categories";
 import { sanitize } from "string-sanitizer";
 import _ from "lodash";
 import cyrillicToTranslit from "cyrillic-to-translit-js";
 import { Button, Col, CustomInput, Form, FormGroup, Row } from "reactstrap";
-import ImageUpload from "./_prototypes/ImageUpload";
+import ImageUpload from "./ImageUpload";
 import TextField from "./form/fields/textField";
 import SelectField from "./form/fields/selectField";
 import DoubleSelect from "./doubleSelect";
@@ -20,7 +21,7 @@ import { getFeaturesFromProducts } from "../utils/getFeaturesFromProducts";
 
 function AdminEditProduct({ product }) {
     const [data, setData] = useState(prepareData(product));
-    // console.log("data", data);
+    const [initData, setInitData] = useState(true);
     const products = useSelector(getProducts());
     const categories = useSelector(getCategories());
     const categoriesIsLoading = useSelector(getCategoriesLoadingStatus());
@@ -102,7 +103,6 @@ function AdminEditProduct({ product }) {
         }
         // eslint-disable-next-line
     }, [data]);
-
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
@@ -116,12 +116,11 @@ function AdminEditProduct({ product }) {
             }
         );
         dispatch(
-            addProduct({
+            updateProduct(product._id, {
                 ...data,
                 features: JSON.stringify(filteredFeatures)
             })
         );
-        //отправляем
     };
     const handleImageChange = (file) => {
         setData((prevState) => {
@@ -130,7 +129,6 @@ function AdminEditProduct({ product }) {
     };
 
     const handleSelectFeature = (value) => {
-        console.log("value", value);
         setData((prevState) => {
             const kvp =
                 value.input === "key"
@@ -172,292 +170,326 @@ function AdminEditProduct({ product }) {
         }
     }, [data.features]);
     const handleShowMore = () => {};
+    const getDefaultValueForDoubeleSelect = (firstDefault, index) => {
+        return data.features.length > 0
+            ? {
+                  ...firstDefault,
+                  secondDefault:
+                      data.features[
+                          data.features.findIndex(
+                              (f) =>
+                                  f.name ===
+                                  features.current?.keys[index]?.label
+                          )
+                      ]?.value ?? ""
+              }
+            : firstDefault;
+    };
     return (
-        <>
-            <Form onSubmit={handleSubmit}>
-                <Row>
-                    <Col md="5" sm="5">
-                        <h6>Изображение</h6>
-                        <ImageUpload
-                            error={errors.name}
-                            onChange={handleImageChange}
-                        />
-                        <h6>Статус</h6>
-                        <div className="mb-1">
-                            <CustomInput
-                                type="switch"
-                                id="status"
-                                name="status"
-                                className="custom-switch-success"
-                                label="Отображать товар в каталоге?"
-                                onChange={() =>
-                                    setData((prevState) => {
-                                        return {
-                                            ...prevState,
-                                            status: !prevState.status
-                                        };
-                                    })
+        isLoaded && (
+            <>
+                <Form onSubmit={handleSubmit}>
+                    <Row>
+                        <Col md="5" sm="5">
+                            <ImageUpload
+                                currentImageUrl={
+                                    product.images?.length > 0
+                                        ? product.images[0]
+                                        : undefined
                                 }
-                                checked={data.status}
-                            />
-                        </div>
-                        <h6>Лидер продаж </h6>
-                        <div className="mb-1">
-                            <CustomInput
-                                type="switch"
-                                id="featured"
-                                name="featured"
-                                className="custom-switch-warning"
-                                label="Отображать на главной?"
-                                onChange={() =>
-                                    setData((prevState) => {
-                                        return {
-                                            ...prevState,
-                                            featured: !prevState.featured
-                                        };
-                                    })
-                                }
-                                checked={data.featured}
-                            />
-                        </div>
-                    </Col>
-                    <Col md="7" sm="7">
-                        <FormGroup>
-                            <TextField
-                                label={
-                                    "Название товара" +
-                                    (data.urlAlias.length > 0
-                                        ? ` | алиас : ${data.urlAlias}`
-                                        : "")
-                                }
-                                required={true}
-                                name="name"
-                                value={data.name}
-                                placeholder=""
-                                type="text"
-                                onChange={handleChange}
                                 error={errors.name}
+                                onChange={handleImageChange}
                             />
-                        </FormGroup>
-                        <Row className="mb-1">
-                            <Col md="6">
-                                <SelectField
-                                    label="Категория / бренд"
-                                    defaultOption="Выберите..."
-                                    name="categoryId"
-                                    options={categories.reduce(
-                                        (acc, category) => {
-                                            acc.push({
-                                                name: category.name,
-                                                value: category._id
-                                            });
-                                            return acc;
-                                        },
-                                        []
-                                    )}
-                                    value={data.categoryId}
-                                    onChange={handleChange}
-                                    error={errors.categoryId}
+                            <h6>Статус</h6>
+                            <div className="mb-1">
+                                <CustomInput
+                                    type="switch"
+                                    id="status"
+                                    name="status"
+                                    className="custom-switch-success"
+                                    label="Отображать товар в каталоге?"
+                                    onChange={() =>
+                                        setData((prevState) => {
+                                            return {
+                                                ...prevState,
+                                                status: !prevState.status
+                                            };
+                                        })
+                                    }
+                                    checked={data.status}
                                 />
-                            </Col>
-                            <Col md="6">
-                                <TextField
-                                    label="Наличие на складе"
-                                    name="stock"
-                                    value={data.stock}
-                                    placeholder="шт."
-                                    type="text"
-                                    onChange={handleChange}
-                                    error={errors.stock}
+                            </div>
+                            <h6>Лидер продаж </h6>
+                            <div className="mb-1">
+                                <CustomInput
+                                    type="switch"
+                                    id="featured"
+                                    name="featured"
+                                    className="custom-switch-warning"
+                                    label="Отображать на главной?"
+                                    onChange={() =>
+                                        setData((prevState) => {
+                                            return {
+                                                ...prevState,
+                                                featured: !prevState.featured
+                                            };
+                                        })
+                                    }
+                                    checked={data.featured}
                                 />
-                            </Col>
-                        </Row>
-                        <Row className="mb-3">
-                            <Col md="6">
+                            </div>
+                        </Col>
+                        <Col md="7" sm="7">
+                            <FormGroup>
                                 <TextField
-                                    label="Цена"
+                                    label={
+                                        "Название товара" +
+                                        (data.urlAlias.length > 0
+                                            ? ` | алиас : ${data.urlAlias}`
+                                            : "")
+                                    }
                                     required={true}
-                                    name="price"
-                                    value={data.price}
-                                    placeholder="₽"
-                                    type="text"
-                                    onChange={handleChange}
-                                    error={errors.price}
-                                />
-                            </Col>
-                            <Col md="6">
-                                <TextField
-                                    label="Скидка %"
-                                    name="discount"
-                                    value={data.discount}
-                                    placeholder="%"
-                                    type="text"
-                                    onChange={handleChange}
-                                    error={errors.discount}
-                                />
-                            </Col>
-                        </Row>
-                        <Row className="price-row">
-                            <Col md="6">
-                                <TextField
-                                    label="Артикул"
-                                    required={true}
-                                    name="article"
-                                    value={data.article}
+                                    name="name"
+                                    value={data.name}
                                     placeholder=""
                                     type="text"
                                     onChange={handleChange}
-                                    error={errors.article}
+                                    error={errors.name}
                                 />
-                            </Col>
-                            <Col md="6">
-                                <TextField
-                                    label="Код производителя"
-                                    name="manufacturerCode"
-                                    value={data.manufacturerCode}
-                                    placeholder=""
-                                    type="text"
-                                    onChange={handleChange}
-                                    error={errors.manufacturerCode}
-                                />
-                            </Col>
-                        </Row>
-                        {features.current?.keys.length > 0 && (
-                            <Row>
-                                <Col className="text-center">
-                                    <span className="mt-0 mb-2 mr-2">
-                                        конструктор параметров
-                                    </span>
-                                    <a
-                                        className="text-info"
-                                        href="#link"
-                                        onClick={() =>
-                                            setData((prevState) => {
-                                                return {
-                                                    ...prevState,
-                                                    features: [
-                                                        {
-                                                            name: features
-                                                                .current.keys[0]
-                                                                .value,
-                                                            value: ""
-                                                        }
-                                                    ]
-                                                };
-                                            })
-                                        }
-                                    >
-                                        ( сбросить )
-                                    </a>
+                            </FormGroup>
+                            <Row className="mb-1">
+                                <Col md="6">
+                                    <SelectField
+                                        label="Категория / бренд"
+                                        defaultOption="Выберите..."
+                                        name="categoryId"
+                                        options={categories.reduce(
+                                            (acc, category) => {
+                                                acc.push({
+                                                    name: category.name,
+                                                    value: category._id
+                                                });
+                                                return acc;
+                                            },
+                                            []
+                                        )}
+                                        value={data.categoryId}
+                                        onChange={handleChange}
+                                        error={errors.categoryId}
+                                    />
+                                </Col>
+                                <Col md="6">
+                                    <TextField
+                                        label="Наличие на складе"
+                                        name="stock"
+                                        value={data.stock}
+                                        placeholder="шт."
+                                        type="text"
+                                        onChange={handleChange}
+                                        error={errors.stock}
+                                    />
                                 </Col>
                             </Row>
-                        )}
+                            <Row className="mb-3">
+                                <Col md="6">
+                                    <TextField
+                                        label="Цена"
+                                        required={true}
+                                        name="price"
+                                        value={data.price}
+                                        placeholder="₽"
+                                        type="text"
+                                        onChange={handleChange}
+                                        error={errors.price}
+                                    />
+                                </Col>
+                                <Col md="6">
+                                    <TextField
+                                        label="Скидка %"
+                                        name="discount"
+                                        value={data.discount}
+                                        placeholder="%"
+                                        type="text"
+                                        onChange={handleChange}
+                                        error={errors.discount}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row className="price-row">
+                                <Col md="6">
+                                    <TextField
+                                        label="Артикул"
+                                        required={true}
+                                        name="article"
+                                        value={data.article}
+                                        placeholder=""
+                                        type="text"
+                                        onChange={handleChange}
+                                        error={errors.article}
+                                    />
+                                </Col>
+                                <Col md="6">
+                                    <TextField
+                                        label="Код производителя"
+                                        name="manufacturerCode"
+                                        value={data.manufacturerCode}
+                                        placeholder=""
+                                        type="text"
+                                        onChange={handleChange}
+                                        error={errors.manufacturerCode}
+                                    />
+                                </Col>
+                            </Row>
+                            {features.current?.keys.length > 0 && (
+                                <Row>
+                                    <Col className="text-center">
+                                        <span className="mt-0 mb-2 mr-2">
+                                            конструктор параметров
+                                        </span>
+                                        <a
+                                            className="text-info"
+                                            href="#link"
+                                            onClick={() => {
+                                                setData((prevState) => {
+                                                    return {
+                                                        ...prevState,
+                                                        features: [
+                                                            {
+                                                                name: features
+                                                                    .current
+                                                                    .keys[0]
+                                                                    .value,
+                                                                value: ""
+                                                            }
+                                                        ]
+                                                    };
+                                                });
+                                                setInitData(false);
+                                            }}
+                                        >
+                                            ( сбросить )
+                                        </a>
+                                    </Col>
+                                </Row>
+                            )}
 
-                        {features.current?.keys.length > 0 &&
-                            data.features.length > 0 &&
-                            data.features.map((feature, index) => {
-                                return (
-                                    <DoubleSelect
-                                        key={index}
-                                        index={index}
-                                        featureOptions={features.current.keys
-                                            .map((f) => {
+                            {features.current?.keys.length > 0 &&
+                                data.features.length > 0 &&
+                                data.features.map((feature, index) => {
+                                    return (
+                                        <DoubleSelect
+                                            key={index}
+                                            index={index}
+                                            featureOptions={features.current.keys
+                                                .map((f) => {
+                                                    return {
+                                                        ...f,
+                                                        index: index
+                                                    };
+                                                })
+                                                .filter(
+                                                    (f) =>
+                                                        !data.features.some(
+                                                            (feat) =>
+                                                                feat.name ===
+                                                                f.value
+                                                        )
+                                                )}
+                                            featureValuesOptions={features.current.all[
+                                                feature.name
+                                            ].map((f) => {
                                                 return {
-                                                    ...f,
+                                                    label: f,
+                                                    value: f,
+                                                    key: feature.name,
+                                                    input: "value",
                                                     index: index
                                                 };
-                                            })
-                                            .filter(
-                                                (f) =>
-                                                    !data.features.some(
-                                                        (feat) =>
-                                                            feat.name ===
-                                                            f.value
-                                                    )
+                                            })}
+                                            defaultValue={getDefaultValueForDoubeleSelect(
+                                                features.current.keys[index],
+                                                index
                                             )}
-                                        featureValuesOptions={features.current.all[
-                                            feature.name
-                                        ].map((f) => {
-                                            return {
-                                                label: f,
-                                                value: f,
-                                                key: feature.name,
-                                                input: "value",
-                                                index: index
-                                            };
-                                        })}
-                                        defaultValue={
-                                            features.current.keys[index]
-                                        }
-                                        onSelect={handleSelectFeature}
-                                        onShowMore={handleShowMore}
-                                    />
-                                );
-                            })}
-                        <FormGroup>
-                            <h6>Описание товара</h6>
-                            <TextField
-                                className="textarea-limited"
-                                maxLength="2000"
-                                name="description"
-                                placeholder="Описание товара..."
-                                rows="5"
-                                type="textarea"
-                                value={data.description}
-                                onChange={handleChange}
-                                error={errors.description}
-                            />
-                            <h5>
-                                <small>
-                                    <span
-                                        className="pull-right"
-                                        id="textarea-limited-message"
-                                    >
-                                        не более{" "}
-                                        {2000 - data.description.length}{" "}
-                                        символов
-                                    </span>
-                                </small>
-                            </h5>
-                        </FormGroup>
-                    </Col>
-                </Row>
-
-                {productAddError && (
-                    <Row>
-                        <span className="text-danger mt-2 ml-auto mr-5 font-weight-bold">
-                            {productAddError}
-                        </span>
+                                            initData={initData}
+                                            onSelect={handleSelectFeature}
+                                            onShowMore={handleShowMore}
+                                        />
+                                    );
+                                })}
+                            <FormGroup>
+                                <h6>Описание товара</h6>
+                                <TextField
+                                    className="textarea-limited"
+                                    maxLength="2000"
+                                    name="description"
+                                    placeholder="Описание товара..."
+                                    rows="5"
+                                    type="textarea"
+                                    value={data.description}
+                                    onChange={handleChange}
+                                    error={errors.description}
+                                />
+                                <h5>
+                                    <small>
+                                        <span
+                                            className="pull-right"
+                                            id="textarea-limited-message"
+                                        >
+                                            не более{" "}
+                                            {2000 - data.description.length}{" "}
+                                            символов
+                                        </span>
+                                    </small>
+                                </h5>
+                            </FormGroup>
+                        </Col>
                     </Row>
-                )}
 
-                <Row className="buttons-row mt-3 flex-row justify-content-between">
-                    <Col md="4" sm="4">
-                        <Button
-                            block
-                            className="btn-round"
-                            color="danger"
-                            outline
-                            type="reset"
-                        >
-                            Назад
-                        </Button>
-                    </Col>
+                    {productAddError && (
+                        <Row>
+                            <span className="text-danger mt-2 ml-auto mr-5 font-weight-bold">
+                                {productAddError}
+                            </span>
+                        </Row>
+                    )}
 
-                    <Col md="4" sm="4">
-                        <Button
-                            block
-                            className="btn-round"
-                            color="primary"
-                            type="submit"
-                            disabled={!isValid()}
-                        >
-                            Добавить товар
-                        </Button>
-                    </Col>
-                </Row>
-            </Form>
-        </>
+                    <Row className="buttons-row mt-3 flex-row justify-content-between">
+                        <Col md="4" sm="4">
+                            <Button
+                                block
+                                className="btn-round"
+                                color="danger"
+                                outline
+                                type="reset"
+                            >
+                                Назад
+                            </Button>
+                        </Col>
+                        <Col md="4" sm="4">
+                            <Button
+                                block
+                                className="btn-round"
+                                color="danger"
+                                type="reset"
+                            >
+                                Удалить
+                            </Button>
+                        </Col>
+                        <Col md="4" sm="4">
+                            <Button
+                                block
+                                className="btn-round"
+                                color="primary"
+                                type="submit"
+                                disabled={!isValid()}
+                            >
+                                Сохранить
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
+            </>
+        )
     );
 }
 function prepareData(product) {
@@ -469,9 +501,9 @@ function prepareData(product) {
     ]);
     return {
         ...productShaped,
-        discount: productShaped.discount.toString(),
-        price: productShaped.price.toString(),
-        stock: productShaped.stock.toString()
+        discount: productShaped.discount?.toString(),
+        price: productShaped.price?.toString(),
+        stock: productShaped.stock?.toString()
     };
 }
 export default AdminEditProduct;
