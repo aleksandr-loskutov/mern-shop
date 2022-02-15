@@ -2,6 +2,7 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 import productService from "../services/product.service";
 import isOutdated from "../utils/isOutdated";
 import history from "../utils/history";
+import userService from "../services/user.service";
 
 const productsSlice = createSlice({
     name: "products",
@@ -27,6 +28,14 @@ const productsSlice = createSlice({
         productAdded: (state, action) => {
             state.entities.push(action.payload);
         },
+        productUpdated: (state, action) => {
+            state.entities[
+                state.entities.findIndex((u) => u._id === action.payload._id)
+            ] = action.payload;
+        },
+        productUpdateFailed: (state, action) => {
+            state.error = action.payload;
+        },
         productAddFailed: (state, action) => {
             state.error = action.payload;
         },
@@ -48,10 +57,12 @@ const {
     productAdded,
     productAddFailed,
     productDeleted,
-    productDeleteFailed
+    productDeleteFailed,
+    productUpdated,
+    productUpdateFailed
 } = actions;
 const productRequestAdd = createAction("products/addRequest");
-
+const productUpdateRequest = createAction("products/updateRequest");
 export const loadProductsList = () => async (dispatch, getState) => {
     const { lastFetch } = getState().products;
     if (isOutdated(lastFetch)) {
@@ -64,14 +75,25 @@ export const loadProductsList = () => async (dispatch, getState) => {
         }
     }
 };
-
+export function updateProduct(productId, payload) {
+    return async function (dispatch) {
+        dispatch(productUpdateRequest());
+        try {
+            const { content } = await productService.update(productId, payload);
+            dispatch(productUpdated(content));
+            history.push(`/admin/products/${content._id}/`);
+        } catch (error) {
+            dispatch(productUpdateFailed(error.message));
+        }
+    };
+}
 export const addProduct = (payload) => async (dispatch) => {
     dispatch(productRequestAdd());
     try {
         const { content } = await productService.create(payload);
         //console.log('content', content)
         dispatch(productAdded(content));
-        history.push("/admin/products/");
+        history.push(`/admin/products/${content._id}/`);
     } catch (error) {
         const { message } = error.response?.data;
         const { status: code } = error.response;
