@@ -7,11 +7,18 @@ function DoubleSelect({
     featureValuesOptions,
     onSelect,
     defaultValue,
-    index
+    index,
+    initData
 }) {
-    // console.log("featureOptions", featureOptions);
-    // console.log("defaultValueFeature", defaultValueFeature);
-    return (
+    const defaultValueSecond =
+        featureValuesOptions[
+            featureValuesOptions.findIndex(
+                (f) => f.label === defaultValue?.secondDefault
+            )
+        ];
+    const bothDefaults = defaultValue && defaultValueSecond;
+    const render = initData ? bothDefaults : true;
+    return render ? (
         <Row>
             <Col md="6" sm="6">
                 <FormGroup>
@@ -33,12 +40,15 @@ function DoubleSelect({
                         className="react-select react-select-default"
                         classNamePrefix="react-select"
                         name={`defaultSelect${index + 1}`}
+                        defaultValue={defaultValueSecond}
                         onChange={(value) => onSelect(value)}
                         options={featureValuesOptions}
                     />
                 </FormGroup>
             </Col>
         </Row>
+    ) : (
+        ""
     );
 }
 
