@@ -3,7 +3,7 @@ const productEndPoint = "product/";
 
 const productService = {
     update: async (id, content) => {
-        const { data } = await httpService.put(productEndPoint + id, content);
+        const { data } = await httpService.patch(productEndPoint + id, content);
         return data;
     },
     get: async (id) => {

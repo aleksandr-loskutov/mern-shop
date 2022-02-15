@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import ImageUpload from "../../components/_prototypes/ImageUpload";
+import ImageUpload from "../../components/ImageUpload";
 import PageAdmin from "../../components/pageAdmin";
 
 function AddCategory(props) {

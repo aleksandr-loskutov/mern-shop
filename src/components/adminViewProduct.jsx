@@ -3,10 +3,6 @@ import {
     Button,
     Card,
     CardBody,
-    Carousel,
-    CarouselCaption,
-    CarouselIndicators,
-    CarouselItem,
     Col,
     Nav,
     NavItem,
@@ -16,7 +12,7 @@ import {
     Table,
     TabPane
 } from "reactstrap";
-import ImageUpload from "./_prototypes/ImageUpload";
+import ImageUpload from "./ImageUpload";
 import { Link, useHistory, useParams } from "react-router-dom";
 import Page from "./page";
 import { Breadcrumbs } from "../routing/routes";
@@ -28,6 +24,7 @@ function AdminViewProduct({ product }) {
     const params = useParams();
     const { productId } = params;
     const history = useHistory();
+    // console.log("data", product.features);
     return (
         <>
             <Row className="justify-content-sm-between">

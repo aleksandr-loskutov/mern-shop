@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Col, FormGroup, Input, Label, Row } from "reactstrap";
-import ImageUpload from "./_prototypes/ImageUpload";
+import ImageUpload from "./ImageUpload";
 import { useHistory } from "react-router-dom";
 
 function AdminEditCategory(props) {

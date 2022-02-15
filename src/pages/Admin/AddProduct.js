@@ -6,7 +6,7 @@ import { Button, FormGroup, Row, Col, CustomInput, Form } from "reactstrap";
 
 // core components
 
-import ImageUpload from "components/_prototypes/ImageUpload.js";
+import ImageUpload from "components/ImageUpload.js";
 import PageAdmin from "../../components/pageAdmin";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -43,7 +43,6 @@ function AddProduct() {
         status: true,
         stock: "1"
     });
-    console.log("data.features", data.features);
     const products = useSelector(getProducts());
     const categories = useSelector(getCategories());
     const categoriesIsLoading = useSelector(getCategoriesLoadingStatus());
