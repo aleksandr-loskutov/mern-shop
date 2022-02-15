@@ -6,6 +6,7 @@ const categoriesMock = require("../mockData/categories.json");
 const bcrypt = require("bcrypt");
 const config = require("config");
 const chalk = require("chalk");
+const getUrlFromString = require("../utils/getUrlFromString");
 module.exports = async () => {
     if (!config.get("importMockData")) return;
     const categories = await Category.find();
@@ -21,7 +22,7 @@ module.exports = async () => {
             categoriesMock,
             rootCategory
         );
-        console.log(`Импорт категорий завершен`);
+        console.log(chalk.green.inverse(`Импорт категорий завершен`));
     }
 
     const products = await Product.find();
@@ -31,7 +32,7 @@ module.exports = async () => {
         );
         await Product.collection.drop();
         const result = await createInitialProductsEntity(Product, productsMock);
-        console.log(`Импорт товаров завершен`);
+        console.log(chalk.green.inverse(`Импорт товаров завершен`));
     }
 
     if (config.get("createAdminIfNotExist")) {
@@ -39,7 +40,10 @@ module.exports = async () => {
         if (!admin) {
             const user = new User({
                 email: config.get("admin").email,
-                password: bcrypt.hashSync(config.get("admin").password, 7),
+                password: bcrypt.hashSync(
+                    config.get("admin").password,
+                    config.get("saltForPasswords")
+                ),
                 role: "admin"
             });
             await user.save();
@@ -68,7 +72,8 @@ async function createInitialCategoriesEntity(Model, data, rootCategory) {
                 const newItem = new Model({
                     ...item,
                     _id: item._id["$oid"],
-                    parentId: rootCategory
+                    parentId: rootCategory,
+                    urlAlias: getUrlFromString(item.urlAlias)
                 });
                 await newItem.save();
                 return newItem;
@@ -83,10 +88,18 @@ async function createInitialProductsEntity(Model, data) {
     return Promise.all(
         data.map(async (item) => {
             try {
+                const categoryFound = await Category.findById(
+                    item.categoryId["$oid"]
+                );
+                const brand = item.brand;
+                const category = categoryFound
+                    ? categoryFound._id
+                    : await Category.findOne({ name: brand });
                 const newItem = new Model({
                     ...item,
                     _id: item._id["$oid"],
-                    categoryId: item.categoryId["$oid"]
+                    categoryId: category?._id,
+                    urlAlias: getUrlFromString(item.name)
                 });
                 await newItem.save();
                 return newItem;
