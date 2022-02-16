@@ -5,23 +5,21 @@ import TableComponent from "./table/table";
 
 function AdminCategoriesTable({ categories }) {
     const columns = {
+        photo: {
+            path: "photo",
+            name: "Фото",
+            component: (category) => <img width="70" src={category.img}></img>
+        },
         name: {
             path: "name",
             name: "Название",
             component: (category) => <span>{category.name}</span>
         },
-
-        photo: {
-            path: "photo",
-            name: "Изображение",
-            component: (category) => <span>{category.photo}</span>
+        metaTitle: {
+            path: "metaTitle",
+            name: "Мета заголовок",
+            component: (category) => <span>{category.metaTitle}</span>
         },
-        alias: {
-            path: "alias",
-            name: "Алиас",
-            component: (category) => <span>{category.price}</span>
-        },
-
         status: {
             path: "status",
             name: "Статус",
@@ -44,22 +42,13 @@ function AdminCategoriesTable({ categories }) {
                     <Button
                         className="btn-link mr-1"
                         color="success"
-                        data-toggle="tooltip"
-                        id="tooltip278266693"
                         size="sm"
                         type="button"
-                        to={`${category.alias}/edit`}
+                        to={`/admin/categories/${category._id}/edit`}
                         tag={Link}
                     >
                         <i className="fa fa-edit" />
                     </Button>
-                    <UncontrolledTooltip
-                        delay={0}
-                        placement="top"
-                        target="tooltip278266693"
-                    >
-                        Редактировать
-                    </UncontrolledTooltip>
                 </>
             )
         }
