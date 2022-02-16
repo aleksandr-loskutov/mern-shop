@@ -3,12 +3,13 @@ import React from "react";
 import { Card, CardHeader, CardBody, Table, Row, Col } from "reactstrap";
 import { formatDate } from "../utils/getDate";
 import { Link } from "react-router-dom";
-function UserOrderDetail({ order }) {
+import TextField from "./form/fields/textField";
+function OrderDetail({ order }) {
     //TODO добавить получателя order.receiver
     return (
         <Row>
             <Col className="mx-auto mt-3" md="10">
-                <Card className="card-invoice">
+                <Card className="card-refine">
                     <CardHeader className="text-center">
                         <Row className="justify-content-md-between">
                             <Col md="4">
@@ -59,16 +60,18 @@ function UserOrderDetail({ order }) {
                                     <thead>
                                         <tr>
                                             <th
-                                                className="text-center"
+                                                className="text-center border-0"
                                                 colSpan="2"
                                             >
                                                 Товар
                                             </th>
-                                            <th className="text-right">Цена</th>
-                                            <th className="text-right">
+                                            <th className="text-right border-0">
+                                                Цена
+                                            </th>
+                                            <th className="text-right border-0">
                                                 Количество
                                             </th>
-                                            <th className="text-right">
+                                            <th className="text-right border-0">
                                                 Всего
                                             </th>
                                         </tr>
@@ -165,4 +168,4 @@ function UserOrderDetail({ order }) {
     );
 }
 
-export default UserOrderDetail;
+export default OrderDetail;

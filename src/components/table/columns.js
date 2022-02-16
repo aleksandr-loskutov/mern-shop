@@ -49,7 +49,7 @@ export const columnsForAdminOrdersTable = {
         name: "Действия",
         component: (order) => (
             <Button
-                to={`/user/orders/${order.orderNumber}`}
+                to={`${order.orderNumber}`}
                 tag={Link}
                 className="btn btn-dark"
             >

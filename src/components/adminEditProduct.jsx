@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     addProduct,
+    deleteProduct,
     getProducts,
     getProductsErrors,
     getProductsLoadingStatus,
@@ -170,6 +171,9 @@ function AdminEditProduct({ product }) {
         }
     }, [data.features]);
     const handleShowMore = () => {};
+    const handleDelete = () => {
+        dispatch(deleteProduct(product._id));
+    };
     const getDefaultValueForDoubeleSelect = (firstDefault, index) => {
         return data.features.length > 0
             ? {
@@ -197,7 +201,7 @@ function AdminEditProduct({ product }) {
                                         ? product.images[0]
                                         : undefined
                                 }
-                                error={errors.name}
+                                error={errors.img}
                                 onChange={handleImageChange}
                             />
                             <h6>Статус</h6>
@@ -453,7 +457,7 @@ function AdminEditProduct({ product }) {
                         </Row>
                     )}
 
-                    <Row className="buttons-row mt-3 flex-row justify-content-between">
+                    <Row className="buttons-row mt-5 flex-row justify-content-between">
                         <Col md="4" sm="4">
                             <Button
                                 block
@@ -471,6 +475,7 @@ function AdminEditProduct({ product }) {
                                 className="btn-round"
                                 color="danger"
                                 type="reset"
+                                onClick={handleDelete}
                             >
                                 Удалить
                             </Button>

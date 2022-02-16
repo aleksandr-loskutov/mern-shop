@@ -90,55 +90,10 @@ class ProductController {
             });
         }
     }
-    // async getOne(req, res) {
-    //     try {
-    //         const isId =
-    //             req.params.id.length === 24 && !req.params.id.includes("-");
-    //         const product = isId
-    //             ? await Product.findById(req.params.id)
-    //             : await Product.find({
-    //                   urlAlias: req.params.id
-    //               });
-    //         return product
-    //             ? res.status(200).json({
-    //                   message: "Успешно",
-    //                   content: product,
-    //                   status: 200
-    //               })
-    //             : res
-    //                   .status(404)
-    //                   .json({ message: "Продукт не найден", status: 400 });
-    //     } catch (e) {
-    //         res.status(500).json({
-    //             message: "На сервере возникла ошибка. Попробуйте позже.",
-    //             error: e.message
-    //         });
-    //     }
-    // }
-    // async getByCategory(req, res) {
-    //     try {
-    //         const products = await Product.find({
-    //             categoryId: req.params.categoryId
-    //         });
-    //         return products
-    //             ? res.status(200).json({
-    //                   message: "Успешно",
-    //                   content: products,
-    //                   status: 200
-    //               })
-    //             : res.status(404).json({ message: "Не найдено", status: 400 });
-    //     } catch (e) {
-    //         res.status(500).json({
-    //             message: "На сервере возникла ошибка. Попробуйте позже.",
-    //             error: e.message
-    //         });
-    //     }
-    // }
-    // //
+
     async update(req, res) {
         try {
             const errors = validationResult(req);
-            console.log("req.body.user", req.user);
             if (!errors.isEmpty()) {
                 return res.status(400).json({
                     status: 400,
@@ -165,20 +120,20 @@ class ProductController {
                 }
                 //getting category name as brand for filtering purposes at the catalog.
                 const category = await Category.findById(categoryId);
+
                 const editedData = {
                     ...req.body,
                     brand: category.name,
                     urlAlias: alias,
                     discount: discount ? discount : 0,
                     features: JSON.parse(features),
-                    images:
-                        images.length > 0
-                            ? images
-                            : [
-                                  req.file
-                                      ? "/images/uploads/" + req.file.filename
-                                      : ""
-                              ]
+                    images: req.file
+                        ? [
+                              req.file
+                                  ? "/images/uploads/" + req.file.filename
+                                  : ""
+                          ]
+                        : images
                 };
                 const product = await Product.findOneAndUpdate(
                     { _id: productId },
@@ -204,7 +159,10 @@ class ProductController {
         try {
             await Product.deleteOne({ _id: req.params.id });
             //TODO проверка на удаление
-            res.status(200).json({ message: "Продукт был удален" });
+            res.status(200).json({
+                status: 200,
+                message: "Продукт был удален"
+            });
         } catch (e) {
             res.status(500).json({
                 message: "На сервере возникла ошибка. Попробуйте позже.",

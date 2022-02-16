@@ -11,17 +11,18 @@ const productValidations = [
     check("price", "Укажите цену").notEmpty(),
     check("article", "Укажите артикул").notEmpty()
 ];
+const uploadMiddleware = upload.single("image");
 router.post(
     "/",
     roleMiddleware(["admin"]),
-    upload.single("image"),
+    uploadMiddleware,
     productValidations,
     productController.create
 );
 router.patch(
     "/:id",
     roleMiddleware(["admin"]),
-    upload.single("image"),
+    uploadMiddleware,
     productValidations,
     productController.update
 );

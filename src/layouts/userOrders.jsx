@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import Page from "../components/page";
 import UserOrdersTable from "../components/userOrdersTable";
-import UserOrderDetail from "../components/userOrderDetail";
+import OrderDetail from "../components/orderDetail";
 import { getOrderByNumber, getOrders } from "../store/orders";
 import { useSelector } from "react-redux";
 
@@ -16,7 +16,7 @@ const UserOrders = () => {
             title={orderId ? `Детали по заказу ${orderId}` : "История заказов"}
         >
             {orderId ? (
-                <UserOrderDetail order={order} />
+                <OrderDetail order={order} />
             ) : (
                 <UserOrdersTable orders={orders} />
             )}
