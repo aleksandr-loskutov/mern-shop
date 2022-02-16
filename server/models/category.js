@@ -9,7 +9,8 @@ const Category = new Schema(
         description: { type: String },
         img: { type: String },
         metaTitle: { type: String },
-        urlAlias: { type: String }
+        urlAlias: { type: String },
+        status: { type: Boolean, default: true }
     },
     { timestamps: true }
 );
