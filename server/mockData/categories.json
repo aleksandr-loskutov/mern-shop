@@ -11,8 +11,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда POZIS лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/pozis.jpg",
+  "description": "Холодильники бренда POZIS Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/pozis.jpg",
   "metaTitle": "Купить холодильники POZIS",
   "urlAlias": "pozis"
 },{
@@ -23,8 +23,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Hitachi лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/hitachi.jpg",
+  "description": "Холодильники бренда Hitachi Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/hitachi.jpg",
   "metaTitle": "Купить холодильники Hitachi",
   "urlAlias": "hitachi"
 },{
@@ -35,8 +35,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Liebherr лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/liebherr.jpg",
+  "description": "Холодильники бренда Liebherr Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/liebherr.jpg",
   "metaTitle": "Купить холодильники Liebherr",
   "urlAlias": "liebherr"
 },{
@@ -47,8 +47,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Beko лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/beko.jpg",
+  "description": "Холодильники бренда Beko Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/beko.jpg",
   "metaTitle": "Купить холодильники Beko",
   "urlAlias": "beko"
 },{
@@ -59,8 +59,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Hiberg лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/hiberg.jpg",
+  "description": "Холодильники бренда Hiberg Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/hiberg.jpg",
   "metaTitle": "Купить холодильники Hiberg",
   "urlAlias": "hiberg"
 },{
@@ -71,8 +71,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Tesler лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/tesler.jpg",
+  "description": "Холодильники бренда Tesler Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/tesler.jpg",
   "metaTitle": "Купить холодильники Tesler",
   "urlAlias": "tesler"
 },{
@@ -83,8 +83,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Smeg лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/smeg.jpg",
+  "description": "Холодильники бренда Smeg Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/smeg.jpg",
   "metaTitle": "Купить холодильники Smeg",
   "urlAlias": "smeg"
 },{
@@ -95,8 +95,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда АТЛАНТ лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/atlant.jpg",
+  "description": "Холодильники бренда АТЛАНТ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/atlant.jpg",
   "metaTitle": "Купить холодильники АТЛАНТ",
   "urlAlias": "atlant"
 },{
@@ -107,8 +107,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Schaub лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/schaub.jpg",
+  "description": "Холодильники бренда Schaub Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/schaub.jpg",
   "metaTitle": "Купить холодильники Schaub",
   "urlAlias": "schaub"
 },{
@@ -119,8 +119,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Sharp лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/sharp.jpg",
+  "description": "Холодильники бренда Sharp Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/sharp.jpg",
   "metaTitle": "Купить холодильники Sharp",
   "urlAlias": "sharp"
 },{
@@ -131,8 +131,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Indesit лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/indesit.jpg",
+  "description": "Холодильники бренда Indesit Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/indesit.jpg",
   "metaTitle": "Купить холодильники Indesit",
   "urlAlias": "indesit"
 },{
@@ -143,8 +143,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Maunfeld лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/maunfeld.jpg",
+  "description": "Холодильники бренда Maunfeld Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/maunfeld.jpg",
   "metaTitle": "Купить холодильники Maunfeld",
   "urlAlias": "maunfeld"
 },{
@@ -155,8 +155,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Weissgauff лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/weissgauff.jpg",
+  "description": "Холодильники бренда Weissgauff Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/weissgauff.jpg",
   "metaTitle": "Купить холодильники Weissgauff",
   "urlAlias": "weissgauff"
 },{
@@ -167,8 +167,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Bosch лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/bosch.jpg",
+  "description": "Холодильники бренда Bosch Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/bosch.jpg",
   "metaTitle": "Купить холодильники Bosch",
   "urlAlias": "bosch"
 },{
@@ -179,8 +179,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Stinol лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/stinol.jpg",
+  "description": "Холодильники бренда Stinol Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/stinol.jpg",
   "metaTitle": "Купить холодильники Stinol",
   "urlAlias": "stinol"
 },{
@@ -191,8 +191,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда LG лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/lg.jpg",
+  "description": "Холодильники бренда LG Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/lg.jpg",
   "metaTitle": "Купить холодильники LG",
   "urlAlias": "lg"
 },{
@@ -203,8 +203,8 @@
   "parentId": {
     "$oid": "6156d9ec3bc7dd62c79388a8"
   },
-  "description": "Холодильники бренда Gorenje лучшие в своем классе! Налетай покупай шевелись!",
-  "img": "/assets/img/brands/gorenje.jpg",
+  "description": "Холодильники бренда Gorenje Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab asperiores blanditiis, doloribus esse eum",
+  "img": "/images/categories/gorenje.jpg",
   "metaTitle": "Купить холодильники Gorenje",
   "urlAlias": "gorenje"
 }]
