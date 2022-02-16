@@ -3,7 +3,14 @@ const categoryEndPoint = "category/";
 
 const categoryService = {
     update: async (id, content) => {
-        const { data } = await httpService.put(categoryEndPoint + id, content);
+        const formData = new FormData();
+        Object.keys(content).forEach((key) =>
+            formData.append(key, content[key])
+        );
+        const { data } = await httpService.patch(
+            categoryEndPoint + id,
+            formData
+        );
         return data;
     },
     get: async (id) => {
@@ -15,7 +22,11 @@ const categoryService = {
         return data;
     },
     create: async (content) => {
-        const { data } = await httpService.post(categoryEndPoint, content);
+        const formData = new FormData();
+        Object.keys(content).forEach((key) =>
+            formData.append(key, content[key])
+        );
+        const { data } = await httpService.post(categoryEndPoint, formData);
         return data;
     },
     delete: async (id) => {
