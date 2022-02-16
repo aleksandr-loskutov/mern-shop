@@ -3,7 +3,14 @@ const productEndPoint = "product/";
 
 const productService = {
     update: async (id, content) => {
-        const { data } = await httpService.patch(productEndPoint + id, content);
+        const formData = new FormData();
+        Object.keys(content).forEach((key) =>
+            formData.append(key, content[key])
+        );
+        const { data } = await httpService.patch(
+            productEndPoint + id,
+            formData
+        );
         return data;
     },
     get: async (id) => {
