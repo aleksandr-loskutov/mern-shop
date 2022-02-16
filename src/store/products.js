@@ -2,7 +2,6 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 import productService from "../services/product.service";
 import isOutdated from "../utils/isOutdated";
 import history from "../utils/history";
-import userService from "../services/user.service";
 
 const productsSlice = createSlice({
     name: "products",
@@ -63,6 +62,7 @@ const {
 } = actions;
 const productRequestAdd = createAction("products/addRequest");
 const productUpdateRequest = createAction("products/updateRequest");
+const productDeleteRequest = createAction("products/deleteRequest");
 export const loadProductsList = () => async (dispatch, getState) => {
     const { lastFetch } = getState().products;
     if (isOutdated(lastFetch)) {
@@ -101,6 +101,26 @@ export const addProduct = (payload) => async (dispatch) => {
             dispatch(productAddFailed(message));
         } else {
             dispatch(productAddFailed(error.message));
+        }
+    }
+};
+export const deleteProduct = (productId) => async (dispatch) => {
+    dispatch(productDeleteRequest());
+    try {
+        const { status } = await productService.delete(productId);
+        if (status === 200) {
+            history.push(`/admin/products/`);
+            dispatch(productDeleted(productId));
+        } else {
+            dispatch(productDeleteFailed(productId));
+        }
+    } catch (error) {
+        const { message } = error.response?.data;
+        const { status: code } = error.response;
+        if (code === 400) {
+            dispatch(productDeleteFailed(message));
+        } else {
+            dispatch(productDeleteFailed(error.message));
         }
     }
 };
