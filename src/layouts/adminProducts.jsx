@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import AdminEditProduct from "../components/adminEditProduct";
 import AdminViewProduct from "../components/adminViewProduct";
@@ -12,6 +12,23 @@ const AdminProducts = () => {
     const { productId, edit } = params;
     const product = useSelector(getProductById(productId));
     const products = useSelector(getProducts());
+    const [searchQuery, setSearchQuery] = useState("");
+    const handleSearchQuery = ({ target }) => {
+        setSearchQuery(target.value);
+    };
+    const searchedProducts = products
+        ? searchQuery
+            ? products.filter((product) => {
+                  return (
+                      product.name
+                          .toString()
+                          .toLowerCase()
+                          .indexOf(searchQuery.toLowerCase()) !== -1 ||
+                      product.article.indexOf(searchQuery) !== -1
+                  );
+              })
+            : products
+        : [];
     return (
         <PageAdmin
             title={
@@ -21,6 +38,10 @@ const AdminProducts = () => {
                         : "Информация о товаре"
                     : "Все товары"
             }
+            search={!productId}
+            onSearch={handleSearchQuery}
+            searchQuery={searchQuery}
+            searchTip="артикул / название..."
         >
             {productId ? (
                 edit ? (
@@ -29,7 +50,7 @@ const AdminProducts = () => {
                     <AdminViewProduct product={product} />
                 )
             ) : (
-                <AdminProductsTable products={products} />
+                <AdminProductsTable products={searchedProducts} />
             )}
         </PageAdmin>
     );
