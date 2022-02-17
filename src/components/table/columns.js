@@ -60,30 +60,31 @@ export const columnsForAdminOrdersTable = {
 };
 export const columnsForUserOrdersTable = columnsForAdminOrdersTable;
 export const columnsForAdminEditUser = {
-    name: {
-        path: "name",
-        name: "Имя",
-        component: (user) => <span>{user.name}</span>
-    },
     email: {
         path: "email",
         name: "Почта",
         component: (user) => <span>{user.email}</span>
     },
+    name: {
+        path: "name",
+        name: "Имя",
+        component: (user) => <span>{user.name}</span>
+    },
+    lastName: {
+        path: "lastName",
+        name: "Фамилия",
+        component: (user) => <span>{user.lastName}</span>
+    },
     city: {
         path: "city",
         name: "Город",
-        component: (user) => <span></span>
+        component: (user) => <span>{getCityName(user.city)}</span>
     },
-    birthDate: {
-        path: "birthDate",
-        name: "Дата",
-        component: (user) => <span>{user.birthDate}</span>
-    },
+
     role: {
         path: "role",
         name: "Роль",
-        component: (user) => <span>user</span>
+        component: (user) => <span>{user.role}</span>
     },
     action: {
         path: "action",
@@ -93,41 +94,24 @@ export const columnsForAdminEditUser = {
                 <Button
                     className="btn-link mr-1"
                     color="info"
-                    data-toggle="tooltip"
-                    id="tooltip542628903"
                     size="sm"
                     type="button"
-                    to={`${user.id}`}
+                    to={`${user._id}`}
                     tag={Link}
                 >
                     <i className="nc-icon nc-alert-circle-i" />
                 </Button>
-                <UncontrolledTooltip
-                    delay={0}
-                    placement="top"
-                    target="tooltip542628903"
-                >
-                    Просмотр
-                </UncontrolledTooltip>
+
                 <Button
                     className="btn-link mr-1"
                     color="success"
-                    data-toggle="tooltip"
-                    id="tooltip278266693"
                     size="sm"
                     type="button"
-                    to={`${user.id}/edit`}
+                    to={`${user._id}/edit`}
                     tag={Link}
                 >
                     <i className="fa fa-edit" />
                 </Button>
-                <UncontrolledTooltip
-                    delay={0}
-                    placement="top"
-                    target="tooltip278266693"
-                >
-                    Редактировать
-                </UncontrolledTooltip>
             </>
         )
     }
