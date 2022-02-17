@@ -9,11 +9,13 @@ function SearchForm({
     formClasses,
     buttonColor,
     showButton,
-    placeholder
+    placeholder,
+    autoFocus
 }) {
     return (
         <Form className={`form-inline ${formClasses}`} onSubmit={onSubmit}>
             <Input
+                autoFocus
                 value={value}
                 className={`mr-sm-2 ${inputClasses}`}
                 placeholder={placeholder}

@@ -60,7 +60,7 @@ class OrderController {
                 postCode: req.body.postCode
             };
             const updatedUserReceiver = await User.findByIdAndUpdate(userId, {
-                receiver
+                ...receiver
             });
             const order = new Order({
                 userId: userId,

@@ -55,7 +55,7 @@ export const addOrder = (payload, emptyCart) => async (dispatch) => {
         const { content } = await orderService.create(payload);
         dispatch(orderAdded(content));
         emptyCart();
-        history.push("/user/orders");
+        history.push("/user/orders/");
     } catch (error) {
         const { message } = error.response?.data;
         const { status: code } = error.response;

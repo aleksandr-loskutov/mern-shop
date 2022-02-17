@@ -33,7 +33,7 @@ class UserController {
                 const user = await User.findById(req.user._id);
                 return res.status(200).json({
                     status: 200,
-                    content: [user],
+                    content: [{ ...user["_doc"], password: "" }],
                     message: "Successfully user retrieved"
                 });
             }
@@ -63,7 +63,14 @@ class UserController {
                         new: true
                     }
                 );
-                res.send({ ...updatedUser["_doc"], password: "Your password" });
+                res.status(201).json({
+                    status: 201,
+                    content: {
+                        ...updatedUser["_doc"],
+                        password: "Your password"
+                    },
+                    message: "Successfully updated"
+                });
             } else {
                 //not admin can only update self data except role field
                 if (
@@ -84,7 +91,11 @@ class UserController {
                             new: true
                         }
                     );
-                    res.send(updatedUser);
+                    res.status(201).json({
+                        status: 201,
+                        content: updatedUser,
+                        message: "Successfully updated"
+                    });
                 } else {
                     res.status(401).json({ message: "Unauthorized" });
                 }

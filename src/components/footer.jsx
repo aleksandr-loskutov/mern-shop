@@ -1,9 +1,10 @@
 import React from "react";
 import { Col, Container, Row } from "reactstrap";
+import { Link } from "react-router-dom";
 
 function Footer(props) {
     return (
-        <footer className="footer footer-black footer-big">
+        <footer className="footer footer-black footer-big ">
             <Container>
                 <Row>
                     <Col className="ml-auto mr-auto" md="4" sm="4">
@@ -15,85 +16,30 @@ function Footer(props) {
                         <div className="links">
                             <ul>
                                 <li className="mr-1">
-                                    <a
-                                        href="#pablo"
-                                        onClick={(e) => e.preventDefault()}
-                                    >
-                                        Home
-                                    </a>
+                                    <Link to={"/contact"}>Главная</Link>
                                 </li>
                                 <li className="mr-1">
-                                    <a
-                                        href="#pablo"
-                                        onClick={(e) => e.preventDefault()}
-                                    >
-                                        Company
-                                    </a>
+                                    <Link to={"/contact"}>О нас</Link>
                                 </li>
                                 <li className="mr-1">
-                                    <a
-                                        href="#pablo"
-                                        onClick={(e) => e.preventDefault()}
-                                    >
-                                        Portfolio
-                                    </a>
+                                    <Link to={"/contact"}>Лидеры продаж</Link>
                                 </li>
                                 <li className="mr-1">
-                                    <a
-                                        href="#pablo"
-                                        onClick={(e) => e.preventDefault()}
-                                    >
-                                        Team
-                                    </a>
+                                    <Link to={"/contact"}>Команда</Link>
                                 </li>
                                 <li className="mr-1">
-                                    <a
-                                        href="#pablo"
-                                        onClick={(e) => e.preventDefault()}
-                                    >
-                                        Contact
-                                    </a>
+                                    <Link to={"/contact"}>Обратная связь</Link>
                                 </li>
                                 <li>
-                                    <a
-                                        href="#pablo"
-                                        onClick={(e) => e.preventDefault()}
-                                    >
-                                        We're Hiring!
-                                    </a>
+                                    <Link to={"/contact"}>Вакансии</Link>
                                 </li>
                             </ul>
                             <hr />
                             <div className="copyright">
-                                <div className="pull-left">
+                                <div className="text-center">
                                     © {new Date().getFullYear()}, made with{" "}
                                     <i className="fa fa-heart heart" /> by
                                     Aleksandr.L for VM.School
-                                </div>
-                                <div className="pull-right">
-                                    <ul>
-                                        <li className="mr-1">
-                                            <a
-                                                href="#pablo"
-                                                onClick={(e) =>
-                                                    e.preventDefault()
-                                                }
-                                            >
-                                                Terms
-                                            </a>
-                                        </li>
-                                        |{" "}
-                                        <li>
-                                            <a
-                                                href="#pablo"
-                                                onClick={(e) =>
-                                                    e.preventDefault()
-                                                }
-                                            >
-                                                Privacy
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>

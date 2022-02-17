@@ -70,8 +70,6 @@ function WhiteNavbar() {
                         </button>
                     </div>
 
-                    <SearchForm inputClasses={"border-danger"} />
-
                     <Collapse navbar isOpen={collapseOpen}>
                         <Nav className="ml-auto" navbar>
                             <UncontrolledDropdown nav inNavbar>
@@ -106,38 +104,23 @@ function WhiteNavbar() {
                                     Контакты
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-danger" right>
-                                    <DropdownItem
-                                        to="/sections#headers"
-                                        tag={Link}
-                                    >
+                                    <DropdownItem to="/contact" tag={Link}>
                                         <i className="nc-icon nc-tile-56" />
                                         Как проехать
                                     </DropdownItem>
-                                    <DropdownItem
-                                        to="/sections#features"
-                                        tag={Link}
-                                    >
+                                    <DropdownItem to="/contact" tag={Link}>
                                         <i className="nc-icon nc-settings" />
                                         Доставка
                                     </DropdownItem>
-                                    <DropdownItem
-                                        to="/sections#blogs"
-                                        tag={Link}
-                                    >
+                                    <DropdownItem to="/contact" tag={Link}>
                                         <i className="nc-icon nc-bullet-list-67" />
                                         Оплата
                                     </DropdownItem>
-                                    <DropdownItem
-                                        to="/sections#teams"
-                                        tag={Link}
-                                    >
+                                    <DropdownItem to="/contact" tag={Link}>
                                         <i className="nc-icon nc-single-02" />О
                                         нас
                                     </DropdownItem>
-                                    <DropdownItem
-                                        to="/sections#projects"
-                                        tag={Link}
-                                    >
+                                    <DropdownItem to="/contact" tag={Link}>
                                         <i className="nc-icon nc-calendar-60" />
                                         Написать нам
                                     </DropdownItem>

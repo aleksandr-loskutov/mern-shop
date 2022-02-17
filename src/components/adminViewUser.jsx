@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Row, Table } from "reactstrap";
 import { Link, useHistory } from "react-router-dom";
+import { getCityName } from "../utils/getCityName";
 
 function AdminViewUser({ user }) {
     const history = useHistory();
@@ -9,7 +10,7 @@ function AdminViewUser({ user }) {
             <Row className="justify-content-sm-between">
                 <Button onClick={() => history.goBack()}>Назад</Button>
 
-                <Button to={`${user.id}/edit`} tag={Link}>
+                <Button to={`${user._id}/edit`} tag={Link}>
                     Редактировать
                 </Button>
             </Row>
@@ -20,21 +21,24 @@ function AdminViewUser({ user }) {
                             <strong>Email </strong>
                         </td>
                         <td className="text-dark font-weight-bold">
-                            noreply@email.com
+                            {user.email}
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Имя</strong>
                         </td>
-                        <td className="text-dark font-weight-bold">Bootdey</td>
+                        <td className="text-dark font-weight-bold">
+                            {" "}
+                            {user.name}
+                        </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Фамилия</strong>
                         </td>
                         <td className="text-dark font-weight-bold">
-                            Bootstrap
+                            {user.lastName}
                         </td>
                     </tr>
 
@@ -42,14 +46,17 @@ function AdminViewUser({ user }) {
                         <td>
                             <strong>Город</strong>
                         </td>
-                        <td className="text-dark font-weight-bold">Spb</td>
+                        <td className="text-dark font-weight-bold">
+                            {" "}
+                            {getCityName(user.city)}
+                        </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Индекс</strong>
                         </td>
                         <td className="text-dark font-weight-bold">
-                            123123ser
+                            {user.postalCode}
                         </td>
                     </tr>
 
@@ -58,15 +65,17 @@ function AdminViewUser({ user }) {
                             <strong>Адрес</strong>
                         </td>
                         <td className="text-dark font-weight-bold">
-                            Ул. Ххххх ываыва ываыва а ывааываыв ываываыв Ул.
-                            Ххххх ываыва ываыва а ывааываыв ываываыв ываыв
+                            {user.address}
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <strong>Роль / права</strong>
                         </td>
-                        <td className="text-dark font-weight-bold">user</td>
+                        <td className="text-dark font-weight-bold">
+                            {" "}
+                            {user.role}
+                        </td>
                     </tr>
                 </tbody>
             </Table>

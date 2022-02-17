@@ -1,7 +1,8 @@
 import React from "react";
+import LoremData from "../../components/loremData";
 
 function ContactUs(props) {
-    return <div>ContactUs</div>;
+    return <LoremData />;
 }
 
 export default ContactUs;

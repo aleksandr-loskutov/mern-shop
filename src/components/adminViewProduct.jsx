@@ -37,7 +37,6 @@ function AdminViewProduct({ product }) {
 
             {product ? (
                 <>
-                    <Breadcrumbs lastCrumbName={product.name} />
                     <Row>
                         <Col md="7" sm="6">
                             <div className="ml-auto mr-auto" id="carousel">

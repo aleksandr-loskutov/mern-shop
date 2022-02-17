@@ -101,7 +101,7 @@ function AdminNavbar() {
                                         to="/admin/product/add"
                                         tag={Link}
                                     >
-                                        <i className="nc-icon nc-settings" />
+                                        <i className="nc-icon nc-simple-add" />
                                         Добавить товар
                                     </DropdownItem>
                                 </DropdownMenu>
@@ -115,35 +115,28 @@ function AdminNavbar() {
                                         to="/admin/categories/"
                                         tag={Link}
                                     >
-                                        <i className="nc-icon nc-bank" />
+                                        <i className="nc-icon nc-tile-56" />
                                         Все категории
                                     </DropdownItem>
                                     <DropdownItem
                                         to="/admin/category/add"
                                         tag={Link}
                                     >
-                                        <i className="nc-icon nc-basket" />
+                                        <i className="nc-icon nc-simple-add" />
                                         Добавить категорию
                                     </DropdownItem>
                                 </DropdownMenu>
                             </UncontrolledDropdown>
                             <UncontrolledDropdown nav inNavbar>
-                                <DropdownToggle color="default" caret nav>
-                                    КЛИЕНТЫ
+                                <DropdownToggle
+                                    className="mr-2"
+                                    color="default"
+                                    nav
+                                    to="/admin/users/"
+                                    tag={Link}
+                                >
+                                    ПОЛЬЗОВАТЕЛИ
                                 </DropdownToggle>
-                                <DropdownMenu className="dropdown-danger" right>
-                                    <DropdownItem to="/admin/users/" tag={Link}>
-                                        <i className="nc-icon nc-bank" />
-                                        Все клиенты
-                                    </DropdownItem>
-                                    <DropdownItem
-                                        to="/admin/user/add"
-                                        tag={Link}
-                                    >
-                                        <i className="nc-icon nc-basket" />
-                                        Добавить клиента
-                                    </DropdownItem>
-                                </DropdownMenu>
                             </UncontrolledDropdown>
                             <NavItem>
                                 <Button

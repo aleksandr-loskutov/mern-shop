@@ -58,6 +58,7 @@ export const authRoutes = [
     {
         path: ADMIN_ROUTE,
         component: Admin,
+        breadcrumb: "админ",
         role: "admin"
     },
     {
