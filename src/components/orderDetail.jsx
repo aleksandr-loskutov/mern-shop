@@ -1,11 +1,11 @@
 import React from "react";
 // reactstrap components
-import { Card, CardHeader, CardBody, Table, Row, Col } from "reactstrap";
+import { Card, CardHeader, CardBody, Table, Row, Col, Input } from "reactstrap";
 import { formatDate } from "../utils/getDate";
 import { Link } from "react-router-dom";
-import TextField from "./form/fields/textField";
+import { getCityName } from "../utils/getCityName";
 function OrderDetail({ order }) {
-    //TODO добавить получателя order.receiver
+    const { name, lastName, phone, city, address, postCode } = order.receiver;
     return (
         <Row>
             <Col className="mx-auto mt-3" md="10">
@@ -51,6 +51,47 @@ function OrderDetail({ order }) {
                                     </Col>
                                 </Row>
                             </Col>
+                        </Row>
+                        <Row className="align-items-center justify-content-xl-around">
+                            <div>
+                                Имя:{" "}
+                                <span className="text-dark font-weight-bolder">
+                                    {name}
+                                </span>
+                            </div>
+                            <div>
+                                Фамилия:{" "}
+                                <span className="text-dark font-weight-bolder">
+                                    {lastName}
+                                </span>
+                            </div>
+                            <div>
+                                Телефон:{" "}
+                                <span className="text-dark font-weight-bolder">
+                                    {phone}
+                                </span>
+                            </div>
+                        </Row>
+
+                        <Row className="align-items-center justify-content-xl-around">
+                            <div>
+                                Адрес:{" "}
+                                <span className="text-dark font-weight-bolder">
+                                    {address}
+                                </span>
+                            </div>
+                            <div>
+                                Город:{" "}
+                                <span className="text-dark font-weight-bolder">
+                                    {getCityName(city)}
+                                </span>
+                            </div>
+                            <div>
+                                Индекс:{" "}
+                                <span className="text-dark font-weight-bolder">
+                                    {postCode}
+                                </span>
+                            </div>
                         </Row>
                     </CardHeader>
                     <CardBody>
