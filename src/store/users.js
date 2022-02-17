@@ -3,6 +3,7 @@ import userService from "../services/user.service";
 import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage.service";
 import history from "../utils/history";
+import { toast } from "react-toastify";
 
 const initialState = localStorageService.getAccessToken()
     ? {
@@ -47,6 +48,12 @@ const usersSlice = createSlice({
         authRequestFailed: (state, action) => {
             state.error = action.payload;
         },
+        createUserFailed: (state, action) => {
+            state.error = action.payload;
+        },
+        userUpdateFailed: (state, action) => {
+            state.error = action.payload;
+        },
         userCreated: (state, action) => {
             //TODO removed state.entities.push from here coz we are calling loadUsersList in appLoader if authorized
         },
@@ -75,14 +82,15 @@ const {
     authRequestFailed,
     userCreated,
     userUpdated,
-    userLoggedOut
+    userLoggedOut,
+    userUpdateFailed,
+    createUserFailed
 } = actions;
 
 const authRequested = createAction("users/authRequested");
 const userCreateRequested = createAction("users/userCreateRequested");
 const userUpdateRequested = createAction("users/userUpdateRequested");
-const createUpdateFailed = createAction("users/createUpdateFailed");
-const createUserFailed = createAction("users/createUserFailed");
+
 export const login =
     ({ payload, redirect }) =>
     async (dispatch) => {
@@ -95,7 +103,7 @@ export const login =
             );
             localStorageService.setTokens(data);
             if (data.role === "admin") {
-                history.push("/admin");
+                history.push("/admin/");
             } else {
                 history.push(redirect);
             }
@@ -124,8 +132,8 @@ export const signUp =
                 authRequestSuccess({ userId: data.userId, role: data.role })
             );
             localStorageService.setTokens(data);
-            dispatch(userCreated());
-            history.push("/cart");
+            dispatch(userCreated(data));
+            history.push("/cart/");
         } catch (error) {
             console.log(error.message);
             const { message } = error.response?.data;
@@ -145,15 +153,15 @@ export const logOut = () => (dispatch) => {
     history.push("/");
 };
 
-export function updateUserData(payload) {
+export function updateUserData(userId, payload) {
     return async function (dispatch) {
         dispatch(userUpdateRequested());
         try {
-            const { content } = await userService.update(payload);
+            const { content } = await userService.update(userId, payload);
             dispatch(userUpdated(content));
-            history.push(`/users/${content._id}`);
+            toast.success("Успешно обновлено");
         } catch (error) {
-            dispatch(createUpdateFailed(error.message));
+            dispatch(userUpdateFailed(error.message));
         }
     };
 }
@@ -180,6 +188,7 @@ export const getUserById = (userId) => (state) => {
     if (state.users.entities) {
         return state.users.entities.find((u) => u._id === userId);
     }
+    return null;
 };
 
 export const getIsLoggedIn = () => (state) => state.users.isLoggedIn;
