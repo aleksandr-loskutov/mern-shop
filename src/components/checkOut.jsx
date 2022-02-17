@@ -25,7 +25,10 @@ import Preloader from "./preloader";
 import Page from "./page";
 import { addOrder, getOrderErrors } from "../store/orders";
 import { CITY_LIST, DELIVERY_METHODS } from "../utils/consts";
+import { getCurrentUserData } from "../store/users";
+import _ from "lodash";
 function CheckOut() {
+    const user = useSelector(getCurrentUserData());
     const [cartProducts, setCartProducts] = useState([]);
     const { isEmpty, items, emptyCart } = useCart();
     const products = useSelector(getProducts());
@@ -43,6 +46,7 @@ function CheckOut() {
         }
         // eslint-disable-next-line
     }, [products, items]);
+    const userData = prepareData(user);
     const [data, setData] = useState({
         name: "",
         lastName: "",
@@ -56,7 +60,8 @@ function CheckOut() {
         cardHolder: "",
         cardExpirationDate: "",
         cardCVC: "",
-        extraPrice: 0
+        extraPrice: 0,
+        ...userData
     });
     const cardFields = [
         "cardNumber",
@@ -286,9 +291,7 @@ function CheckOut() {
                                                     defaultOption="Выберите..."
                                                     name="city"
                                                     options={CITY_LIST}
-                                                    defaultValue={
-                                                        CITY_LIST[0].value
-                                                    }
+                                                    defaultValue={data.city}
                                                     onChange={handleChange}
                                                     error={errors.city}
                                                 />
@@ -539,13 +542,24 @@ function CheckOut() {
         </Page>
     );
 }
-
+function prepareData(user) {
+    const userShaped = _.omit(user, [
+        "updatedAt",
+        "createdAt",
+        "__v",
+        "_id",
+        "role",
+        "password",
+        "email"
+    ]);
+    return userShaped;
+}
 function getDemoData() {
     return {
         name: "Иван",
         lastName: "Иванов",
         phone: "+79216666666",
-        city: "SPb",
+        city: CITY_LIST[0],
         address: "ул. Ленина дом 3/2 кв. 42",
         postCode: "194080",
         deliveryMethod: "pickup",
