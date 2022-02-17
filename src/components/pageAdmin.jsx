@@ -1,9 +1,18 @@
 import React from "react";
-import { Container } from "reactstrap";
+import { Col, Container, FormGroup, Row } from "reactstrap";
 import AdminNavbar from "./AdminNavbar";
-import FooterBlack from "../kit/Footers/FooterBlack";
+import SearchForm from "./searchForm";
+import { Breadcrumbs } from "../routing/routes";
 
-function PageAdmin({ children, sectionClass, title }) {
+function PageAdmin({
+    children,
+    sectionClass,
+    title,
+    search,
+    onSearch,
+    searchQuery,
+    searchTip
+}) {
     return (
         <>
             <AdminNavbar />
@@ -15,11 +24,28 @@ function PageAdmin({ children, sectionClass, title }) {
                                 {title}
                             </h2>
                         )}
+                        {search ? (
+                            <Row className="justify-content-center">
+                                <FormGroup className="">
+                                    <SearchForm
+                                        autoFocus
+                                        value={searchQuery}
+                                        showButton={false}
+                                        placeholder={searchTip || "поиск.."}
+                                        onChange={onSearch}
+                                    />
+                                </FormGroup>
+                            </Row>
+                        ) : (
+                            <Row className="justify-content-center">
+                                {" "}
+                                <Breadcrumbs lastCrumbName={title} />
+                            </Row>
+                        )}
                         {children}
                     </Container>
                 </div>
             </div>
-            <FooterBlack />
         </>
     );
 }
