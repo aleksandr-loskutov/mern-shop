@@ -151,6 +151,17 @@ export const getProductByAlias = (alias) => (state) => {
     }
     return {};
 };
+export const getFeaturedProducts = () => (state) => {
+    if (state.products.entities) {
+        const featured = state.products.entities.filter(
+            (p) => p.featured === true
+        );
+        return featured.length > 0
+            ? featured
+            : state.products.entities.slice(0, 6);
+    }
+    return [];
+};
 export const getProductById = (productId) => (state) => {
     if (state.products.entities) {
         return state.products.entities[
