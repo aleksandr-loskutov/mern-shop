@@ -5,6 +5,7 @@ const LogOut = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(logOut());
+        // eslint-disable-next-line
     }, []);
     return <h1>Loading</h1>;
 };

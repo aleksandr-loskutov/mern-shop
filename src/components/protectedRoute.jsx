@@ -11,14 +11,12 @@ const ProtectedRoute = ({
 }) => {
     const isLoggedIn = useSelector(getIsLoggedIn());
     const userRole = useSelector(getCurrentUserRole());
-    console.log("isLoggedIn", isLoggedIn);
     const isRoleMatch =
         requiredRole && requiredRole !== ""
             ? userRole === "admin"
                 ? true
                 : requiredRole === userRole
             : true;
-    console.log("isRoleMatch", isRoleMatch);
     return (
         <Route
             {...rest}

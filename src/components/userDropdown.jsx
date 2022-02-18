@@ -14,12 +14,14 @@ import {
     getUsersLoadingStatus
 } from "../store/users";
 import { useSelector } from "react-redux";
+import Preloader from "./preloader";
 
 function UserDropdown(props) {
     const currentUser = useSelector(getCurrentUserData());
     const role = useSelector(getCurrentUserRole());
     const isLoading = useSelector(getUsersLoadingStatus());
-    if (isLoading) return "Loading...";
+    if (isLoading) return <Preloader />;
+    //console.log("currentUser", currentUser);
     return (
         <>
             <UncontrolledDropdown nav inNavbar>
@@ -32,11 +34,11 @@ function UserDropdown(props) {
                     {!currentUser ? (
                         <>
                             <DropdownItem to="/login" tag={Link}>
-                                <i className="nc-icon nc-bullet-list-67" />
+                                <i className="nc-icon nc-key-25" />
                                 Вход
                             </DropdownItem>
                             <DropdownItem to="/login/register" tag={Link}>
-                                <i className="nc-icon nc-bullet-list-67" />
+                                <i className="nc-icon nc-badge" />
                                 Регистрация
                             </DropdownItem>
                         </>
@@ -61,12 +63,11 @@ function UserDropdown(props) {
             {role === "admin" && (
                 <NavItem>
                     <Button
-                        className="btn-round"
-                        color="danger"
+                        className="btn btn-outline-danger btn-round"
                         tag={Link}
-                        to={"/admin"}
+                        to={"/admin/"}
                     >
-                        <i className="nc-icon nc-key-25" /> Админ
+                        Админ
                     </Button>
                 </NavItem>
             )}

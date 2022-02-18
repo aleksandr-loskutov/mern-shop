@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Container, FormGroup, Row } from "reactstrap";
+import { Container, FormGroup, Row } from "reactstrap";
 import AdminNavbar from "./AdminNavbar";
 import SearchForm from "./searchForm";
 import { Breadcrumbs } from "../routing/routes";

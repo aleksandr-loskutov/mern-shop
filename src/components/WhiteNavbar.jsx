@@ -20,7 +20,6 @@ import {
 } from "reactstrap";
 import { useSelector } from "react-redux";
 import { getCategories } from "../store/categories";
-import SearchForm from "./searchForm";
 import UserDropdown from "./userDropdown";
 // core components
 
@@ -82,7 +81,7 @@ function WhiteNavbar() {
                                     КАТАЛОГ
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-danger" right>
-                                    {categories.length > 0 &&
+                                    {categories?.length > 0 &&
                                         categories.map((cat) => (
                                             <DropdownItem
                                                 key={cat._id}
@@ -105,23 +104,23 @@ function WhiteNavbar() {
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-danger" right>
                                     <DropdownItem to="/contact" tag={Link}>
-                                        <i className="nc-icon nc-tile-56" />
+                                        <i className="nc-icon nc-globe" />
                                         Как проехать
                                     </DropdownItem>
                                     <DropdownItem to="/contact" tag={Link}>
-                                        <i className="nc-icon nc-settings" />
+                                        <i className="nc-icon nc-delivery-fast" />
                                         Доставка
                                     </DropdownItem>
                                     <DropdownItem to="/contact" tag={Link}>
-                                        <i className="nc-icon nc-bullet-list-67" />
+                                        <i className="nc-icon nc-money-coins" />
                                         Оплата
                                     </DropdownItem>
                                     <DropdownItem to="/contact" tag={Link}>
-                                        <i className="nc-icon nc-single-02" />О
-                                        нас
+                                        <i className="nc-icon nc-alert-circle-i" />
+                                        О нас
                                     </DropdownItem>
                                     <DropdownItem to="/contact" tag={Link}>
-                                        <i className="nc-icon nc-calendar-60" />
+                                        <i className="nc-icon nc-email-85" />
                                         Написать нам
                                     </DropdownItem>
                                 </DropdownMenu>

@@ -1,17 +1,18 @@
 import React from "react";
 import { Button, Row, Table } from "reactstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getCityName } from "../utils/getCityName";
 
 function AdminViewUser({ user }) {
-    const history = useHistory();
     return (
         <>
-            <Row className="justify-content-sm-between">
-                <Button onClick={() => history.goBack()}>Назад</Button>
-
-                <Button to={`${user._id}/edit`} tag={Link}>
-                    Редактировать
+            <Row className="justify-content-end mb-2">
+                <Button
+                    to={`/admin/users/${user._id}/edit`}
+                    tag={Link}
+                    className="btn btn-outline-danger btn-round"
+                >
+                    <i className="nc-icon nc-ruler-pencil"></i> Редактировать
                 </Button>
             </Row>
             <Table style={{ tableLayout: "fixed" }}>

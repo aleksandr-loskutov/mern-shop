@@ -559,7 +559,7 @@ function getDemoData() {
         name: "Иван",
         lastName: "Иванов",
         phone: "+79216666666",
-        city: CITY_LIST[0],
+        city: CITY_LIST[0].value,
         address: "ул. Ленина дом 3/2 кв. 42",
         postCode: "194080",
         deliveryMethod: "pickup",

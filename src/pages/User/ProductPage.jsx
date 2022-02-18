@@ -24,7 +24,6 @@ import Page from "../../components/page";
 import { Link, useParams } from "react-router-dom";
 import Preloader from "../../components/preloader";
 import StoreServices from "../../components/storeServices";
-import { useHistory } from "react-router-dom";
 import { Breadcrumbs } from "../../routing/routes";
 import { useCart } from "react-use-cart";
 import { useSelector } from "react-redux";
@@ -32,11 +31,6 @@ import { getProductByAlias } from "../../store/products";
 
 function ProductPage() {
     const { alias } = useParams();
-    const history = useHistory();
-    //todo fix proper redirect from empty or wrong product alias
-
-    //TODO
-    // const productsIsLoading = useSelector(getProductsLoadingStatus());
     const product = useSelector(getProductByAlias(alias));
     const { addItem, inCart, getItem } = useCart();
     const [carouselItems, setCarouselItems] = React.useState([]);
@@ -90,16 +84,6 @@ function ProductPage() {
             document.body.classList.remove("product-page");
         };
     });
-    //todo fix rerender slider
-
-    // const [collapses, setCollapses] = React.useState([1]);
-    // const changeCollapse = (collapse) => {
-    //     if (collapses.includes(collapse)) {
-    //         setCollapses(collapses.filter((prop) => prop !== collapse));
-    //     } else {
-    //         setCollapses([...collapses, collapse]);
-    //     }
-    // };
 
     return (
         <>
@@ -337,5 +321,13 @@ function ProductPage() {
         </>
     );
 }
-
+//todo fix rerender slider
+// const [collapses, setCollapses] = React.useState([1]);
+// const changeCollapse = (collapse) => {
+//     if (collapses.includes(collapse)) {
+//         setCollapses(collapses.filter((prop) => prop !== collapse));
+//     } else {
+//         setCollapses([...collapses, collapse]);
+//     }
+// };
 export default ProductPage;

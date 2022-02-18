@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, CustomInput, Form, FormGroup, Row } from "reactstrap";
-import { useHistory } from "react-router-dom";
 import ImageUpload from "../../components/ImageUpload";
 import PageAdmin from "../../components/pageAdmin";
 import {
-    getCategories,
     getCategoriesLoadingStatus,
     addCategory,
     getCategoriesErrors
@@ -21,8 +19,6 @@ function AddCategory() {
         metaTitle: "",
         status: true
     });
-    const history = useHistory();
-    const categories = useSelector(getCategories());
     const categoriesIsLoading = useSelector(getCategoriesLoadingStatus());
     const dispatch = useDispatch();
     const isLoaded = !categoriesIsLoading;
@@ -81,9 +77,6 @@ function AddCategory() {
     return (
         isLoaded && (
             <PageAdmin title="Добавить категорию">
-                <Row className="justify-content-sm-between">
-                    <Button onClick={() => history.goBack()}>Назад</Button>
-                </Row>
                 <Form onSubmit={handleSubmit}>
                     <Row>
                         <Col md="5" sm="5">

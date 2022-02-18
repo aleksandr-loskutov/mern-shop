@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import categoryService from "../services/category.service";
 import { toast } from "react-toastify";
+import Preloader from "../components/preloader";
 
 const CategoriesContext = React.createContext();
 export const useCategories = () => {
@@ -85,7 +86,7 @@ export const CategoriesProvider = ({ children }) => {
                 deleteCategory
             }}
         >
-            {!isLoading ? children : <h1>Categories Loading...</h1>}
+            {!isLoading ? children : <Preloader />}
         </CategoriesContext.Provider>
     );
 };

@@ -25,6 +25,7 @@ import TextField from "../../components/form/fields/textField";
 import DoubleSelect from "../../components/doubleSelect";
 import { getProductValidationSchema } from "../../utils/getProductValidationSchema";
 import { getFeaturesFromProducts } from "../../utils/getFeaturesFromProducts";
+import { Link } from "react-router-dom";
 
 function AddProduct() {
     const [data, setData] = useState({
@@ -478,6 +479,8 @@ function AddProduct() {
                                     color="danger"
                                     outline
                                     type="reset"
+                                    tag={Link}
+                                    to={"/admin/products/"}
                                 >
                                     Назад
                                 </Button>

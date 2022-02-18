@@ -3,7 +3,7 @@ import { Card, CardBody, CardTitle, Col, FormGroup, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import ShowMoreButton from "./showMoreButton";
-import TagsInput from "./_prototypes/TagsInput";
+import TagsInput from "./TagsInput";
 import Preloader from "./preloader";
 import SearchForm from "./searchForm";
 

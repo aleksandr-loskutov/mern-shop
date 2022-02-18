@@ -3,11 +3,10 @@ import { Button, ButtonGroup, Card, Col, Row, Table } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useCart } from "react-use-cart";
 import { useSelector } from "react-redux";
-import { getProducts, getProductsLoadingStatus } from "../store/products";
+import { getProducts } from "../store/products";
 import { validateCartProducts } from "../utils/validateCartProducts";
 import Preloader from "./preloader";
 import Page from "./page";
-//todo getProductsLoadingStatus
 const Cart = () => {
     const [cartProducts, setCartProducts] = useState([]);
     const { isEmpty, items, updateItemQuantity } = useCart();

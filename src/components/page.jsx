@@ -1,6 +1,5 @@
 import React from "react";
 import WhiteNavbar from "./WhiteNavbar";
-import Footer from "./footer";
 import { Container } from "reactstrap";
 
 function Page({ children, sectionClass, title }) {
@@ -19,7 +18,6 @@ function Page({ children, sectionClass, title }) {
                     </Container>
                 </div>
             </div>
-            <Footer />
         </>
     );
 }

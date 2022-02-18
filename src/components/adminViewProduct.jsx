@@ -12,26 +12,20 @@ import {
     Table,
     TabPane
 } from "reactstrap";
-import ImageUpload from "./ImageUpload";
-import { Link, useHistory, useParams } from "react-router-dom";
-import Page from "./page";
-import { Breadcrumbs } from "../routing/routes";
-import StoreServices from "./storeServices";
+import { Link } from "react-router-dom";
 import Preloader from "./preloader";
 
 function AdminViewProduct({ product }) {
     const [hTabs, setHTabs] = React.useState("1");
-    const params = useParams();
-    const { productId } = params;
-    const history = useHistory();
-    // console.log("data", product.features);
     return (
         <>
-            <Row className="justify-content-sm-between">
-                <Button onClick={() => history.goBack()}>Назад</Button>
-
-                <Button to={`${productId}/edit`} tag={Link}>
-                    Редактировать
+            <Row className="justify-content-end">
+                <Button
+                    to={`/admin/products/${product._id}/edit`}
+                    tag={Link}
+                    className="btn btn-outline-danger btn-round"
+                >
+                    <i className="nc-icon nc-ruler-pencil"></i> Редактировать
                 </Button>
             </Row>
 
@@ -41,7 +35,11 @@ function AdminViewProduct({ product }) {
                         <Col md="7" sm="6">
                             <div className="ml-auto mr-auto" id="carousel">
                                 <Card className="page-carousel align-items-center">
-                                    <img width="70%" src={product.images[0]} />
+                                    <img
+                                        alt="фото."
+                                        width="70%"
+                                        src={product.images[0]}
+                                    />
                                 </Card>
                             </div>
                             {/* end carousel */}

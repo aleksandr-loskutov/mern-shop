@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, UncontrolledTooltip } from "reactstrap";
+import { Button } from "reactstrap";
 import TableComponent from "./table/table";
 
 function AdminCategoriesTable({ categories }) {
@@ -8,7 +8,9 @@ function AdminCategoriesTable({ categories }) {
         photo: {
             path: "photo",
             name: "Фото",
-            component: (category) => <img width="70" src={category.img}></img>
+            component: (category) => (
+                <img alt="Фото." width="70" src={category.img}></img>
+            )
         },
         name: {
             path: "name",

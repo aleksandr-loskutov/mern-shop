@@ -32,10 +32,8 @@ const FormComponent = ({
     );
     const handleSubmit = (e) => {
         e.preventDefault();
-        // console.log("handleSubmit");
         const isValid = validate(data);
         if (!isValid) return;
-        console.log("handleSubmit", isValid);
         onSubmit(data);
     };
 

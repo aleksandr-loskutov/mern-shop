@@ -12,7 +12,6 @@ const LoginForm = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const handleSubmit = async (data) => {
-        console.log("login data", data);
         const redirect = history.location.state
             ? history.location.state.from.pathname
             : "/catalog";

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Card, CardTitle, Col, Container, Row } from "reactstrap";
 import FormComponent, { TextField } from "./index";
 import { Link } from "react-router-dom";

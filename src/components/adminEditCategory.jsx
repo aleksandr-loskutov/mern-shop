@@ -1,9 +1,6 @@
-import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    addCategory,
     deleteCategory,
-    getCategories,
     getCategoriesErrors,
     getCategoriesLoadingStatus,
     updateCategory
@@ -14,12 +11,9 @@ import { Button, Col, CustomInput, Form, FormGroup, Row } from "reactstrap";
 import ImageUpload from "./ImageUpload";
 import TextField from "./form/fields/textField";
 import _ from "lodash";
-import { deleteProduct } from "../store/products";
 
 function AdminEditCategory({ category }) {
     const [data, setData] = useState(prepareData(category));
-    const history = useHistory();
-    const categories = useSelector(getCategories());
     const categoriesIsLoading = useSelector(getCategoriesLoadingStatus());
     const dispatch = useDispatch();
     const isLoaded = !categoriesIsLoading;
@@ -81,9 +75,6 @@ function AdminEditCategory({ category }) {
     return (
         isLoaded && (
             <>
-                <Row className="justify-content-sm-between">
-                    <Button onClick={() => history.goBack()}>Назад</Button>
-                </Row>
                 <Form onSubmit={handleSubmit}>
                     <Row>
                         <Col md="5" sm="5">

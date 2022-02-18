@@ -4,13 +4,11 @@ import { Button, Card, Col, Row } from "reactstrap";
 import FormComponent from "./index";
 import TextField from "./fields/textField";
 import PageAdmin from "../pageAdmin";
-import { useHistory } from "react-router-dom";
 
 const AddUser = () => {
-    const history = useHistory();
     const handleSubmit = (data) => {
-        console.log("data", data);
-        console.log("success");
+        //console.log("data", data);
+        //console.log("success");
     };
     const validateSchema = yup.object().shape({
         password: yup
@@ -36,9 +34,6 @@ const AddUser = () => {
     });
     return (
         <PageAdmin title="Добавить нового пользователя">
-            <Row className="justify-content-sm-between">
-                <Button onClick={() => history.goBack()}>Назад</Button>
-            </Row>
             <Row>
                 <Col className="ml-auto mr-auto" lg="4" md="7" sm="7">
                     <Card className="card-register">
