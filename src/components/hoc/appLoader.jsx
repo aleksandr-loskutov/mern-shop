@@ -15,6 +15,7 @@ import {
     loadProductsList,
     getProductsLoadingStatus
 } from "../../store/products";
+import Preloader from "../preloader";
 function AppLoader({ children }) {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(getIsLoggedIn());
@@ -23,6 +24,7 @@ function AppLoader({ children }) {
     const isOrdersLoading = useSelector(getOrdersLoadingStatus());
     const isUsersLoading = useSelector(getUsersLoadingStatus());
     const isLoaded = !isCategoriesLoading && !isProductsLoading;
+    const authDataLoaded = !isOrdersLoading && !isUsersLoading;
     useEffect(() => {
         dispatch(loadCategoriesList());
         dispatch(loadProductsList());
@@ -31,7 +33,7 @@ function AppLoader({ children }) {
             dispatch(loadOrdersList());
         }
     }, [dispatch, isLoggedIn]);
-    if (!isLoaded) return "Loading...";
+    if (!isLoaded || !authDataLoaded) return <Preloader />;
     return children;
 }
 AppLoader.propTypes = {
