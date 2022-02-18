@@ -1,16 +1,27 @@
 import { Link } from "react-router-dom";
-import { Button, UncontrolledTooltip } from "reactstrap";
+import { Button } from "reactstrap";
 import React from "react";
 import { getCityName } from "../../utils/getCityName";
 import { getDeliveryMethodName } from "../../utils/getDeliveryMethodName";
 import { formatDate } from "../../utils/getDate";
-import { getCategoryById } from "../../store/categories";
-
+import localStorageService from "../../services/localStorage.service";
 export const columnsForAdminOrdersTable = {
     orderNumber: {
         path: "orderNumber",
         name: "Заказ №",
-        component: (order) => <span>{order.orderNumber}</span>
+        component: (order) => (
+            <Link
+                to={
+                    localStorageService.getUserRole() === "admin"
+                        ? `/admin/orders/${order.orderNumber}/`
+                        : `/user/orders/${order.orderNumber}/`
+                }
+            >
+                <span className="text-dark font-weight-bolder border-bottom">
+                    {order.orderNumber}
+                </span>
+            </Link>
+        )
     },
     date: {
         path: "createdAt",
@@ -30,7 +41,17 @@ export const columnsForAdminOrdersTable = {
         path: "payment",
         name: "Оплата",
         component: (order) => (
-            <span>{order.payment ? "оплачен" : "не оплачен"}</span>
+            <>
+                {order.payment ? (
+                    <span className="badge badge-pill badge-success">
+                        оплачен
+                    </span>
+                ) : (
+                    <span className="badge badge-pill badge-default">
+                        не оплачен
+                    </span>
+                )}
+            </>
         )
     },
     sum: {
@@ -49,9 +70,13 @@ export const columnsForAdminOrdersTable = {
         name: "Действия",
         component: (order) => (
             <Button
-                to={`${order.orderNumber}`}
+                to={
+                    localStorageService.getUserRole() === "admin"
+                        ? `/admin/orders/${order.orderNumber}/`
+                        : `/user/orders/${order.orderNumber}/`
+                }
                 tag={Link}
-                className="btn btn-dark"
+                className="btn btn-outline-default btn-round"
             >
                 Подробнее
             </Button>
@@ -96,7 +121,7 @@ export const columnsForAdminEditUser = {
                     color="info"
                     size="sm"
                     type="button"
-                    to={`${user._id}`}
+                    to={`/admin/users/${user._id}/`}
                     tag={Link}
                 >
                     <i className="nc-icon nc-alert-circle-i" />
@@ -107,7 +132,7 @@ export const columnsForAdminEditUser = {
                     color="success"
                     size="sm"
                     type="button"
-                    to={`${user._id}/edit`}
+                    to={`/admin/users/${user._id}/edit`}
                     tag={Link}
                 >
                     <i className="fa fa-edit" />
@@ -120,15 +145,19 @@ export const columnsForAdminProductsTable = {
     photo: {
         path: "photo",
         name: "Фото",
-        component: (product) => <img width="70" src={product.images[0]}></img>
+        component: (product) => (
+            <Link to={`/admin/products/${product._id}/`}>
+                <img alt="фото." width="70" src={product.images[0]}></img>
+            </Link>
+        )
     },
 
     name: {
         path: "name",
         name: "Название",
         component: (product) => (
-            <Link to={`${product._id}`}>
-                <span className="pull-left font-weight-bold text-dark ">
+            <Link to={`/admin/products/${product._id}/`}>
+                <span className="pull-left text-dark font-weight-bolder border-bottom">
                     {product.name}
                 </span>
             </Link>
@@ -179,7 +208,7 @@ export const columnsForAdminProductsTable = {
                     color="info"
                     size="sm"
                     type="button"
-                    to={`${product._id}`}
+                    to={`/admin/products/${product._id}/`}
                     tag={Link}
                 >
                     <i className="nc-icon nc-alert-circle-i  font-weight-bolder" />
@@ -190,7 +219,7 @@ export const columnsForAdminProductsTable = {
                     color="success"
                     size="sm"
                     type="button"
-                    to={`${product._id}/edit`}
+                    to={`/admin/products/${product._id}/edit`}
                     tag={Link}
                 >
                     <i className="fa fa-edit font-weight-bolder" />
