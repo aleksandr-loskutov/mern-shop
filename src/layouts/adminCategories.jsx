@@ -5,10 +5,11 @@ import PageAdmin from "../components/pageAdmin";
 import AdminEditCategory from "../components/adminEditCategory";
 import { useSelector } from "react-redux";
 import { getCategories, getCategoryById } from "../store/categories";
+import _ from "lodash";
 
 const AdminCategories = () => {
     const params = useParams();
-    const { categoryId, edit } = params;
+    const { categoryId } = params;
     const category = useSelector(getCategoryById(categoryId));
     const categories = useSelector(getCategories());
     const [searchQuery, setSearchQuery] = useState("");
@@ -27,6 +28,14 @@ const AdminCategories = () => {
               })
             : categories
         : [];
+    const sortedCategories =
+        searchedCategories.length > 0
+            ? _.orderBy(
+                  searchedCategories,
+                  (category) => new Date(category["updatedAt"]),
+                  "desc"
+              )
+            : [];
     return (
         <PageAdmin
             title={categoryId ? "Редактировать категорию" : "Все категории"}
@@ -38,7 +47,7 @@ const AdminCategories = () => {
             {categoryId ? (
                 <AdminEditCategory category={category} />
             ) : (
-                <AdminCategoriesTable categories={searchedCategories} />
+                <AdminCategoriesTable categories={sortedCategories} />
             )}
         </PageAdmin>
     );

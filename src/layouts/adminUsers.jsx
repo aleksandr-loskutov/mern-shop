@@ -6,6 +6,7 @@ import AdminUsersTable from "../components/table/adminUsersTable";
 import AdminViewUser from "../components/adminViewUser";
 import { useSelector } from "react-redux";
 import { getUserById, getUsersList } from "../store/users";
+import _ from "lodash";
 
 const AdminUsers = () => {
     const { userId, edit } = useParams();
@@ -29,6 +30,14 @@ const AdminUsers = () => {
               })
             : users
         : [];
+    const sortedUsers =
+        searchedUsers.length > 0
+            ? _.orderBy(
+                  searchedUsers,
+                  (user) => new Date(user["createdAt"]),
+                  "desc"
+              )
+            : [];
     return (
         <PageAdmin
             title={
@@ -50,7 +59,7 @@ const AdminUsers = () => {
                     <AdminViewUser user={user} />
                 )
             ) : (
-                <AdminUsersTable users={searchedUsers} />
+                <AdminUsersTable users={sortedUsers} />
             )}
         </PageAdmin>
     );

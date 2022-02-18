@@ -3,13 +3,20 @@ import { useParams } from "react-router-dom";
 import PageAdmin from "../components/pageAdmin";
 import AdminOrdersTable from "../components/table/adminOrderTable";
 import { useSelector } from "react-redux";
-import { getOrderByNumber, getOrders } from "../store/orders";
+import {
+    getOrderByNumber,
+    getOrders,
+    getOrdersLoadingStatus
+} from "../store/orders";
 import OrderDetail from "../components/orderDetail";
+import Preloader from "../components/preloader";
+import _ from "lodash";
 
 const AdminOrders = () => {
     const { orderId } = useParams();
     const orders = useSelector(getOrders());
     const order = useSelector(getOrderByNumber(orderId));
+    const isLoading = useSelector(getOrdersLoadingStatus());
     const [searchQuery, setSearchQuery] = useState("");
     const handleSearchQuery = ({ target }) => {
         setSearchQuery(target.value);
@@ -26,7 +33,18 @@ const AdminOrders = () => {
               })
             : orders
         : [];
-    return (
+
+    const sortedOrders =
+        searchedOrders.length > 0
+            ? _.orderBy(
+                  searchedOrders,
+                  (order) => new Date(order["createdAt"]),
+                  "desc"
+              )
+            : [];
+    return isLoading ? (
+        <Preloader />
+    ) : (
         <PageAdmin
             title={orderId ? `Детали по заказу ${orderId}` : "Все заказы"}
             search={!orderId}
@@ -37,7 +55,7 @@ const AdminOrders = () => {
             {orderId ? (
                 <OrderDetail order={order} />
             ) : (
-                <AdminOrdersTable orders={searchedOrders} />
+                <AdminOrdersTable orders={sortedOrders} />
             )}
         </PageAdmin>
     );

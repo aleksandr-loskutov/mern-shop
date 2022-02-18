@@ -6,6 +6,7 @@ import AdminProductsTable from "../components/adminProductsTable";
 import PageAdmin from "../components/pageAdmin";
 import { useSelector } from "react-redux";
 import { getProductById, getProducts } from "../store/products";
+import _ from "lodash";
 
 const AdminProducts = () => {
     const params = useParams();
@@ -29,6 +30,14 @@ const AdminProducts = () => {
               })
             : products
         : [];
+    const sortedProducts =
+        searchedProducts.length > 0
+            ? _.orderBy(
+                  searchedProducts,
+                  (product) => new Date(product["updatedAt"]),
+                  "desc"
+              )
+            : [];
     return (
         <PageAdmin
             title={
@@ -50,7 +59,7 @@ const AdminProducts = () => {
                     <AdminViewProduct product={product} />
                 )
             ) : (
-                <AdminProductsTable products={searchedProducts} />
+                <AdminProductsTable products={sortedProducts} />
             )}
         </PageAdmin>
     );
