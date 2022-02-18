@@ -55,7 +55,7 @@ const usersSlice = createSlice({
             state.error = action.payload;
         },
         userCreated: (state, action) => {
-            //TODO removed state.entities.push from here coz we are calling loadUsersList in appLoader if authorized
+            state.entities.push(action.payload);
         },
         userUpdated: (state, action) => {
             state.entities[
@@ -102,12 +102,14 @@ export const login =
                 authRequestSuccess({ userId: data.userId, role: data.role })
             );
             localStorageService.setTokens(data);
+            toast.success("Успешный вход");
             if (data.role === "admin") {
                 history.push("/admin/");
             } else {
                 history.push(redirect);
             }
         } catch (error) {
+            toast.error("Ошибка входа");
             const { message } = error.response?.data;
             const { status: code } = error.response;
             if (code === 400) {
@@ -124,25 +126,29 @@ export const signUp =
         dispatch(userCreateRequested());
         dispatch(authRequested());
         try {
-            const data = await authService.register({
+            const { user, tokens } = await authService.register({
                 email,
                 password
             });
-            dispatch(
-                authRequestSuccess({ userId: data.userId, role: data.role })
-            );
-            localStorageService.setTokens(data);
-            dispatch(userCreated(data));
+            dispatch(authRequestSuccess({ userId: user._id, role: user.role }));
+            localStorageService.setTokens({
+                ...tokens,
+                userId: user._id,
+                role: user.role
+            });
+            dispatch(userCreated(user));
+            toast.success("Успешная регистрация");
             history.push("/cart/");
         } catch (error) {
-            console.log(error.message);
             const { message } = error.response?.data;
             const { status: code } = error.response;
+            toast.error(message || error.message || "Ошибка");
             if (code === 400) {
-                // const errorMessage = generateAuthError(message);
                 dispatch(authRequestFailed(message));
+                dispatch(createUserFailed(message));
             } else {
                 dispatch(authRequestFailed(error.message));
+                dispatch(createUserFailed(error.message));
             }
         }
     };
@@ -160,7 +166,9 @@ export function updateUserData(userId, payload) {
             const { content } = await userService.update(userId, payload);
             dispatch(userUpdated(content));
             toast.success("Успешно обновлено");
+            history.push("/");
         } catch (error) {
+            toast.error("Ошибка обновления");
             dispatch(userUpdateFailed(error.message));
         }
     };
@@ -171,15 +179,12 @@ export const loadUsersList = () => async (dispatch, getState) => {
         const { content } = await userService.get();
         dispatch(usersReceved(content));
     } catch (error) {
+        toast.error("Ошибка загрузки");
         dispatch(usersRequestFiled(error.message));
     }
 };
 export const getUsersList = () => (state) => state.users.entities;
 export const getCurrentUserData = () => (state) => {
-    console.log(
-        "localStorageService.getUserId()",
-        localStorageService.getUserId()
-    );
     return state.users.entities
         ? state.users.entities.find((u) => u._id === state.users.auth.userId)
         : null;
