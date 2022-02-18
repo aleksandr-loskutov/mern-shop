@@ -2,6 +2,7 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 import isOutdated from "../utils/isOutdated";
 import history from "../utils/history";
 import categoryService from "../services/category.service";
+import { toast } from "react-toastify";
 
 const categoriesSlice = createSlice({
     name: "categories",
@@ -71,6 +72,7 @@ export const loadCategoriesList = () => async (dispatch, getState) => {
             const { content } = await categoryService.fetchAll();
             dispatch(categoriesReceved(content));
         } catch (error) {
+            toast.error("Ошибка загрузки");
             dispatch(categoriesRequestFailed(error.message));
         }
     }
@@ -83,9 +85,11 @@ export function updateCategory(categoryId, payload) {
                 categoryId,
                 payload
             );
+            toast.success("Обновлено");
             history.push(`/admin/categories/`);
             dispatch(categoryUpdated(content));
         } catch (error) {
+            toast.error("Ошибка обновления");
             dispatch(categoryUpdateFailed(error.message));
         }
     };
@@ -95,10 +99,12 @@ export const addCategory = (payload) => async (dispatch) => {
     try {
         const { content } = await categoryService.create(payload);
         dispatch(categoryAdded(content));
+        toast.success("Добавлена категория");
         history.push(`/admin/categories/`);
     } catch (error) {
         const { message } = error.response?.data;
         const { status: code } = error.response;
+        toast.error(message || error.message || "Ошибка");
         if (code === 400) {
             dispatch(categoryAddFailed(message));
         } else {
@@ -111,14 +117,17 @@ export const deleteCategory = (categoryId) => async (dispatch) => {
     try {
         const { status } = await categoryService.delete(categoryId);
         if (status === 200) {
+            toast.success("Категория удалена");
             history.push(`/admin/categories/`);
             dispatch(categoryDeleted(categoryId));
         } else {
+            toast.error("Ошибка");
             dispatch(categoryDeleteFailed(categoryId));
         }
     } catch (error) {
         const { message } = error.response?.data;
         const { status: code } = error.response;
+        toast.error(message || error.message || "Ошибка");
         if (code === 400) {
             dispatch(categoryDeleteFailed(message));
         } else {

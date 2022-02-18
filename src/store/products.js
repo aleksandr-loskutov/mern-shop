@@ -2,6 +2,7 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 import productService from "../services/product.service";
 import isOutdated from "../utils/isOutdated";
 import history from "../utils/history";
+import { toast } from "react-toastify";
 
 const productsSlice = createSlice({
     name: "products",
@@ -71,6 +72,7 @@ export const loadProductsList = () => async (dispatch, getState) => {
             const { content } = await productService.fetchAll();
             dispatch(productsReceved(content));
         } catch (error) {
+            toast.error("Ошибка загрузки");
             dispatch(productsRequestFailed(error.message));
         }
     }
@@ -81,8 +83,10 @@ export function updateProduct(productId, payload) {
         try {
             const { content } = await productService.update(productId, payload);
             dispatch(productUpdated(content));
+            toast.success("Обновлено");
             history.push(`/admin/products/${content._id}/`);
         } catch (error) {
+            toast.error("Ошибка обновления");
             dispatch(productUpdateFailed(error.message));
         }
     };
@@ -93,10 +97,12 @@ export const addProduct = (payload) => async (dispatch) => {
         const { content } = await productService.create(payload);
         //console.log('content', content)
         dispatch(productAdded(content));
+        toast.success("Товар добавлен");
         history.push(`/admin/products/${content._id}/`);
     } catch (error) {
         const { message } = error.response?.data;
         const { status: code } = error.response;
+        toast.error(message || error.message || "Ошибка");
         if (code === 400) {
             dispatch(productAddFailed(message));
         } else {
@@ -109,14 +115,17 @@ export const deleteProduct = (productId) => async (dispatch) => {
     try {
         const { status } = await productService.delete(productId);
         if (status === 200) {
+            toast.success("Товар удален");
             history.push(`/admin/products/`);
             dispatch(productDeleted(productId));
         } else {
+            toast.error("Ошибка удаления");
             dispatch(productDeleteFailed(productId));
         }
     } catch (error) {
         const { message } = error.response?.data;
         const { status: code } = error.response;
+        toast.error(message || error.message || "Ошибка");
         if (code === 400) {
             dispatch(productDeleteFailed(message));
         } else {

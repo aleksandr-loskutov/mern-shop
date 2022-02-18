@@ -1,12 +1,13 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
 import orderService from "../services/order.service";
 import history from "../utils/history";
+import { toast } from "react-toastify";
 
 const ordersSlice = createSlice({
     name: "orders",
     initialState: {
         entities: [],
-        isLoading: true,
+        isLoading: false,
         error: null
     },
     reducers: {
@@ -55,10 +56,12 @@ export const addOrder = (payload, emptyCart) => async (dispatch) => {
         const { content } = await orderService.create(payload);
         dispatch(orderAdded(content));
         emptyCart();
+        toast.success("Заказ размещен");
         history.push("/user/orders/");
     } catch (error) {
         const { message } = error.response?.data;
         const { status: code } = error.response;
+        toast.error(message || error.message || "Ошибка");
         if (code === 400) {
             dispatch(orderAddFailed(message));
         } else {
@@ -73,6 +76,7 @@ export const loadOrdersList = () => async (dispatch) => {
         const { content } = await orderService.get();
         dispatch(ordersReceved(content));
     } catch (error) {
+        toast.error("Ошибка загрузки");
         dispatch(ordersRequestFiled(error.message));
     }
 };
