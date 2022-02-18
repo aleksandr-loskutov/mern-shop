@@ -25,7 +25,6 @@ import {
     SEARCH_ROUTE,
     LOGOUT_ROUTE
 } from "../utils/consts";
-
 import Admin from "../pages/Admin/admin";
 import AddUser from "../components/form/AddUser";
 import AdminUsers from "../layouts/adminUsers";
@@ -53,7 +52,6 @@ import withBreadcrumbs from "react-router-breadcrumbs-hoc";
 import BreadcrumbsComponent from "../components/breadcrumbs";
 import LogOut from "../components/logOut";
 import Cart from "../components/cart";
-
 export const authRoutes = [
     {
         path: ADMIN_ROUTE,
@@ -89,21 +87,25 @@ export const authRoutes = [
     {
         path: ADMIN_PRODUCTS_ROUTE,
         component: AdminProducts,
+        breadcrumb: DynamicProductBreadcrumb,
         role: "admin"
     },
     {
         path: ADMIN_CATEGORIES_ROUTE,
         component: AdminCategories,
+        breadcrumb: DynamicCategoriesBreadcrumb,
         role: "admin"
     },
     {
         path: ADMIN_USERS_ROUTE,
+        breadcrumb: DynamicUsersBreadcrumb,
         component: AdminUsers,
         role: "admin"
     },
     {
         path: ADMIN_ORDERS_ROUTE,
         component: AdminOrders,
+        breadcrumb: "заказы",
         role: "admin"
     },
     {
@@ -184,7 +186,15 @@ export const publicRoutes = [
         component: Error404
     }
 ];
-
+function DynamicProductBreadcrumb({ match }) {
+    return match.params?.productId ? "товар" : "все товары";
+}
+function DynamicCategoriesBreadcrumb({ match }) {
+    return match.params?.categoryId ? "категория" : "все категории";
+}
+function DynamicUsersBreadcrumb({ match }) {
+    return match.params?.userId ? "пользователь" : "все пользователи";
+}
 export const Breadcrumbs = withBreadcrumbs([...publicRoutes, ...authRoutes], {
     disableDefaults: false
 })(BreadcrumbsComponent);
