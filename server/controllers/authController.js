@@ -36,7 +36,7 @@ class AuthController {
             await tokenService.save(user._id, tokens.refreshToken);
             return res
                 .status(200)
-                .send({ ...tokens, userId: user._id, role: user.role });
+                .send({ tokens, user: { ...user["_doc"], password: "" } });
         } catch (e) {
             console.log(e);
             res.status(400).json({ message: "Ошибка регистрации" });

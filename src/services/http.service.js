@@ -13,12 +13,14 @@ http.interceptors.request.use(
     async function (config) {
         const expiresDate = localStorageService.getTokenExpiresDate();
         const refreshToken = localStorageService.getRefreshToken();
-        const isExpired = refreshToken && expiresDate < Date.now();
+        const isExpired = refreshToken && expiresDate < Date.now(); // <
 
         if (isExpired) {
-            console.log("token isExpired");
             const data = await authService.refresh();
-            localStorageService.setTokens(data);
+            localStorageService.setTokens({
+                ...data,
+                userId: data._id
+            });
         }
         const accessToken = localStorageService.getAccessToken();
         if (accessToken) {

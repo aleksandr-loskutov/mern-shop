@@ -121,6 +121,8 @@ class ProductController {
                 //getting category name as brand for filtering purposes at the catalog.
                 const category = await Category.findById(categoryId);
 
+                const oldImages =
+                    images.split(",").length > 0 ? images.split(",") : images;
                 const editedData = {
                     ...req.body,
                     brand: category.name,
@@ -133,7 +135,9 @@ class ProductController {
                                   ? "/images/uploads/" + req.file.filename
                                   : ""
                           ]
-                        : images
+                        : Array.isArray(oldImages)
+                        ? oldImages
+                        : [oldImages]
                 };
                 const product = await Product.findOneAndUpdate(
                     { _id: productId },

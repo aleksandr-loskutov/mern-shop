@@ -11,7 +11,7 @@ const AppRouter = () => {
                 <ProtectedRoute
                     key={path}
                     path={path}
-                    role={role}
+                    requiredRole={role}
                     component={component}
                     exact
                 />
