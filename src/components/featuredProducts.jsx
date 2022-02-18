@@ -1,137 +1,69 @@
 import React from "react";
-import {
-    Button,
-    Card,
-    CardBody,
-    CardTitle,
-    Col,
-    Container,
-    Row
-} from "reactstrap";
+import { Card, CardBody, CardTitle, Col, Container, Row } from "reactstrap";
+import { useSelector } from "react-redux";
+import { getFeaturedProducts } from "../store/products";
+import { Link } from "react-router-dom";
+import Preloader from "./preloader";
 
 const FeaturedProducts = () => {
+    const featuredProducts = useSelector(getFeaturedProducts());
     return (
         <>
             <div className="section" id="cards">
                 <Container className="tim-container">
-                    <h4 className="title">
-                        <small>Cards with products</small>
+                    <h4 className="title text-center">
+                        <small>Лидеры продаж</small>
                     </h4>
-                    <Row>
-                        <Col md="3" sm="4">
-                            <Card className="card-product card-plain">
-                                <div className="card-image">
-                                    <a
-                                        href="#pablo"
-                                        onClick={(e) => e.preventDefault()}
-                                    >
-                                        <img
-                                            alt="..."
-                                            className="img-rounded img-responsive"
-                                            src={
-                                                require("assets/img/balmain-1.jpg")
-                                                    .default
-                                            }
-                                        />
-                                    </a>
-                                    <CardBody>
-                                        <div className="card-description">
-                                            <CardTitle tag="h5">
-                                                Double Breasted Mini Dress
-                                            </CardTitle>
-                                            <p className="card-description">
-                                                Dresses &amp; Skirts
-                                            </p>
-                                        </div>
-                                        <div className="actions">
-                                            <h5>$300</h5>
-                                        </div>
-                                    </CardBody>
-                                </div>
-                            </Card>
-                        </Col>
-                        <Col md="3" sm="4">
-                            <Card className="card-product card-plain">
-                                <div className="card-image">
-                                    <a
-                                        href="#pablo"
-                                        onClick={(e) => e.preventDefault()}
-                                    >
-                                        <img
-                                            alt="..."
-                                            className="img-rounded img-responsive"
-                                            src={
-                                                require("assets/img/balmain-2.jpg")
-                                                    .default
-                                            }
-                                        />
-                                    </a>
-                                    <CardBody>
-                                        <div className="card-description">
-                                            <CardTitle tag="h5">
-                                                Chrystal Dress
-                                            </CardTitle>
-                                            <div className="meta">
-                                                Dresses &amp; Skirts
+                    <div className="products">
+                        <Row>
+                            {featuredProducts ? (
+                                featuredProducts.map((product) => (
+                                    <Col md="4" sm="4" key={product._id}>
+                                        <Card className="card-product card-plain">
+                                            <div className="card-image">
+                                                <Link
+                                                    to={`/product/${product.urlAlias}`}
+                                                >
+                                                    {product.images?.length >
+                                                        0 && (
+                                                        <img
+                                                            alt={
+                                                                product.name +
+                                                                "."
+                                                            }
+                                                            className="img-rounded img-responsive"
+                                                            src={
+                                                                product
+                                                                    .images[0]
+                                                            }
+                                                        />
+                                                    )}
+                                                </Link>
+                                                <CardBody>
+                                                    <div className="card-description">
+                                                        <CardTitle tag="h5">
+                                                            {product.name}
+                                                        </CardTitle>
+                                                        <p className="card-description">
+                                                            Артикул:{" "}
+                                                            {product.article}
+                                                        </p>
+                                                    </div>
+                                                    <div className="price">
+                                                        <h5>
+                                                            {product.price} ₽
+                                                        </h5>
+                                                    </div>
+                                                </CardBody>
                                             </div>
-                                        </div>
-                                        <div className="actions">
-                                            <Button
-                                                className="btn-just-icon mr-1"
-                                                color="link"
-                                            >
-                                                <i className="fa fa-star-o" />
-                                            </Button>
-                                            <Button
-                                                className="btn-just-icon"
-                                                color="link"
-                                            >
-                                                <i className="nc-icon nc-simple-delete" />
-                                            </Button>
-                                        </div>
-                                    </CardBody>
-                                </div>
-                            </Card>
-                        </Col>
-                        <Col md="3" sm="4">
-                            <Card className="card-product card-plain">
-                                <div className="card-image">
-                                    <a
-                                        href="#pablo"
-                                        onClick={(e) => e.preventDefault()}
-                                    >
-                                        <img
-                                            alt="..."
-                                            className="img-rounded img-responsive"
-                                            src={
-                                                require("assets/img/balmain-3.jpg")
-                                                    .default
-                                            }
-                                        />
-                                    </a>
-                                    <CardBody>
-                                        <div className="card-description">
-                                            <CardTitle tag="h5">
-                                                Chrystal Skirt
-                                            </CardTitle>
-                                            <p className="card-description">
-                                                Only on demand
-                                            </p>
-                                        </div>
-                                        <div className="actions">
-                                            <Button
-                                                className="btn-link btn-just-icon"
-                                                color="danger"
-                                            >
-                                                234{" "}
-                                                <i className="nc-icon nc-favourite-28" />
-                                            </Button>
-                                        </div>
-                                    </CardBody>
-                                </div>
-                            </Card>
-                        </Col>
-                    </Row>
+                                        </Card>
+                                    </Col>
+                                ))
+                            ) : (
+                                <Preloader />
+                            )}
+                        </Row>
+                    </div>
                 </Container>
             </div>
         </>
