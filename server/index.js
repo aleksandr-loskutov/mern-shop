@@ -1,9 +1,10 @@
 const express = require("express");
 const db = require("./models/index");
+const path = require("path");
 const config = require("config");
 const authRouter = require("./routes/authRouter");
 const initDatabase = require("./startup/initDatabase");
-const PORT = config.get("serverPort") ?? 4000;
+const PORT = config.get("serverPort") ?? 8080;
 const DB_URL = config.get("dbUrl");
 const app = express();
 const cors = require("cors");
@@ -17,25 +18,27 @@ app.use("/uploads", express.static("uploads"));
 app.use(errorHandler);
 
 if (process.env.NODE_ENV === "production") {
-    console.log("Production");
-} else {
-    console.log("Development");
+  app.use("/", express.static(path.join(__dirname, "client")));
+  const indexPath = path.join(__dirname, "client", "index.html");
+  app.get("*", (req, res) => {
+    res.sendFile(indexPath);
+  });
 }
 
 const start = async () => {
-    try {
-        db.mongoose.connection.once("open", () => {
-            initDatabase();
-        });
-        await db.mongoose.connect(DB_URL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-        app.listen(PORT, () => {
-            console.log("server started on port", PORT);
-        });
-    } catch (e) {
-        console.log("ошибка", e);
-    }
+  try {
+    db.mongoose.connection.once("open", () => {
+      initDatabase();
+    });
+    await db.mongoose.connect(DB_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    app.listen(PORT, () => {
+      console.log("server started on port", PORT);
+    });
+  } catch (e) {
+    console.log("ошибка", e);
+  }
 };
 start();
