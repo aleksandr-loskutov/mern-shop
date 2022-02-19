@@ -48,7 +48,9 @@ class ProductController {
                     description,
                     features: JSON.parse(features),
                     images: [
-                        req.file ? "/images/uploads/" + req.file.filename : ""
+                        req.file
+                            ? "/images/uploads/" + req.file.filename
+                            : "/images/products/placeholder.png"
                     ],
                     urlAlias: alias,
                     discount: discount ? discount : 0,
@@ -122,7 +124,11 @@ class ProductController {
                 const category = await Category.findById(categoryId);
 
                 const oldImages =
-                    images.split(",").length > 0 ? images.split(",") : images;
+                    images.split(",").length > 0
+                        ? images.split(",")
+                        : images === ""
+                        ? "images/products/placeholder.png"
+                        : images;
                 const editedData = {
                     ...req.body,
                     brand: category.name,

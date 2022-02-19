@@ -33,7 +33,9 @@ class CategoryController {
                 const category = new Category({
                     ...req.body,
                     parentId,
-                    img: req.file ? "/images/uploads/" + req.file.filename : "",
+                    img: req.file
+                        ? "/images/uploads/" + req.file.filename
+                        : "/images/products/placeholder.png",
                     urlAlias: alias
                 });
                 await category.save();
@@ -98,7 +100,9 @@ class CategoryController {
                     urlAlias: alias,
                     img: req.file
                         ? "/images/uploads/" + req.file.filename
-                        : dbCategory.img
+                        : dbCategory.img !== ""
+                        ? dbCategory.img
+                        : "/images/products/placeholder.png"
                 };
                 // console.log("editedData", editedData);
                 const category = await Category.findOneAndUpdate(
