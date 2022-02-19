@@ -121,7 +121,12 @@ function OrderDetail({ order }) {
                                                 <td>
                                                     <div className="img-container">
                                                         <Link
-                                                            to={`/admin/products/${product._id}/`}
+                                                            to={
+                                                                currentUserRole ===
+                                                                "admin"
+                                                                    ? `/admin/products/${product._id}/`
+                                                                    : `/product/${product.urlAlias}`
+                                                            }
                                                         >
                                                             {product.images
                                                                 ?.length >
@@ -142,7 +147,12 @@ function OrderDetail({ order }) {
                                                 </td>
                                                 <td className="td-product">
                                                     <Link
-                                                        to={`/admin/products/${product._id}/`}
+                                                        to={
+                                                            currentUserRole ===
+                                                            "admin"
+                                                                ? `/admin/products/${product._id}/`
+                                                                : `/product/${product.urlAlias}`
+                                                        }
                                                     >
                                                         <strong>
                                                             {product.name}
