@@ -166,7 +166,6 @@ export function updateUserData(userId, payload) {
             const { content } = await userService.update(userId, payload);
             dispatch(userUpdated(content));
             toast.success("Успешно обновлено");
-            history.push("/");
         } catch (error) {
             toast.error("Ошибка обновления");
             dispatch(userUpdateFailed(error.message));
