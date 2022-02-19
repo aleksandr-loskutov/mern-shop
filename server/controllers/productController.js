@@ -49,7 +49,7 @@ class ProductController {
                     features: JSON.parse(features),
                     images: [
                         req.file
-                            ? "/images/uploads/" + req.file.filename
+                            ? "/uploads/" + req.file.filename
                             : "/images/products/placeholder.png"
                     ],
                     urlAlias: alias,
@@ -136,11 +136,7 @@ class ProductController {
                     discount: discount ? discount : 0,
                     features: JSON.parse(features),
                     images: req.file
-                        ? [
-                              req.file
-                                  ? "/images/uploads/" + req.file.filename
-                                  : ""
-                          ]
+                        ? [req.file ? "/uploads/" + req.file.filename : ""]
                         : Array.isArray(oldImages)
                         ? oldImages
                         : [oldImages]

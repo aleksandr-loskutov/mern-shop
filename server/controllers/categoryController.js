@@ -34,7 +34,7 @@ class CategoryController {
                     ...req.body,
                     parentId,
                     img: req.file
-                        ? "/images/uploads/" + req.file.filename
+                        ? "/uploads/" + req.file.filename
                         : "/images/products/placeholder.png",
                     urlAlias: alias
                 });
@@ -99,7 +99,7 @@ class CategoryController {
                     ...req.body,
                     urlAlias: alias,
                     img: req.file
-                        ? "/images/uploads/" + req.file.filename
+                        ? "/uploads/" + req.file.filename
                         : dbCategory.img !== ""
                         ? dbCategory.img
                         : "/images/products/placeholder.png"
