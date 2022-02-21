@@ -25,7 +25,7 @@ import Preloader from "./preloader";
 import Page from "./page";
 import { addOrder, getOrderErrors } from "../store/orders";
 import { CITY_LIST, DELIVERY_METHODS } from "../utils/consts";
-import { getCurrentUserData } from "../store/users";
+import { getCurrentUserData, updateUserData } from "../store/users";
 import _ from "lodash";
 function CheckOut() {
     const user = useSelector(getCurrentUserData());
@@ -210,6 +210,16 @@ function CheckOut() {
                 },
                 emptyCart
             )
+        );
+        dispatch(
+            updateUserData(user._id, {
+                name: data.name,
+                lastName: data.lastName,
+                phone: data.phone,
+                city: data.city,
+                address: data.address,
+                postCode: data.postCode
+            })
         );
     };
     return (
