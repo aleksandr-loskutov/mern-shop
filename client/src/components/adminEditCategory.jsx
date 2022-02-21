@@ -11,6 +11,7 @@ import { Button, Col, CustomInput, Form, FormGroup, Row } from "reactstrap";
 import ImageUpload from "./ImageUpload";
 import TextField from "./form/fields/textField";
 import _ from "lodash";
+import ModalConfirm from "./modalConfirm";
 
 function AdminEditCategory({ category }) {
     const [data, setData] = useState(prepareData(category));
@@ -18,6 +19,8 @@ function AdminEditCategory({ category }) {
     const dispatch = useDispatch();
     const isLoaded = !categoriesIsLoading;
     const [errors, setErrors] = useState({});
+    const [modalOpen, setModalOpen] = useState(false);
+
     const categoryAddingError = useSelector(getCategoriesErrors());
     const validateSchema = getCategoryValidationSchema();
     const validate = () => {
@@ -56,7 +59,7 @@ function AdminEditCategory({ category }) {
         dispatch(updateCategory(category._id, data));
     };
     const handleDelete = () => {
-        dispatch(deleteCategory(category._id));
+        setModalOpen(true);
     };
     useEffect(() => {
         if (Object.keys(data).length > 0) {
@@ -192,6 +195,11 @@ function AdminEditCategory({ category }) {
                         </Col>
                     </Row>
                 </Form>
+                <ModalConfirm
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen}
+                    onConfirm={() => dispatch(deleteCategory(category._id))}
+                />
             </>
         )
     );

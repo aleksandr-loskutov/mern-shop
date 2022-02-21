@@ -18,10 +18,13 @@ import SelectField from "./form/fields/selectField";
 import DoubleSelect from "./doubleSelect";
 import { getProductValidationSchema } from "../utils/getProductValidationSchema";
 import { getFeaturesFromProducts } from "../utils/getFeaturesFromProducts";
+import ModalConfirm from "./modalConfirm";
+import history from "../utils/history";
 
 function AdminEditProduct({ product }) {
     const [data, setData] = useState(prepareData(product));
     const [initData, setInitData] = useState(true);
+    const [modalOpen, setModalOpen] = useState(false);
     const products = useSelector(getProducts());
     const categories = useSelector(getCategories());
     const categoriesIsLoading = useSelector(getCategoriesLoadingStatus());
@@ -171,7 +174,7 @@ function AdminEditProduct({ product }) {
     }, [data.features]);
     const handleShowMore = () => {};
     const handleDelete = () => {
-        dispatch(deleteProduct(product._id));
+        setModalOpen(true);
     };
     const getDefaultValueForDoubeleSelect = (firstDefault, index) => {
         return data.features.length > 0
@@ -464,6 +467,7 @@ function AdminEditProduct({ product }) {
                                 color="danger"
                                 outline
                                 type="reset"
+                                onClick={() => history.goBack()}
                             >
                                 Назад
                             </Button>
@@ -492,6 +496,11 @@ function AdminEditProduct({ product }) {
                         </Col>
                     </Row>
                 </Form>
+                <ModalConfirm
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen}
+                    onConfirm={() => dispatch(deleteProduct(product._id))}
+                />
             </>
         )
     );
