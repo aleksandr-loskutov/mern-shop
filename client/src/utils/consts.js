@@ -40,6 +40,30 @@ export const CITY_LIST = [
         value: "Msk"
     }
 ];
+export const PAYMENT_METHODS = [
+    {
+        name: "Картой",
+        value: "card"
+    },
+    {
+        name: "Курьеру",
+        value: "onDelivery"
+    }
+];
+export const ORDER_STATUSES = [
+    {
+        name: "не оплачен",
+        value: "notPayed"
+    },
+    {
+        name: "оплачен",
+        value: "payed"
+    },
+    {
+        name: "отправлен",
+        value: "shipped"
+    }
+];
 export const DELIVERY_METHODS = [
     {
         name: "самовывоз",
