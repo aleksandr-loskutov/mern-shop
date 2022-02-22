@@ -5,7 +5,15 @@ import { getCityName } from "../../utils/getCityName";
 import { getDeliveryMethodName } from "../../utils/getDeliveryMethodName";
 import { formatDate } from "../../utils/getDate";
 import localStorageService from "../../services/localStorage.service";
+import { getOrderStatusName } from "../../utils/getOrderStatusName";
 export const columnsForAdminOrdersTable = {
+    date: {
+        path: "createdAt",
+        name: "Дата",
+        component: (order) => (
+            <span>{formatDate(new Date(Date.parse(order.createdAt)))}</span>
+        )
+    },
     orderNumber: {
         path: "orderNumber",
         name: "Заказ №",
@@ -23,13 +31,7 @@ export const columnsForAdminOrdersTable = {
             </Link>
         )
     },
-    date: {
-        path: "createdAt",
-        name: "Дата",
-        component: (order) => (
-            <span>{formatDate(new Date(Date.parse(order.createdAt)))}</span>
-        )
-    },
+
     deliveryMethod: {
         path: "deliveryMethod",
         name: "Доставка",
@@ -37,22 +39,10 @@ export const columnsForAdminOrdersTable = {
             <span>{getDeliveryMethodName(order.deliveryMethod)}</span>
         )
     },
-    payment: {
-        path: "payment",
-        name: "Оплата",
-        component: (order) => (
-            <>
-                {order.payment ? (
-                    <span className="badge badge-pill badge-success">
-                        оплачен
-                    </span>
-                ) : (
-                    <span className="badge badge-pill badge-default">
-                        не оплачен
-                    </span>
-                )}
-            </>
-        )
+    products: {
+        path: "products",
+        name: "Товаров",
+        component: (order) => <span>{order.products.length}</span>
     },
     sum: {
         path: "total",
@@ -60,9 +50,21 @@ export const columnsForAdminOrdersTable = {
         component: (order) => <span>{order.total} ₽</span>
     },
     status: {
-        path: "orderStatus",
+        path: "status",
         name: "Статус",
-        component: (order) => <span>{order.status}</span>
+        component: (order) => (
+            <>
+                {
+                    <span
+                        className={`badge badge-pill badge-${
+                            order.payment ? "success" : "default"
+                        }`}
+                    >
+                        {getOrderStatusName(order.status)}
+                    </span>
+                }
+            </>
+        )
     },
 
     action: {
