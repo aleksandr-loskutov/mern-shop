@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-
+import history from "../../utils/history";
 // reactstrap components
 import {
     Button,
@@ -198,14 +198,18 @@ function ProductPage() {
                                             block
                                             className="btn-round"
                                             color="danger"
-                                            onClick={() =>
-                                                addItem(
-                                                    {
-                                                        id: product._id,
-                                                        price: product.price
-                                                    },
-                                                    1
-                                                )
+                                            onClick={
+                                                !inCart(product._id)
+                                                    ? () =>
+                                                          addItem(
+                                                              {
+                                                                  id: product._id,
+                                                                  price: product.price
+                                                              },
+                                                              1
+                                                          )
+                                                    : () =>
+                                                          history.push("/cart")
                                             }
                                         >
                                             {inCart(product._id)

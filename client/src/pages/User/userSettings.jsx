@@ -71,10 +71,10 @@ function UserSettings({ specifiedUser }) {
         dispatch(updateUserData(user._id, data));
     };
     const body = (
-        <Card className="card-refine">
-            <CardBody>
-                <Row>
-                    <Col className="ml-auto mr-auto" md="6">
+        <Row>
+            <Col className="ml-auto mr-auto" md="6">
+                <Card className="card-refine">
+                    <CardBody>
                         <Form className="settings-form" onSubmit={handleSubmit}>
                             <Row>
                                 <Col md="6">
@@ -195,10 +195,10 @@ function UserSettings({ specifiedUser }) {
                                 </Button>
                             </Row>
                         </Form>
-                    </Col>
-                </Row>
-            </CardBody>
-        </Card>
+                    </CardBody>
+                </Card>
+            </Col>
+        </Row>
     );
     return !specifiedUser ? <Page title="Мои данные">{body}</Page> : body;
 }

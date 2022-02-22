@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, FormGroup, Row } from "reactstrap";
+import { Card, CardBody, Container, FormGroup, Row } from "reactstrap";
 import AdminNavbar from "./AdminNavbar";
 import SearchForm from "./searchForm";
 import { Breadcrumbs } from "../routing/routes";
@@ -37,12 +37,11 @@ function PageAdmin({
                                 </FormGroup>
                             </Row>
                         ) : (
-                            <Row className="justify-content-center">
-                                {" "}
-                                <Breadcrumbs lastCrumbName={title} />
-                            </Row>
+                            <Breadcrumbs lastCrumbName={title} />
                         )}
-                        {children}
+                        <Card className="card-refine">
+                            <CardBody className="p-4">{children}</CardBody>
+                        </Card>
                     </Container>
                 </div>
             </div>

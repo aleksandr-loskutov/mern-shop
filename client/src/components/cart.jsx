@@ -174,7 +174,16 @@ const Cart = () => {
                                             </tr>
 
                                             <tr className="tr-actions">
-                                                <td colSpan="3" />
+                                                <td colSpan="3">
+                                                    <Button
+                                                        to="/catalog/"
+                                                        className=" mr-1 btn btn-outline-default"
+                                                        tag={Link}
+                                                    >
+                                                        <i className="fa fa-arrow-left mr-1"></i>
+                                                        Продолжить покупки
+                                                    </Button>
+                                                </td>
                                                 <td
                                                     className="text-right"
                                                     colSpan="2"
