@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // reactstrap components
 import { Card, CardHeader, CardBody, Table, Row, Col } from "reactstrap";
 import { formatDate } from "../utils/getDate";
@@ -6,12 +6,27 @@ import { Link } from "react-router-dom";
 import { getCityName } from "../utils/getCityName";
 import { useSelector } from "react-redux";
 import { getCurrentUserRole } from "../store/users";
+import { getDeliveryMethodName } from "../utils/getDeliveryMethodName";
+import SelectField from "./form/fields/selectField";
+import { ORDER_STATUSES } from "../utils/consts";
+import { useDispatch } from "react-redux";
+import { updateOrder } from "../store/orders";
+import { getOrderStatusName } from "../utils/getOrderStatusName";
 function OrderDetail({ order }) {
+    const [status, setStatus] = useState(order.status);
     const { name, lastName, phone, city, address, postCode } = order.receiver;
     const currentUserRole = useSelector(getCurrentUserRole());
+    const dispatch = useDispatch();
+    const handleChangeStatus = (target) => {
+        setStatus(target.value);
+        const payment = {
+            payment: target.value === "payed" || target.value === "shipped"
+        };
+        dispatch(updateOrder(order._id, { status: target.value, ...payment }));
+    };
     return (
         <Row>
-            <Col className="mx-auto mt-3" md="10">
+            <Col className="mx-auto" md="11">
                 <Card className="card-refine">
                     <CardHeader className="text-center">
                         <Row className="justify-content-md-between">
@@ -27,14 +42,32 @@ function OrderDetail({ order }) {
                                 </h3>
                             </Col>
                             <Col md="4">
-                                <h3 className="mt-2 text-left ">
-                                    Статус:{" "}
-                                    {order.payment ? "оплачен" : "не оплачен"}
-                                </h3>
+                                {currentUserRole === "admin" ? (
+                                    <SelectField
+                                        defaultOption={"Выберите статус."}
+                                        name="status"
+                                        options={ORDER_STATUSES}
+                                        value={status}
+                                        onChange={handleChangeStatus}
+                                    />
+                                ) : (
+                                    <h5 className="mt-2 text-left ">
+                                        Статус:{" "}
+                                        <span
+                                            className={`badge badge-pill badge-${
+                                                order.payment
+                                                    ? "success"
+                                                    : "default"
+                                            }`}
+                                        >
+                                            {getOrderStatusName(order.status)}
+                                        </span>
+                                    </h5>
+                                )}
                             </Col>
                             <Col lg="4" md="5">
                                 <Row className="mt-2">
-                                    <Col md="6">Дата:</Col>
+                                    <Col md="6">Размещен:</Col>
                                     <Col md="6">
                                         {formatDate(
                                             new Date(
@@ -44,18 +77,24 @@ function OrderDetail({ order }) {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col md="6">Оплачен:</Col>
-                                    <Col md="6">
-                                        {formatDate(
-                                            new Date(
-                                                Date.parse(order.createdAt)
-                                            )
-                                        )}
-                                    </Col>
+                                    {order.payment && (
+                                        <>
+                                            <Col md="6">Оплачен:</Col>
+                                            <Col md="6">
+                                                {formatDate(
+                                                    new Date(
+                                                        Date.parse(
+                                                            order.createdAt
+                                                        )
+                                                    )
+                                                )}
+                                            </Col>
+                                        </>
+                                    )}
                                 </Row>
                             </Col>
                         </Row>
-                        <Row className="align-items-center justify-content-xl-around">
+                        <Row>
                             <Link
                                 to={
                                     currentUserRole === "admin"
@@ -63,32 +102,41 @@ function OrderDetail({ order }) {
                                         : "/user"
                                 }
                             >
-                                <p>
-                                    {"Получатель: "} Имя:{" "}
-                                    <span className="text-dark font-weight-bolder">
-                                        {name}
-                                    </span>{" "}
-                                    Фамилия:{" "}
-                                    <span className="text-dark font-weight-bolder">
-                                        {lastName}
-                                    </span>{" "}
-                                    Телефон:{" "}
-                                    <span className="text-dark font-weight-bolder">
-                                        {phone}
-                                    </span>
-                                    <br /> Адрес:{" "}
-                                    <span className="text-dark font-weight-bolder">
-                                        {address}
-                                    </span>{" "}
-                                    Город:{" "}
-                                    <span className="text-dark font-weight-bolder">
-                                        {getCityName(city)}
-                                    </span>{" "}
-                                    Индекс:{" "}
-                                    <span className="text-dark font-weight-bolder">
-                                        {postCode}
-                                    </span>
-                                </p>
+                                <Col className="ml-1">
+                                    <p className="text-left border-bottom">
+                                        {"Получатель: "}
+                                        <span className="text-dark font-weight-bolder p-2">
+                                            {name}
+                                        </span>
+                                        <span className="text-dark font-weight-bolder p-2">
+                                            {lastName}
+                                        </span>{" "}
+                                        Телефон:
+                                        <span className="text-dark font-weight-bolder p-2">
+                                            {phone}
+                                        </span>
+                                        Доставка:
+                                        <span className="text-dark font-weight-bolder p-2">
+                                            {getDeliveryMethodName(
+                                                order.deliveryMethod
+                                            )}
+                                        </span>
+                                    </p>
+                                    <p className="text-left border-bottom">
+                                        Адрес:
+                                        <span className="text-dark font-weight-bolder p-2">
+                                            {address}
+                                        </span>
+                                        Город:
+                                        <span className="text-dark font-weight-bolder p-2">
+                                            {getCityName(city)}
+                                        </span>
+                                        Индекс:
+                                        <span className="text-dark font-weight-bolder p-2">
+                                            {postCode}
+                                        </span>
+                                    </p>
+                                </Col>
                             </Link>
                         </Row>
                     </CardHeader>

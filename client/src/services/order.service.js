@@ -1,5 +1,4 @@
 import httpService from "./http.service";
-import localStorageService from "./localStorage.service";
 
 const orderEndpoint = "order/";
 
@@ -13,9 +12,9 @@ const orderService = {
         return data;
     },
 
-    update: async (payload) => {
+    update: async (orderId, payload) => {
         const { data } = await httpService.patch(
-            orderEndpoint + localStorageService.getUserId(),
+            orderEndpoint + orderId,
             payload
         );
         return data;

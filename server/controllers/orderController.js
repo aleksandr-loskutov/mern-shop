@@ -69,7 +69,9 @@ class OrderController {
                 receiver,
                 products: orderedProducts,
                 total,
-                payment: req.body.paymentType === "card"
+                paymentType: req.body.paymentType,
+                payment: req.body.paymentType === "card",
+                status: req.body.paymentType === "card" ? "payed" : "notPayed"
             });
             await order.save();
             return res.status(200).json({
@@ -105,35 +107,69 @@ class OrderController {
             res.status(401).json({ message: "Unauthorized" });
         }
     }
-    async getOne(req, res) {
+    async update(req, res) {
         try {
-            const order = await Order.findById(req.params.id);
-            return order
-                ? res.status(200).json({
-                      status: 200,
-                      content: order,
-                      message: "Successfully order retrieved"
-                  })
-                : res
-                      .status(404)
-                      .json({ status: 404, message: "order not found" });
-        } catch (e) {
-            res.status(500).json({
-                message: "На сервере возникла ошибка. Попробуйте позже."
+            const { orderId } = req.params;
+            if (!orderId) {
+                res.status(401).json({
+                    message: "Specify orderNumber to update"
+                });
+            }
+            const updatedOrder = await Order.findByIdAndUpdate(
+                orderId,
+                req.body,
+                {
+                    new: true
+                }
+            );
+
+            res.status(201).json({
+                status: 201,
+                content: {
+                    ...updatedOrder["_doc"]
+                },
+                message: "Successfully updated"
             });
-        }
-    }
-    async getByUser(req, res) {
-        //user orders, check user id in token and compare it with request id
-        try {
         } catch (e) {
             res.status(500).json({
-                message: "На сервере возникла ошибка. Попробуйте позже."
+                message: "На сервере возникла ошибка. Попробуйте позже.",
+                error: e.message
             });
         }
     }
 }
-function randomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
+
 module.exports = new OrderController();
+
+//not used
+// function randomInt(min, max) {
+//     return Math.floor(Math.random() * (max - min + 1) + min);
+// }
+//
+// async getOne(req, res) {
+//     try {
+//         const order = await Order.findById(req.params.id);
+//         return order
+//             ? res.status(200).json({
+//                 status: 200,
+//                 content: order,
+//                 message: "Successfully order retrieved"
+//             })
+//             : res
+//                 .status(404)
+//                 .json({ status: 404, message: "order not found" });
+//     } catch (e) {
+//         res.status(500).json({
+//             message: "На сервере возникла ошибка. Попробуйте позже."
+//         });
+//     }
+// }
+// async getByUser(req, res) {
+//     //user orders, check user id in token and compare it with request id
+//     try {
+//     } catch (e) {
+//         res.status(500).json({
+//             message: "На сервере возникла ошибка. Попробуйте позже."
+//         });
+//     }
+// }

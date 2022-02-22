@@ -35,6 +35,16 @@ const ordersSlice = createSlice({
         },
         orderDeleteFailed: (state, action) => {
             state.error = action.payload;
+        },
+        orderUpdated: (state, action) => {
+            state.entities[
+                state.entities.findIndex(
+                    (u) => u.orderNumber === action.payload.orderNumber
+                )
+            ] = action.payload;
+        },
+        orderUpdateFailed: (state, action) => {
+            state.error = action.payload;
         }
     }
 });
@@ -45,11 +55,13 @@ const {
     ordersReceved,
     ordersRequestFiled,
     orderAdded,
-    orderAddFailed
+    orderAddFailed,
+    orderUpdated,
+    orderUpdateFailed
 } = actions;
 
 const orderRequestAdd = createAction("orders/addRequest");
-
+const orderUpdateRequested = createAction("orders/updateRequested");
 export const addOrder = (payload, emptyCart) => async (dispatch) => {
     dispatch(orderRequestAdd());
     try {
@@ -70,6 +82,19 @@ export const addOrder = (payload, emptyCart) => async (dispatch) => {
     }
 };
 
+export function updateOrder(orderId, payload) {
+    return async function (dispatch) {
+        dispatch(orderUpdateRequested());
+        try {
+            const { content } = await orderService.update(orderId, payload);
+            dispatch(orderUpdated(content));
+            toast.success("Заказ обновлен");
+        } catch (error) {
+            toast.error("Ошибка обновления");
+            dispatch(orderUpdateFailed(error.message));
+        }
+    };
+}
 export const loadOrdersList = () => async (dispatch) => {
     dispatch(ordersRequested());
     try {

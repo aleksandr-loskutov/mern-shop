@@ -21,6 +21,8 @@ router.post(
     orderController.create
 );
 router.get("/", authMiddleware, orderController.get);
-router.get("/user/:id", authMiddleware, orderController.getByUser);
-router.get("/:id", authMiddleware, orderController.getOne);
+router.patch("/:orderId", roleMiddleware(["admin"]), orderController.update);
+
+// router.get("/user/:id", authMiddleware, orderController.getByUser);
+// router.get("/:id", authMiddleware, orderController.getOne);
 module.exports = router;
