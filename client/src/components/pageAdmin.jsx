@@ -24,7 +24,8 @@ function PageAdmin({
                                 {title}
                             </h2>
                         )}
-                        {search ? (
+                        <Breadcrumbs lastCrumbName={title} />
+                        {search && (
                             <Row className="justify-content-center">
                                 <FormGroup className="">
                                     <SearchForm
@@ -36,8 +37,6 @@ function PageAdmin({
                                     />
                                 </FormGroup>
                             </Row>
-                        ) : (
-                            <Breadcrumbs lastCrumbName={title} />
                         )}
                         <Card className="card-refine">
                             <CardBody className="p-4">{children}</CardBody>

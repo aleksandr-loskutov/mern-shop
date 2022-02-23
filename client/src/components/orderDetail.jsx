@@ -12,6 +12,7 @@ import { ORDER_STATUSES } from "../utils/consts";
 import { useDispatch } from "react-redux";
 import { updateOrder } from "../store/orders";
 import { getOrderStatusName } from "../utils/getOrderStatusName";
+import { Breadcrumbs } from "../routing/routes";
 function OrderDetail({ order }) {
     const [status, setStatus] = useState(order.status);
     const { name, lastName, phone, city, address, postCode } = order.receiver;
@@ -26,6 +27,13 @@ function OrderDetail({ order }) {
     };
     return (
         <Row>
+            {currentUserRole === "user" && (
+                <div className="ml-5">
+                    <Breadcrumbs
+                        lastCrumbName={`детали по заказу ${order.orderNumber}`}
+                    />
+                </div>
+            )}
             <Col className="mx-auto" md="11">
                 <Card className="card-refine">
                     <CardHeader className="text-center">

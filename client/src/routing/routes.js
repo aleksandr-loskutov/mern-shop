@@ -129,6 +129,7 @@ export const authRoutes = [
     },
     {
         path: USER_ROUTE,
+        breadcrumb: "Личный кабинет",
         component: UserSettings
     }
 ];

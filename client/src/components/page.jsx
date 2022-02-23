@@ -10,9 +10,9 @@ function Page({ children, sectionClass, title }) {
                 <div className={sectionClass || "section"}>
                     <Container>
                         {title && (
-                            <h2 className="section-title text-center">
+                            <h3 className="section-title text-center">
                                 {title}
-                            </h2>
+                            </h3>
                         )}
                         {children}
                     </Container>
