@@ -21,6 +21,7 @@ export const CART_ROUTE = "/cart";
 export const CHECKOUT_ROUTE = "/checkout";
 export const LOGIN_ROUTE = "/login/:register?";
 export const LOGOUT_ROUTE = "/logout";
+export const PASSWORD_RECOVERY_ROUTE = "/recovery";
 export const CATEGORY_ROUTE = "/catalog/:alias?";
 export const PRODUCT_ROUTE = "/product/:alias?";
 export const SEARCH_ROUTE = "/search/:term?";

@@ -23,7 +23,8 @@ import {
     NOT_FOUND_ROUTE,
     POSTS_ROUTE,
     SEARCH_ROUTE,
-    LOGOUT_ROUTE
+    LOGOUT_ROUTE,
+    PASSWORD_RECOVERY_ROUTE
 } from "../utils/consts";
 import Admin from "../pages/Admin/admin";
 import AddUser from "../components/form/AddUser";
@@ -52,6 +53,7 @@ import withBreadcrumbs from "react-router-breadcrumbs-hoc";
 import BreadcrumbsComponent from "../components/breadcrumbs";
 import LogOut from "../components/logOut";
 import Cart from "../components/cart";
+import PasswordRecovery from "../components/passwordRecovery";
 export const authRoutes = [
     {
         path: ADMIN_ROUTE,
@@ -155,6 +157,11 @@ export const publicRoutes = [
         path: LOGIN_ROUTE,
         breadcrumb: "Вход",
         component: LoginLayout
+    },
+    {
+        path: PASSWORD_RECOVERY_ROUTE,
+        breadcrumb: "Восстановление пароля",
+        component: PasswordRecovery
     },
     {
         path: ROOT_ROUTE,
