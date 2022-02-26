@@ -30,7 +30,6 @@ import Admin from "../pages/Admin/admin";
 import AddUser from "../components/form/AddUser";
 import AdminUsers from "../layouts/adminUsers";
 import AddOrder from "../pages/Admin/AddOrder";
-import AddPost from "../pages/Admin/AddPost";
 import AdminProducts from "../layouts/adminProducts";
 import AdminCategories from "../layouts/adminCategories";
 import AdminOrders from "../layouts/adminOrders";
