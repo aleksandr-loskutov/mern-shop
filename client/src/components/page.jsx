@@ -1,5 +1,5 @@
 import React from "react";
-import WhiteNavbar from "./WhiteNavbar";
+import WhiteNavbar from "./whiteNavbar";
 import { Container } from "reactstrap";
 
 function Page({ children, sectionClass, title }) {

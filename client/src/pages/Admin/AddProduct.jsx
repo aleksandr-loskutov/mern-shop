@@ -6,7 +6,7 @@ import { Button, FormGroup, Row, Col, CustomInput, Form } from "reactstrap";
 
 // core components
 
-import ImageUpload from "components/ImageUpload.js";
+import ImageUpload from "components/ImageUpload.jsx";
 import PageAdmin from "../../components/pageAdmin";
 import { useDispatch, useSelector } from "react-redux";
 import {
