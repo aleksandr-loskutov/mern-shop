@@ -3,13 +3,10 @@ import {
     ADMIN_PRODUCT_ADD_ROUTE,
     ADMIN_CATEGORY_ADD_ROUTE,
     ADMIN_USER_ROUTE,
-    ADMIN_ORDER_ADD_ROUTE,
-    ADMIN_POST_ADD_ROUTE,
     ADMIN_PRODUCTS_ROUTE,
     ADMIN_CATEGORIES_ROUTE,
     ADMIN_USERS_ROUTE,
     ADMIN_ORDERS_ROUTE,
-    ADMIN_POSTS_ROUTE,
     CART_ROUTE,
     CATEGORY_ROUTE,
     LOGIN_ROUTE,
@@ -74,16 +71,6 @@ export const authRoutes = [
         role: "admin"
     },
     {
-        path: ADMIN_ORDER_ADD_ROUTE,
-        component: AddOrder,
-        role: "admin"
-    },
-    {
-        path: ADMIN_POST_ADD_ROUTE,
-        component: AddPost,
-        role: "admin"
-    },
-    {
         path: ADMIN_PRODUCTS_ROUTE,
         component: AdminProducts,
         breadcrumb: DynamicProductBreadcrumb,
@@ -105,11 +92,6 @@ export const authRoutes = [
         path: ADMIN_ORDERS_ROUTE,
         component: AdminOrders,
         breadcrumb: "заказы",
-        role: "admin"
-    },
-    {
-        path: ADMIN_POSTS_ROUTE,
-        component: AdminPosts,
         role: "admin"
     },
     {
