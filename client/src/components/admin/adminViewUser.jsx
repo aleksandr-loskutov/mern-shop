@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Row, Table } from "reactstrap";
 import { Link } from "react-router-dom";
-import { getCityName } from "../utils/getCityName";
+import { getCityName } from "../../utils/getCityName";
 
 function AdminViewUser({ user }) {
     return (

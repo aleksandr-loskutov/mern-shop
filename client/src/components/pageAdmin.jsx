@@ -1,8 +1,8 @@
 import React from "react";
 import { Card, CardBody, Container, FormGroup, Row } from "reactstrap";
-import AdminNavbar from "./AdminNavbar";
 import SearchForm from "./searchForm";
 import { Breadcrumbs } from "../routing/routes";
+import AdminNavbar from "./admin/adminNavbar";
 
 function PageAdmin({
     children,

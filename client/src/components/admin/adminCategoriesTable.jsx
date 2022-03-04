@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
-import TableComponent from "./table/table";
+import TableComponent from "../table/table";
 
 function AdminCategoriesTable({ categories }) {
     const columns = {

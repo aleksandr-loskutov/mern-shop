@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import AdminEditProduct from "../components/adminEditProduct";
-import AdminViewProduct from "../components/adminViewProduct";
-import AdminProductsTable from "../components/adminProductsTable";
 import PageAdmin from "../components/pageAdmin";
 import { useSelector } from "react-redux";
 import { getProductById, getProducts } from "../store/products";
 import _ from "lodash";
+import AdminEditProduct from "../components/admin/adminEditProduct";
+import AdminViewProduct from "../components/admin/adminViewProduct";
+import AdminProductsTable from "../components/admin/adminProductsTable";
 
 const AdminProducts = () => {
     const params = useParams();

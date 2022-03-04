@@ -13,7 +13,7 @@ import {
     TabPane
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import Preloader from "./preloader";
+import Preloader from "../preloader";
 
 function AdminViewProduct({ product }) {
     const [hTabs, setHTabs] = React.useState("1");

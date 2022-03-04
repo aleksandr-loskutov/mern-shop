@@ -4,14 +4,14 @@ import {
     getCategoriesErrors,
     getCategoriesLoadingStatus,
     updateCategory
-} from "../store/categories";
+} from "../../store/categories";
 import React, { useEffect, useState } from "react";
-import { getCategoryValidationSchema } from "../utils/getCategoryValidationSchema";
+import { getCategoryValidationSchema } from "../../utils/getCategoryValidationSchema";
 import { Button, Col, CustomInput, Form, FormGroup, Row } from "reactstrap";
-import ImageUpload from "./ImageUpload";
-import TextField from "./form/fields/textField";
+import ImageUpload from "../ImageUpload";
+import TextField from "../form/fields/textField";
 import _ from "lodash";
-import ModalConfirm from "./modalConfirm";
+import ModalConfirm from "../modalConfirm";
 
 function AdminEditCategory({ category }) {
     const [data, setData] = useState(prepareData(category));

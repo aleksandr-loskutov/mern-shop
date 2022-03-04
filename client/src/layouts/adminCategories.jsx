@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import AdminCategoriesTable from "../components/adminCategoriesTable";
 import PageAdmin from "../components/pageAdmin";
-import AdminEditCategory from "../components/adminEditCategory";
 import { useSelector } from "react-redux";
 import { getCategories, getCategoryById } from "../store/categories";
 import _ from "lodash";
+import AdminEditCategory from "../components/admin/adminEditCategory";
+import AdminCategoriesTable from "../components/admin/adminCategoriesTable";
 
 const AdminCategories = () => {
     const params = useParams();

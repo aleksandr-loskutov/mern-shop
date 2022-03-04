@@ -6,20 +6,23 @@ import {
     getProductsErrors,
     getProductsLoadingStatus,
     updateProduct
-} from "../store/products";
-import { getCategories, getCategoriesLoadingStatus } from "../store/categories";
+} from "../../store/products";
+import {
+    getCategories,
+    getCategoriesLoadingStatus
+} from "../../store/categories";
 import { sanitize } from "string-sanitizer";
 import _ from "lodash";
 import cyrillicToTranslit from "cyrillic-to-translit-js";
 import { Button, Col, CustomInput, Form, FormGroup, Row } from "reactstrap";
-import ImageUpload from "./ImageUpload";
-import TextField from "./form/fields/textField";
-import SelectField from "./form/fields/selectField";
-import DoubleSelect from "./doubleSelect";
-import { getProductValidationSchema } from "../utils/getProductValidationSchema";
-import { getFeaturesFromProducts } from "../utils/getFeaturesFromProducts";
-import ModalConfirm from "./modalConfirm";
-import history from "../utils/history";
+import ImageUpload from "../ImageUpload";
+import TextField from "../form/fields/textField";
+import SelectField from "../form/fields/selectField";
+import DoubleSelect from "../doubleSelect";
+import { getProductValidationSchema } from "../../utils/getProductValidationSchema";
+import { getFeaturesFromProducts } from "../../utils/getFeaturesFromProducts";
+import ModalConfirm from "../modalConfirm";
+import history from "../../utils/history";
 
 function AdminEditProduct({ product }) {
     const [data, setData] = useState(prepareData(product));

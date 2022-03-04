@@ -3,10 +3,10 @@ import PageAdmin from "../components/pageAdmin";
 import { useParams } from "react-router-dom";
 import AdminEditUser from "../components/form/adminEditUser";
 import AdminUsersTable from "../components/table/adminUsersTable";
-import AdminViewUser from "../components/adminViewUser";
 import { useSelector } from "react-redux";
 import { getUserById, getUsersList } from "../store/users";
 import _ from "lodash";
+import AdminViewUser from "../components/admin/adminViewUser";
 
 const AdminUsers = () => {
     const { userId, edit } = useParams();
