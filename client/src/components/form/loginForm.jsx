@@ -37,6 +37,9 @@ const LoginForm = () => {
                 <Col className="ml-auto mr-auto" lg="4" md="6" sm="6">
                     <Card className="card-register">
                         <CardTitle tag="h3">Войти</CardTitle>
+                        <span className="text-center">
+                            админ: admin@admin.ru, pw: admin1
+                        </span>
                         <FormComponent
                             onSubmit={handleSubmit}
                             validatorConfig={validateSchema}
