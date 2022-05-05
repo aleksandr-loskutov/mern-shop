@@ -26,18 +26,14 @@ function AdminNavbar() {
         // initialise
         headroom.init();
     });
+    const toggleNavBar = () => {
+        document.documentElement.classList.toggle("nav-open");
+        setBodyClick(false);
+        setCollapseOpen(false);
+    };
     return (
         <>
-            {bodyClick ? (
-                <div
-                    id="bodyClick"
-                    onClick={() => {
-                        document.documentElement.classList.toggle("nav-open");
-                        setBodyClick(false);
-                        setCollapseOpen(false);
-                    }}
-                />
-            ) : null}
+            {bodyClick ? <div id="bodyClick" onClick={toggleNavBar} /> : null}
             <Navbar
                 className="fixed-top"
                 expand="lg"
@@ -76,6 +72,7 @@ function AdminNavbar() {
                                     nav
                                     to="/admin/orders/"
                                     tag={Link}
+                                    onClick={toggleNavBar}
                                 >
                                     ЗАКАЗЫ
                                 </DropdownToggle>
@@ -93,6 +90,7 @@ function AdminNavbar() {
                                     <DropdownItem
                                         to="/admin/products/"
                                         tag={Link}
+                                        onClick={toggleNavBar}
                                     >
                                         <i className="nc-icon nc-tile-56" />
                                         Все товары
@@ -100,6 +98,7 @@ function AdminNavbar() {
                                     <DropdownItem
                                         to="/admin/product/add"
                                         tag={Link}
+                                        onClick={toggleNavBar}
                                     >
                                         <i className="nc-icon nc-simple-add" />
                                         Добавить товар
@@ -113,6 +112,7 @@ function AdminNavbar() {
                                 <DropdownMenu className="dropdown-danger" right>
                                     <DropdownItem
                                         to="/admin/categories/"
+                                        onClick={toggleNavBar}
                                         tag={Link}
                                     >
                                         <i className="nc-icon nc-tile-56" />
@@ -120,6 +120,7 @@ function AdminNavbar() {
                                     </DropdownItem>
                                     <DropdownItem
                                         to="/admin/category/add"
+                                        onClick={toggleNavBar}
                                         tag={Link}
                                     >
                                         <i className="nc-icon nc-simple-add" />
@@ -133,6 +134,7 @@ function AdminNavbar() {
                                     color="default"
                                     nav
                                     to="/admin/users/"
+                                    onClick={toggleNavBar}
                                     tag={Link}
                                 >
                                     ПОЛЬЗОВАТЕЛИ
@@ -143,6 +145,7 @@ function AdminNavbar() {
                                     className="btn-round"
                                     color="danger"
                                     tag={Link}
+                                    onClick={toggleNavBar}
                                     to={"/"}
                                 >
                                     <i className="nc-icon nc-shop" /> МАГАЗИН
