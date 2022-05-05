@@ -19,13 +19,13 @@ import {
     Container
 } from "reactstrap";
 import { useSelector } from "react-redux";
-import { getCategories } from "../store/categories";
+import { getActiveCategories } from "../store/categories";
 import UserDropdown from "./userDropdown";
 // core components
 
 function WhiteNavbar() {
     const { items } = useCart();
-    const categories = useSelector(getCategories());
+    const categories = useSelector(getActiveCategories());
     const [bodyClick, setBodyClick] = React.useState(false);
     const [collapseOpen, setCollapseOpen] = React.useState(false);
     React.useEffect(() => {
@@ -33,18 +33,15 @@ function WhiteNavbar() {
         // initialise
         headroom.init();
     });
+    const toggleNavBar = () => {
+        document.documentElement.classList.toggle("nav-open");
+        setBodyClick(false);
+        setCollapseOpen(false);
+    };
+
     return (
         <>
-            {bodyClick ? (
-                <div
-                    id="bodyClick"
-                    onClick={() => {
-                        document.documentElement.classList.toggle("nav-open");
-                        setBodyClick(false);
-                        setCollapseOpen(false);
-                    }}
-                />
-            ) : null}
+            {bodyClick ? <div id="bodyClick" onClick={toggleNavBar} /> : null}
             <Navbar className="fixed-top" expand="lg" id="navbar-main">
                 <Container>
                     <div className="navbar-translate">
@@ -103,30 +100,34 @@ function WhiteNavbar() {
                                     Контакты
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-danger" right>
-                                    <DropdownItem to="/contact" tag={Link}>
+                                    <DropdownItem
+                                        to="/contact"
+                                        tag={Link}
+                                        onClick={toggleNavBar}
+                                    >
                                         <i className="nc-icon nc-globe" />
                                         Как проехать
                                     </DropdownItem>
-                                    <DropdownItem to="/contact" tag={Link}>
+                                    <DropdownItem
+                                        to="/contact"
+                                        tag={Link}
+                                        onClick={toggleNavBar}
+                                    >
                                         <i className="nc-icon nc-delivery-fast" />
                                         Доставка
                                     </DropdownItem>
-                                    <DropdownItem to="/contact" tag={Link}>
+                                    <DropdownItem
+                                        to="/contact"
+                                        tag={Link}
+                                        onClick={toggleNavBar}
+                                    >
                                         <i className="nc-icon nc-money-coins" />
                                         Оплата
-                                    </DropdownItem>
-                                    <DropdownItem to="/contact" tag={Link}>
-                                        <i className="nc-icon nc-alert-circle-i" />
-                                        О нас
-                                    </DropdownItem>
-                                    <DropdownItem to="/contact" tag={Link}>
-                                        <i className="nc-icon nc-email-85" />
-                                        Написать нам
                                     </DropdownItem>
                                 </DropdownMenu>
                             </UncontrolledDropdown>
 
-                            <UserDropdown />
+                            <UserDropdown onToggle={toggleNavBar} />
 
                             <NavItem>
                                 <Button
@@ -134,6 +135,7 @@ function WhiteNavbar() {
                                     color="danger"
                                     to="/cart"
                                     tag={Link}
+                                    onClick={toggleNavBar}
                                 >
                                     <i className="nc-icon nc-cart-simple" />{" "}
                                     {items.length}

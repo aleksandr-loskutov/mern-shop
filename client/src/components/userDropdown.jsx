@@ -16,12 +16,11 @@ import {
 import { useSelector } from "react-redux";
 import Preloader from "./preloader";
 
-function UserDropdown(props) {
+function UserDropdown({ onToggle }) {
     const currentUser = useSelector(getCurrentUserData());
     const role = useSelector(getCurrentUserRole());
     const isLoading = useSelector(getUsersLoadingStatus());
     if (isLoading) return <Preloader />;
-    //console.log("currentUser", currentUser);
     return (
         <>
             <UncontrolledDropdown nav inNavbar>
@@ -33,26 +32,46 @@ function UserDropdown(props) {
                 <DropdownMenu className="dropdown-danger" right>
                     {!currentUser ? (
                         <>
-                            <DropdownItem to="/login" tag={Link}>
+                            <DropdownItem
+                                to="/login"
+                                tag={Link}
+                                onClick={onToggle}
+                            >
                                 <i className="nc-icon nc-key-25" />
                                 Вход
                             </DropdownItem>
-                            <DropdownItem to="/login/register" tag={Link}>
+                            <DropdownItem
+                                to="/login/register"
+                                tag={Link}
+                                onClick={onToggle}
+                            >
                                 <i className="nc-icon nc-badge" />
                                 Регистрация
                             </DropdownItem>
                         </>
                     ) : (
                         <>
-                            <DropdownItem to="/user/orders/" tag={Link}>
+                            <DropdownItem
+                                to="/user/orders/"
+                                tag={Link}
+                                onClick={onToggle}
+                            >
                                 <i className="nc-icon nc-app" />
                                 Мои заказы
                             </DropdownItem>
-                            <DropdownItem to="/user" tag={Link}>
+                            <DropdownItem
+                                to="/user"
+                                tag={Link}
+                                onClick={onToggle}
+                            >
                                 <i className="nc-icon nc-badge" />
                                 Мои данные
                             </DropdownItem>
-                            <DropdownItem to="/logout" tag={Link}>
+                            <DropdownItem
+                                to="/logout"
+                                tag={Link}
+                                onClick={onToggle}
+                            >
                                 <i className="nc-icon nc-button-power" />
                                 Выйти
                             </DropdownItem>
@@ -63,9 +82,10 @@ function UserDropdown(props) {
             {role === "admin" && (
                 <NavItem>
                     <Button
-                        className="btn btn-outline-danger btn-round"
+                        className="btn btn-outline-dark btn-round text-dark"
                         tag={Link}
                         to={"/admin/"}
+                        onClick={onToggle}
                     >
                         Админ
                     </Button>
