@@ -1,3 +1,4 @@
 {
-  "apiEndPoint": "http://161.97.167.216:1500/api/"
+  "apiEndPoint": "http://161.97.167.216:1500/api/",
+  "adminCredentials": {"email": "admin@holodos.com", "password": "admin1"}
 }

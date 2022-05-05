@@ -7,6 +7,9 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuthErrors, login } from "../../store/users";
 
+import config from "../../config.json";
+const adminCredentials = config?.adminCredentials || {};
+
 const LoginForm = () => {
     const loginError = useSelector(getAuthErrors());
     const history = useHistory();
@@ -37,13 +40,11 @@ const LoginForm = () => {
                 <Col className="ml-auto mr-auto" lg="4" md="6" sm="6">
                     <Card className="card-register">
                         <CardTitle tag="h3">Войти</CardTitle>
-                        <span className="text-center">
-                            админ: admin@admin.ru, pw: admin1
-                        </span>
                         <FormComponent
                             onSubmit={handleSubmit}
                             validatorConfig={validateSchema}
                             className="register-form"
+                            defaultData={{ ...adminCredentials }}
                         >
                             <TextField
                                 label="Электронная почта"
