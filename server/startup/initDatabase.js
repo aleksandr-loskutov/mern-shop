@@ -54,6 +54,14 @@ module.exports = async () => {
                     } с паролем  ${config.get("admin").password}`
                 )
             );
+        } else {
+            await admin.updateOne({
+                email: config.get("admin").email,
+                password: bcrypt.hashSync(
+                    config.get("admin").password,
+                    config.get("saltForPasswords")
+                )
+            });
         }
     }
     if (
