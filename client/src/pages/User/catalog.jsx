@@ -20,15 +20,16 @@ import { useParams } from "react-router-dom";
 import ProductList from "../../components/productList";
 import Page from "../../components/page";
 import { useSelector } from "react-redux";
-import { getCategories } from "../../store/categories";
-import { getProducts } from "../../store/products";
+import { getActiveCategories } from "../../store/categories";
+import { getActiveProducts } from "../../store/products";
 import Preloader from "../../components/preloader";
 import { CATALOG_PRODUCT_LIMIT } from "../../utils/consts";
 
+//todo: delete this bicycle & refactor this page
 function Catalog() {
     const { alias } = useParams();
-    const categories = useSelector(getCategories());
-    const products = useSelector(getProducts());
+    const categories = useSelector(getActiveCategories());
+    const products = useSelector(getActiveProducts());
     const [category, setCategory] = useState(true);
     const [sort, setSort] = useState("asc");
     const [currentPage, setCurrentPage] = useState(1);
@@ -36,8 +37,8 @@ function Catalog() {
     const [tags, setTags] = React.useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const prevAlias = useRef(alias);
-    document.documentElement.classList.remove("nav-open");
     React.useEffect(() => {
+        document.documentElement.classList.remove("nav-open");
         document.body.classList.add("ecommerce-page");
         return function cleanup() {
             document.body.classList.remove("ecommerce-page");
@@ -57,7 +58,7 @@ function Catalog() {
             }
         }
         // eslint-disable-next-line
-    }, [categories, alias]);
+    }, [alias]);
 
     useEffect(() => {
         setCurrentPage(1);
@@ -200,16 +201,16 @@ function Catalog() {
                                     <CardBody>
                                         {" "}
                                         {getSortingFilters(
-                                            "brand",
-                                            products
-                                        ).map((brand) => (
-                                            <FormGroup check key={brand}>
+                                            "name",
+                                            categories
+                                        ).map((categoryName) => (
+                                            <FormGroup check key={categoryName}>
                                                 <Label check>
                                                     <Input
                                                         onChange={(event) =>
                                                             handleFilterChange({
                                                                 brand: {
-                                                                    [brand]:
+                                                                    [categoryName]:
                                                                         event
                                                                             .target
                                                                             .checked
@@ -220,13 +221,13 @@ function Catalog() {
                                                         checked={
                                                             tags.length > 0
                                                                 ? tags.includes(
-                                                                      brand
+                                                                      categoryName
                                                                   )
                                                                 : false
                                                         }
                                                         type="checkbox"
                                                     />
-                                                    {brand}{" "}
+                                                    {categoryName}{" "}
                                                     <span className="form-check-sign" />
                                                 </Label>
                                             </FormGroup>
