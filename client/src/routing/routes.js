@@ -18,7 +18,6 @@ import {
     ORDER_SUCCESS_ROUTE,
     CONTACT_ROUTE,
     NOT_FOUND_ROUTE,
-    POSTS_ROUTE,
     SEARCH_ROUTE,
     LOGOUT_ROUTE,
     PASSWORD_RECOVERY_ROUTE
@@ -35,10 +34,8 @@ import Error404 from "../pages/Error404.jsx";
 import SearchWithSidebar from "../pages/User/SearchWithSidebar.jsx";
 import CheckOut from "../components/checkOut";
 import UserOrders from "../layouts/userOrders";
-import OrderSuccess from "../pages/User/orderSuccess";
 import Catalog from "../pages/User/catalog.jsx";
 import ProductPage from "../pages/User/ProductPage.jsx";
-import Posts from "../pages/User/posts";
 import AddCategory from "../pages/Admin/AddCategory";
 import UserSettings from "../pages/User/userSettings.jsx";
 import AddProduct from "../pages/Admin/AddProduct";
@@ -48,6 +45,7 @@ import BreadcrumbsComponent from "../components/breadcrumbs";
 import LogOut from "../components/logOut";
 import Cart from "../components/cart";
 import PasswordRecovery from "../components/passwordRecovery";
+import OrderSuccess from "../pages/User/orderSuccess";
 export const authRoutes = [
     {
         path: ADMIN_ROUTE,
@@ -146,11 +144,6 @@ export const publicRoutes = [
         path: ROOT_ROUTE,
         breadcrumb: "Главная",
         component: Main
-    },
-    {
-        path: POSTS_ROUTE,
-        breadcrumb: "Статьи",
-        component: Posts
     },
     {
         path: CONTACT_ROUTE,
