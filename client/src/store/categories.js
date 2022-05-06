@@ -137,7 +137,10 @@ export const deleteCategory = (categoryId) => async (dispatch) => {
 };
 export const getCategories = () => (state) => state.categories.entities;
 export const getActiveCategories = () => (state) => {
-    return state.categories.entities.filter((c) => c.status === true);
+    if (state.categories.entities) {
+        return state.categories.entities.filter((c) => c.status === true);
+    }
+    return [];
 };
 export const getCategoriesLoadingStatus = () => (state) =>
     state.categories.isLoading;

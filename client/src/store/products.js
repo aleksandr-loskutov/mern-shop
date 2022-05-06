@@ -134,8 +134,12 @@ export const deleteProduct = (productId) => async (dispatch) => {
     }
 };
 export const getProducts = () => (state) => state.products.entities;
-export const getActiveProducts = () => (state) =>
-    state.products.entities.filter((p) => p.status === true);
+export const getActiveProducts = () => (state) => {
+    if (state.products.entities) {
+        return state.products.entities.filter((p) => p.status === true);
+    }
+    return [];
+};
 export const getProductsLoadingStatus = () => (state) =>
     state.products.isLoading;
 export const getProductsErrors = () => (state) => state.products.error;
