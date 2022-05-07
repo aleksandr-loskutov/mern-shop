@@ -14,7 +14,6 @@ http.interceptors.request.use(
         const expiresDate = localStorageService.getTokenExpiresDate();
         const refreshToken = localStorageService.getRefreshToken();
         const isExpired = refreshToken && expiresDate < Date.now(); // <
-
         if (isExpired) {
             const data = await authService.refresh();
             localStorageService.setTokens({
@@ -44,7 +43,10 @@ http.interceptors.response.use(
             error.response &&
             error.response.status >= 400 &&
             error.response.status < 500;
-
+        if (error.response.status === 401 || error.response.status === 403) {
+            localStorageService.removeAuthData();
+            window.location.href = "/login";
+        }
         if (!expectedErrors) {
             console.log(error);
             toast.error("Somthing was wrong. Try it later");
