@@ -12,7 +12,7 @@ module.exports = function (roles) {
                     .json({ message: "Не авторизованный запрос" });
             }
             const user = tokenService.validateAccess(token);
-            if (user && !roles.includes(user.role)) {
+            if (!user || !roles.includes(user?.role)) {
                 return res
                     .status(403)
                     .json({ message: "Не авторизованный запрос" });
