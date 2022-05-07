@@ -30,6 +30,7 @@ const ProductList = ({
                     <Col md="4" sm="4">
                         <FormGroup className="">
                             <SearchForm
+                                autoFocus={false}
                                 value={searchQuery}
                                 showButton={false}
                                 placeholder={"поиск.."}

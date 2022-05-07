@@ -15,7 +15,7 @@ function SearchForm({
     return (
         <Form className={`form-inline ${formClasses}`} onSubmit={onSubmit}>
             <Input
-                autoFocus
+                autoFocus={autoFocus}
                 value={value}
                 className={`mr-sm-2 ${inputClasses}`}
                 placeholder={placeholder}
