@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { sanitize } from "string-sanitizer";
 import cyrillicToTranslit from "cyrillic-to-translit-js";
 // reactstrap components
@@ -22,10 +22,9 @@ import {
 import SelectField from "../../components/form/fields/selectField";
 import Preloader from "../../components/preloader";
 import TextField from "../../components/form/fields/textField";
-import DoubleSelect from "../../components/doubleSelect";
 import { getProductValidationSchema } from "../../utils/getProductValidationSchema";
-import { getFeaturesFromProducts } from "../../utils/getFeaturesFromProducts";
 import { Link } from "react-router-dom";
+import ProductFeaturesConstructor from "../../components/productFeaturesConstructor";
 
 function AddProduct() {
     const [data, setData] = useState({
@@ -52,7 +51,6 @@ function AddProduct() {
     const isLoaded = !categoriesIsLoading && !productsIsLoading;
     const [errors, setErrors] = useState({});
     const productAddError = useSelector(getProductsErrors());
-    const features = useRef();
 
     const validateSchema = getProductValidationSchema();
     const validate = () => {
@@ -86,8 +84,9 @@ function AddProduct() {
             Object.values(data).join("").length > 0
         );
     };
-    document.documentElement.classList.remove("nav-open");
+
     React.useEffect(() => {
+        document.documentElement.classList.remove("nav-open");
         document.body.classList.add("add-product");
         // window.scrollTo(0, 0);
         // document.body.scrollTop = 0;
@@ -95,25 +94,6 @@ function AddProduct() {
             document.body.classList.remove("add-product");
         };
     });
-    useEffect(() => {
-        if (isLoaded) {
-            features.current = getFeaturesFromProducts(products);
-            features.current.keys.length > 0 &&
-                setData((prevState) => {
-                    return {
-                        ...prevState,
-                        features: [
-                            {
-                                name: features.current.keys[0].value,
-                                value: ""
-                            }
-                        ]
-                    };
-                });
-        }
-
-        // eslint-disable-next-line
-    }, [products, categories]);
 
     useEffect(() => {
         if (Object.keys(data).length > 0) {
@@ -140,56 +120,17 @@ function AddProduct() {
                 features: JSON.stringify(filteredFeatures)
             })
         );
-        //отправляем
     };
     const handleImageChange = (file) => {
         setData((prevState) => {
             return { ...prevState, image: file };
         });
     };
-
-    const handleSelectFeature = (value) => {
+    const handleFeaturesChange = (featuresData) => {
         setData((prevState) => {
-            const kvp =
-                value.input === "key"
-                    ? { name: value.value, value: "" }
-                    : { name: value.key, value: value.value };
-            return {
-                ...prevState,
-                features: [
-                    ...prevState.features.map((feature, index) =>
-                        index === value.index ? kvp : feature
-                    )
-                ]
-            };
+            return { ...prevState, features: featuresData };
         });
     };
-
-    useEffect(() => {
-        if (data.features?.length > 0) {
-            const count = data.features.reduce(
-                (acc, feature) =>
-                    feature.name !== "" && feature.value !== "" ? acc + 1 : acc,
-                0
-            );
-            if (
-                count === data.features.length &&
-                data.features.length < features?.current?.keys.length
-            ) {
-                const nextFeature = {
-                    name: features.current.keys[data.features.length].value,
-                    value: ""
-                };
-                setData((prevState) => {
-                    return {
-                        ...prevState,
-                        features: [...prevState.features, nextFeature]
-                    };
-                });
-            }
-        }
-    }, [data.features]);
-    const handleShowMore = () => {};
     return (
         <PageAdmin title="Добавить товар">
             {isLoaded ? (
@@ -361,79 +302,11 @@ function AddProduct() {
                                         />
                                     </Col>
                                 </Row>
-                                {features.current?.keys.length > 0 && (
-                                    <Row>
-                                        <Col className="text-center">
-                                            <span className="mt-0 mb-2 mr-2">
-                                                конструктор параметров
-                                            </span>
-                                            <a
-                                                className="text-info"
-                                                href="#link"
-                                                onClick={() =>
-                                                    setData((prevState) => {
-                                                        return {
-                                                            ...prevState,
-                                                            features: [
-                                                                {
-                                                                    name: features
-                                                                        .current
-                                                                        .keys[0]
-                                                                        .value,
-                                                                    value: ""
-                                                                }
-                                                            ]
-                                                        };
-                                                    })
-                                                }
-                                            >
-                                                ( сбросить )
-                                            </a>
-                                        </Col>
-                                    </Row>
-                                )}
-
-                                {features.current?.keys.length > 0 &&
-                                    data.features.length > 0 &&
-                                    data.features.map((feature, index) => {
-                                        return (
-                                            <DoubleSelect
-                                                key={index}
-                                                index={index}
-                                                featureOptions={features.current.keys
-                                                    .map((f) => {
-                                                        return {
-                                                            ...f,
-                                                            index: index
-                                                        };
-                                                    })
-                                                    .filter(
-                                                        (f) =>
-                                                            !data.features.some(
-                                                                (feat) =>
-                                                                    feat.name ===
-                                                                    f.value
-                                                            )
-                                                    )}
-                                                featureValuesOptions={features.current.all[
-                                                    feature.name
-                                                ].map((f) => {
-                                                    return {
-                                                        label: f,
-                                                        value: f,
-                                                        key: feature.name,
-                                                        input: "value",
-                                                        index: index
-                                                    };
-                                                })}
-                                                defaultValue={
-                                                    features.current.keys[index]
-                                                }
-                                                onSelect={handleSelectFeature}
-                                                onShowMore={handleShowMore}
-                                            />
-                                        );
-                                    })}
+                                <ProductFeaturesConstructor
+                                    featuresData={data.features}
+                                    products={products}
+                                    onChange={handleFeaturesChange}
+                                />
                                 <FormGroup>
                                     <h6>Описание товара</h6>
                                     <TextField
