@@ -76,3 +76,19 @@ export const DELIVERY_METHODS = [
         price: 700
     }
 ];
+export const DEFAULT_PRODUCT_DATA = {
+    name: "",
+    urlAlias: "",
+    categoryId: "",
+    brand: "",
+    article: "",
+    manufacturerCode: "",
+    price: "",
+    discount: "",
+    image: undefined,
+    description: "",
+    features: [],
+    featured: false,
+    status: true,
+    stock: "1"
+};
