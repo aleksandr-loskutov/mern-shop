@@ -3,6 +3,7 @@ import productService from "../services/product.service";
 import isOutdated from "../utils/isOutdated";
 import history from "../utils/history";
 import { toast } from "react-toastify";
+import { validateMongoId } from "../utils/validateMongoId";
 
 const productsSlice = createSlice({
     name: "products",
@@ -178,11 +179,11 @@ export const getFeaturedProducts = () => (state) => {
     return [];
 };
 export const getProductById = (productId) => (state) => {
-    if (state.products.entities) {
+    if (validateMongoId(productId) && state.products.entities) {
         return state.products.entities[
             state.products.entities.findIndex((p) => p._id === productId)
         ];
     }
-    return {};
+    return null;
 };
 export default productsReducer;
