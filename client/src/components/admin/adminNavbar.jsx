@@ -96,7 +96,7 @@ function AdminNavbar() {
                                         Все товары
                                     </DropdownItem>
                                     <DropdownItem
-                                        to="/admin/product/add"
+                                        to="/admin/products/add"
                                         tag={Link}
                                         onClick={toggleNavBar}
                                     >
