@@ -38,7 +38,6 @@ import Catalog from "../pages/User/catalog.jsx";
 import ProductPage from "../pages/User/ProductPage.jsx";
 import AddCategory from "../pages/Admin/AddCategory";
 import UserSettings from "../pages/User/userSettings.jsx";
-import AddProduct from "../pages/Admin/AddProduct";
 import LoginLayout from "../layouts/loginLayout";
 import withBreadcrumbs from "react-router-breadcrumbs-hoc";
 import BreadcrumbsComponent from "../components/breadcrumbs";
@@ -46,6 +45,7 @@ import LogOut from "../components/logOut";
 import Cart from "../components/cart";
 import PasswordRecovery from "../components/passwordRecovery";
 import OrderSuccess from "../pages/User/orderSuccess";
+import AdminProduct from "../layouts/adminProduct";
 export const authRoutes = [
     {
         path: ADMIN_ROUTE,
@@ -55,7 +55,7 @@ export const authRoutes = [
     },
     {
         path: ADMIN_PRODUCT_ADD_ROUTE,
-        component: AddProduct,
+        component: AdminProduct,
         role: "admin"
     },
     {
