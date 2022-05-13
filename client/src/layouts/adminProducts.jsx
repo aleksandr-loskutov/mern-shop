@@ -4,9 +4,9 @@ import PageAdmin from "../components/pageAdmin";
 import { useSelector } from "react-redux";
 import { getProductById, getProducts } from "../store/products";
 import _ from "lodash";
-import AdminEditProduct from "../components/admin/adminEditProduct";
 import AdminViewProduct from "../components/admin/adminViewProduct";
 import AdminProductsTable from "../components/admin/adminProductsTable";
+import AdminProduct from "./adminProduct";
 
 const AdminProducts = () => {
     const params = useParams();
@@ -41,10 +41,12 @@ const AdminProducts = () => {
     return (
         <PageAdmin
             title={
-                productId
+                product
                     ? edit
                         ? "Редактировать товар"
                         : "Информация о товаре"
+                    : productId
+                    ? "Добавить товар"
                     : "Все товары"
             }
             search={!productId}
@@ -52,12 +54,14 @@ const AdminProducts = () => {
             searchQuery={searchQuery}
             searchTip="артикул / название..."
         >
-            {productId ? (
+            {product ? (
                 edit ? (
-                    <AdminEditProduct product={product} />
+                    <AdminProduct product={product} />
                 ) : (
                     <AdminViewProduct product={product} />
                 )
+            ) : productId ? (
+                <AdminProduct />
             ) : (
                 <AdminProductsTable products={sortedProducts} />
             )}
