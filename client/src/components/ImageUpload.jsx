@@ -8,15 +8,23 @@ import defaultImage from "assets/img/image_placeholder.jpg";
 import defaultAvatar from "assets/img/placeholder.jpg";
 
 function ImageUpload({ avatar, onChange, currentImageUrl }) {
-    const [file, setFile] = React.useState(null);
-    const [imagePreviewUrl, setImagePreviewUrl] = React.useState(
-        currentImageUrl
+    const setDefaultImage = () => {
+        return currentImageUrl
             ? currentImageUrl
             : avatar
             ? defaultAvatar
-            : defaultImage
+            : defaultImage;
+    };
+    const [file, setFile] = React.useState(null);
+    const [imagePreviewUrl, setImagePreviewUrl] = React.useState(
+        setDefaultImage()
     );
+
     const fileInput = React.useRef(null);
+    useEffect(() => {
+        setImagePreviewUrl(setDefaultImage());
+        // eslint-disable-next-line
+    }, [currentImageUrl]);
     const handleImageChange = (e) => {
         e.preventDefault();
         if (e.target.files[0]) {
@@ -33,6 +41,7 @@ function ImageUpload({ avatar, onChange, currentImageUrl }) {
         if (file?.name) onChange(file);
         // eslint-disable-next-line
     }, [file]);
+
     const handleClick = () => {
         fileInput.current.click();
     };
