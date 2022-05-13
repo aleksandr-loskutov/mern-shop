@@ -30,12 +30,3 @@ router.delete("/:id", roleMiddleware(["admin"]), productController.delete);
 router.get("/", productController.getAll);
 
 module.exports = router;
-// router.get("/:id", productController.getOne);
-// router.get("/cat/:categoryId", productController.getByCategory);
-// check(
-//     "name",
-//     "Наименование товара должно быть от 4 до 50 символов"
-// ).isLength({
-//     min: 4,
-//     max: 50
-// }),
