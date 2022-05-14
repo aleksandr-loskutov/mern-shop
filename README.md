@@ -13,7 +13,10 @@ Full stack app made with the MERN stack (MongoDB, Express, React, Node) + Redux 
 
 ## Demo
 
-[Demo](http://161.97.167.216:1500/). Login/pass for admin you can find at [login page](http://161.97.167.216:1500/login). Cron is set to 30 mins for data restoration process.
+[Demo site](http://161.97.167.216:1500/). Login/pass for admin you can find at [login page](http://161.97.167.216:1500/login). Cron is set to 30 mins for data restoration process.
+
+## Video
+[ Short video of functionality showcase](https://www.berrycast.com/conversations/64feda24-801c-57af-b38a-62dab5beecc2).
 
 ![App Screenshot](https://aleksandrl.ru/img/mern1.jpg)
 ## Credits
