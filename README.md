@@ -1,9 +1,10 @@
-
 # MERN SHOP
-Full stack app made with the MERN stack (MongoDB, Express, React, Node) + Redux (RTK).
+![Build status](https://github.com/aleksandr-loskutov/mern-shop/actions/workflows/docker-deploy.yml/badge.svg)
+
+Full stack SPA app made with the MERN stack (MongoDB, Express, React, Node) + Redux (RTK).
 
 ## Features
-- Products, catalogue, auth users (JWT), cart, orders;
+- Products, catalogue, auth users (JWT), private routes, cart, orders;
 - User personal area to manage orders & info;
 - Admin panel to manage users, products, orders, categories;
 - Easy product addition via product feature constructor;
