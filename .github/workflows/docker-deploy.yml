@@ -1,7 +1,7 @@
 name: Docker-deploy
 on:
   push:
-    branches: [ ci-cd ]
+    branches: [ master ]
 jobs:
   docker-deploy:
     runs-on: self-hosted
@@ -22,6 +22,6 @@ jobs:
       - name: stopping running container if exist
         run: docker stop ${{ env.running_container_id }} || true
       - name: removing old containers that affiliated with this repository name
-        run: docker rmi $(docker images -f reference=${{ github.event.repository.name }}*  | grep -v "${{ github.event.repository.name }}-${{ env.short_sha }}" | awk 'NR>1 {print $1}') || true
+        run: docker rmi $(docker images -f reference=${{ github.event.repository.name }}-*  | grep -v "${{ github.event.repository.name }}-${{ env.short_sha }}" | awk 'NR>1 {print $1}') || true
       - name: starting new container
         run: docker run -d -p 1500:8080 --name ${{ github.event.repository.name }}-${{ env.short_sha }}  --rm ${{ github.event.repository.name }}-${{ env.short_sha }}
