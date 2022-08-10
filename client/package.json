@@ -5,7 +5,6 @@
     "name": "Aleksandr",
     "url": "https://github.com/aleksandr-loskutov"
   },
-  "homepage": "https://github.com/aleksandr-loskutov/mern-shop",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "1.7.1",
