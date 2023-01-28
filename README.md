@@ -10,7 +10,7 @@ Full stack SPA app made with the MERN stack (MongoDB, Express, React, Node) + Re
 - Easy product addition via product feature constructor;
 
 ## Demo
-[Demo site](http://aleksandrl.ru:1500/). Cron is set to 30 mins for data restoration process.
+[Demo site](https://mern.aleksandrl.ru). Cron is set to 30 mins for data restoration process.
 
 ## Video
 [ Short video of functionality showcase](https://www.berrycast.com/conversations/64feda24-801c-57af-b38a-62dab5beecc2).
